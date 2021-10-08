@@ -34,7 +34,6 @@ implements IAchievementTemplate {
   
   public getAchievements!: HasManyGetAssociationsMixin<Achievement>;
   public addAchievement!: HasManyAddAssociationMixin<Achievement, number>;
-  public hasAchievement!: HasManyHasAssociationMixin<Achievement, number>;
   public countAchievements!: HasManyCountAssociationsMixin;
   public createAchievement!: HasManyCreateAssociationMixin<Achievement>;
   

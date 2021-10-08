@@ -10,7 +10,7 @@ export interface IAchievement {
   userId: number
   achievementId: number
 }
-interface IAchievementCreationAttributes extends Optional<IAchievement, 'id' | 'userId'> {}
+interface IAchievementCreationAttributes extends Optional<IAchievement, 'id' | 'userId' | 'achievementId'> {}
 
 class Achievement extends Model<IAchievement, IAchievementCreationAttributes>
 implements IAchievement {
