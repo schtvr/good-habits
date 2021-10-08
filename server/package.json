@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "habit",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm t"
+  },
+  "keywords": [
+    "habit"
+  ],
+  "author": "",
+  "license": "MIT"
+}
