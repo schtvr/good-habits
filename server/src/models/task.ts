@@ -1,9 +1,16 @@
 import {
   Model,
   DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyHasAssociationMixin,
+  Association,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
   Optional
 } from 'sequelize';
 import sequelize from './index';
+import TaskHistory from './taskHistory';
 
 interface ITask {
   id: number,
@@ -28,6 +35,16 @@ implements ITask {
   
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  
+  public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
+  public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
+  public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
+  public countTaskHistory!: HasManyCountAssociationsMixin;
+  public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
+  
+  public static associations: {
+    taskHistory: Association<Task, TaskHistory>
+  };
 }
 
 Task.init(

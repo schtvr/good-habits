@@ -12,6 +12,7 @@ import {
 import Achievement from './achievement';
 import ActiveQuest from './activeQuest';
 import sequelize from './index';
+import TaskHistory from './taskHistory';
 
 interface IUser {
   id: number
@@ -51,9 +52,16 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public countActiveQuests!: HasManyCountAssociationsMixin;
   public createActiveQuest!: HasManyCreateAssociationMixin<ActiveQuest>;
   
+  public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
+  public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
+  public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
+  public countTaskHistory!: HasManyCountAssociationsMixin;
+  public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
+  
   public static associations: {
     achievements: Association<User, Achievement>,
     activeQuests: Association<User, ActiveQuest>,
+    taskHistory: Association<User, TaskHistory>
   };
 }
 
