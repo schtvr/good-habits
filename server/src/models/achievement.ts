@@ -1,16 +1,19 @@
 import {
   Model,
   DataTypes,
+  Optional
 } from 'sequelize';
 
 import sequelize from './index';
-export interface IUserAchievements {
+export interface IAchievement {
   id: number
   userId: number
   achievementId: number
 }
+interface IAchievementCreationAttributes extends Optional<IAchievement, 'id' | 'userId'> {}
 
-class UserAchievements extends Model<IUserAchievements> implements IUserAchievements {
+class Achievement extends Model<IAchievement, IAchievementCreationAttributes>
+implements IAchievement {
   public id!: number;
   public userId!: number
   public achievementId!: number
@@ -19,7 +22,7 @@ class UserAchievements extends Model<IUserAchievements> implements IUserAchievem
   public readonly updatedAt!: Date;
 }
 
-UserAchievements.init(
+Achievement.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -37,8 +40,8 @@ UserAchievements.init(
   },
   {
     sequelize,
-    tableName: 'userAchievements',
+    tableName: 'achievements',
   }
 );
 
-export default UserAchievements;
+export default Achievement;

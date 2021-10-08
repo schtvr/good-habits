@@ -1,9 +1,12 @@
 import User from './user';
-import UserAchievements from './userAchievements';
+import Achievement from './achievement';
+import AchievementTemplate from './achievementTemplate';
 
-const dbInit = () => {
-  User.sync();
-  UserAchievements.sync();
+const dbInit = async () => {
+  await User.sync();
+  await AchievementTemplate.sync();
+  await Achievement.sync();
 };
+
 
 export default dbInit;

@@ -2,7 +2,6 @@ import {
   Sequelize,
   Dialect
 } from "sequelize";
-//import path from 'path';
 import cfg from '../config';
 
 const sqlConfig = {

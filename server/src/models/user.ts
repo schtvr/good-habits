@@ -7,8 +7,9 @@ import {
   Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
+  Optional
 } from 'sequelize';
-import UserAchievements from './userAchievements';
+import Achievement from './achievement';
 import sequelize from './index';
 
 interface IUser {
@@ -22,7 +23,9 @@ interface IUser {
   level: number
 }
 
-class User extends Model<IUser> implements IUser {
+interface IUserCreationAttributes extends Optional<IUser, 'id' | 'EXP' | 'level'> {}
+
+class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public id!: number;
   public firstName!: string;
   public lastName!: string;
@@ -35,15 +38,15 @@ class User extends Model<IUser> implements IUser {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   
-  public getAchievements!: HasManyGetAssociationsMixin<UserAchievements>;
-  public addAchievement!: HasManyAddAssociationMixin<UserAchievements, number>;
-  public hasAchievement!: HasManyHasAssociationMixin<UserAchievements, number>;
+  public getAchievements!: HasManyGetAssociationsMixin<Achievement>;
+  public addAchievement!: HasManyAddAssociationMixin<Achievement, number>;
+  public hasAchievement!: HasManyHasAssociationMixin<Achievement, number>;
   public countAchievements!: HasManyCountAssociationsMixin;
-  public createAchievement!: HasManyCreateAssociationMixin<UserAchievements>;
+  public createAchievement!: HasManyCreateAssociationMixin<Achievement>;
   
   public static associations: {
-    userAchievements: Association<User, UserAchievements>
-  }
+    achievements: Association<User, Achievement>
+  };
 }
 
 User.init(
@@ -90,10 +93,10 @@ User.init(
   }
 );
 
-User.hasMany(UserAchievements, {
+User.hasMany(Achievement, {
   sourceKey: 'id',
   foreignKey: 'userId',
-  as: 'userAchievements'
+  as: 'achievements'
 });
 
 export default User;
