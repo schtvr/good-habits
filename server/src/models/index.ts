@@ -2,7 +2,7 @@ import {
   Sequelize,
   Dialect
 } from "sequelize";
-import cfg from '../config';
+import cfg from '../../config';
 
 const sqlConfig = {
   host: cfg.HOST,
@@ -13,6 +13,7 @@ const sqlConfig = {
     acquire: 30000,
     idle: 10000
   },
+  logging: false,
 };
 
 const sequelize = new Sequelize(cfg.DATABASE, cfg.DBUSER, cfg.DBPASS, sqlConfig);
