@@ -10,6 +10,7 @@ import {
   Optional
 } from 'sequelize';
 import Achievement from './achievement';
+import ActiveQuest from './activeQuest';
 import sequelize from './index';
 
 interface IUser {
@@ -44,8 +45,15 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public countAchievements!: HasManyCountAssociationsMixin;
   public createAchievement!: HasManyCreateAssociationMixin<Achievement>;
   
+  public getActiveQuests!: HasManyGetAssociationsMixin<ActiveQuest>;
+  public addActiveQuest!: HasManyAddAssociationMixin<ActiveQuest, number>;
+  public hasActiveQuest!: HasManyHasAssociationMixin<ActiveQuest, number>;
+  public countActiveQuests!: HasManyCountAssociationsMixin;
+  public createActiveQuest!: HasManyCreateAssociationMixin<ActiveQuest>;
+  
   public static associations: {
-    achievements: Association<User, Achievement>
+    achievements: Association<User, Achievement>,
+    activeQuests: Association<User, ActiveQuest>,
   };
 }
 
