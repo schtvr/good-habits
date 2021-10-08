@@ -9,4 +9,10 @@ const ProfileScreen = () => {
   );
 };
 
+const styles = StyleSheet.create({
+  pfp: {
+    flexDirection: 'row'
+  }
+})
+
 export default ProfileScreen;
