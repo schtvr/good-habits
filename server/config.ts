@@ -7,6 +7,7 @@ interface IConfig {
   DBPASS: string
   DATABASE: string
   DIALECT: string
+  ENV: string
 }
 
 const config: IConfig = {
@@ -14,8 +15,13 @@ const config: IConfig = {
   HOST: process.env.HOST ||  'hostName',
   DBUSER: process.env.DBUSER || 'dbUserName',
   DBPASS: process.env.DBPASS || 'dbUserPassword',
-  DATABASE: process.env.DATABASE || 'databaseName',
-  DIALECT: process.env.DIALECT || 'mysql/postgres'
+  DATABASE: 'databaseName',
+  DIALECT: process.env.DIALECT || 'mysql/postgres',
+  ENV: process.env.ENV || 'test',
 };
+
+if (config.ENV === 'test') {
+  config.DATABASE = 'testHabits';
+} else config.DATABASE = process.env.DATABASE || 'test';
 
 export default config;
