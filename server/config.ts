@@ -8,6 +8,7 @@ interface IConfig {
   DATABASE: string
   DIALECT: string
   ENV: string
+  SECRET: string
 }
 
 const config: IConfig = {
@@ -18,6 +19,7 @@ const config: IConfig = {
   DATABASE: 'databaseName',
   DIALECT: process.env.DIALECT || 'mysql/postgres',
   ENV: process.env.ENV || 'test',
+  SECRET: process.env.SECRET || 'notverysecretkeylol',
 };
 
 if (config.ENV === 'test') {
