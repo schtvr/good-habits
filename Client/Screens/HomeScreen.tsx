@@ -1,6 +1,9 @@
 import React from 'react';
-import {Text, View, Button, StyleSheet, Image} from 'react-native';
+import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
+
+import CarouselComponent from '../Components/CarouselComponent';
+
 import Accordian from '../Components/Accordian';
 
 const quests = [
@@ -24,24 +27,42 @@ const quests = [
   },
 ];
 
+const friends = [
+  {
+    id: 1,
+    name: 'Sean',
+    activeQuests: 'Improve posture',
+  },
+  {id: 2, name: 'Steve', activeQuests: 'Couch to 5k'},
+  {
+    id: 3,
+    name: 'Juan',
+    activeQuests: 'Couch to 5k',
+  },
+];
+
 const HomeScreen = () => {
   return (
     <View style={styles.body}>
-      <View style={styles.header}>
-        <Image style={styles.avatar} source={require('../assets/avatar.png')} />
-        <Text style={styles.level}>Lvl 1</Text>
-        <LinearProgress
-          style={styles.progressBar}
-          color="yellow"
-          value={0.5}
-          variant={'determinate'}
-        />
-        <Text style={styles.EXP}>50/100 EXP</Text>
-      </View>
-      <View style={styles.container}>
-        <Text style={styles.activeQuests}>Active Quests</Text>
-        {renderAccordians()}
-      </View>
+      <ScrollView style={{flex: 1}}>
+        <View style={styles.header}>
+          <Image source={require('../assets/avatar.png')} />
+          <Text style={styles.level}>Lvl 1</Text>
+          <LinearProgress
+            style={styles.progressBar}
+            color="yellow"
+            value={0.5}
+            variant={'determinate'}
+          />
+          <Text style={styles.EXP}>50/100 EXP</Text>
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.activeQuests}>Active Quests</Text>
+          {renderAccordians()}
+        </View>
+        <Text style={styles.activeFriends}>Active Friends</Text>
+        <CarouselComponent data={friends} />
+      </ScrollView>
     </View>
   );
 };
@@ -49,26 +70,35 @@ const HomeScreen = () => {
 const renderAccordians = () => {
   const items = [];
   for (let item of quests) {
-    items.push(<Accordian title={item.name} data={item.description} />);
+    items.push(
+      <Accordian
+        key={item.id}
+        title={item.name}
+        data={item.description}
+        btnText="completed"
+        btnText2="upload"
+      />,
+    );
   }
   return items;
 };
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: 50,
-    backgroundColor: '#35374a',
+    backgroundColor: '#001845',
     paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   body: {
     flex: 1,
-    backgroundColor: '#35374a',
+    backgroundColor: '#001845',
   },
   activeQuests: {
     alignSelf: 'center',
     paddingBottom: 20,
     fontSize: 22,
-    color: 'white',
+    color: '#979dac',
   },
   progressBar: {
     width: '50%',
@@ -77,24 +107,38 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    borderBottomColor: 'black',
-    borderWidth: 1,
-    paddingTop: 20,
+    borderBottomColor: '#979dac',
+    borderWidth: 2,
+    paddingTop: 10,
   },
   EXP: {
     position: 'absolute',
     bottom: 0,
     right: 50,
-    color: 'white',
+    color: '#979dac',
   },
   level: {
     position: 'absolute',
     bottom: 0,
-    color: 'white',
+    color: '#979dac',
     left: 100,
   },
-  avatar: {
-    // marginTop: 20,
+  carousel: {
+    borderWidth: 1,
+    borderColor: '#979dac',
+  },
+  activeFriends: {
+    color: '#979dac',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingLeft: 25,
+    paddingBottom: 10,
+  },
+  friendList: {
+    alignContent: 'center',
+  },
+  friendButtons: {
+    alignItems: 'flex-end',
   },
 });
 

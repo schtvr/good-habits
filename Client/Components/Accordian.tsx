@@ -7,14 +7,14 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
-  Button,
 } from 'react-native';
+import {Button} from 'react-native-elements';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const Accordian = ({title, data}) => {
+const Accordian = ({title, data, btnText, btnText2}) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -25,16 +25,35 @@ const Accordian = ({title, data}) => {
   return (
     <View>
       <TouchableOpacity style={styles.row} onPress={() => toggleExpand()}>
-        <Text>{title}</Text>
-        <View>{expanded ? <Text>+</Text> : <Text>-</Text>}</View>
+        <Text style={styles.title}>{title}</Text>
+        <View>
+          {expanded ? (
+            <Text style={styles.accoridianBtn}>-</Text>
+          ) : (
+            <Text style={styles.accoridianBtn}>+</Text>
+          )}
+        </View>
       </TouchableOpacity>
       <View style={styles.parentHeader} />
       {expanded && (
         <View style={styles.child}>
-          <Text>{data}</Text>
-          <TouchableOpacity>
-            <Text>Fulfilled</Text>
-          </TouchableOpacity>
+          <Text style={styles.content}>{data}</Text>
+          {btnText ? (
+            <View style={styles.friendButtons}>
+              <Button
+                title={btnText}
+                // type="outline"
+                buttonStyle={styles.btn}
+                onPress={() => console.log('hi')}
+              />
+              <Button
+                title={btnText2}
+                // type="outline"
+                buttonStyle={styles.btn}
+                onPress={() => console.log('hi')}
+              />
+            </View>
+          ) : null}
         </View>
       )}
     </View>
@@ -49,7 +68,7 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 18,
     alignItems: 'center',
-    backgroundColor: 'grey',
+    backgroundColor: '#5c677d',
   },
   parentHeader: {
     height: 1,
@@ -57,8 +76,36 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   child: {
-    backgroundColor: 'lightgray',
+    flexDirection: 'row',
+    backgroundColor: '#7d8597',
     padding: 16,
+  },
+  friendList: {
+    alignContent: 'center',
+  },
+  friendButtons: {
+    alignItems: 'flex-end',
+    width: 175,
+  },
+  btn: {
+    marginBottom: 10,
+    width: 100,
+  },
+  content: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+    maxWidth: 200,
+    color: '#001233',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#001233',
+  },
+  accoridianBtn: {
+    // flex: 1,
+    // width: 10,
   },
 });
 
