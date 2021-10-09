@@ -3,11 +3,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import HomeScreen from './Screens/HomeScreen';
-import ProfileScreen from './Screens/ProfileScreen';
-import SocialScreen from './Screens/SocialScreen';
-import TrophyRoomScreen from './Screens/TrophyRoomScreen';
-import SettingsScreen from './Screens/SettingsScreen';
+import HomeScreen from './screens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import SocialScreen from './screens/SocialScreen';
+import TrophyRoomScreen from './screens/TrophyRoomScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 /**
  * Sample React Native App
