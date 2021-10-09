@@ -19,6 +19,8 @@ interface IUser {
   curatedTrophies: any[],
   activeQuests: any[],
   questHistory: any[],
+  level: number,
+  EXP: number,
 }
 
 
@@ -30,6 +32,8 @@ export const user : IUser = {
   curatedTrophies: [1,2,3],
   activeQuests: [,11,112,1123],
   questHistory: [1,4,9,16],
+  level: 3,
+  EXP: 280
 }
 
 const styles = StyleSheet.create({

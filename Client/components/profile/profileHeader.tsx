@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import { user } from '../../screens/ProfileScreen';
+import CircularProgressBar from './progressCircle';
 
 
 const ProfileHeader = () => {
@@ -38,10 +39,11 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    paddingBottom: 10,
+    paddingBottom: 30,
   },
   userName: {
     fontSize: 20,
+    paddingBottom: 15,
   },
 });
 
