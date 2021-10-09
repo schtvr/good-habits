@@ -160,7 +160,7 @@ describe('Tests for the models', () => {
         await quest.createActiveQuest({
           userId: user.id,
         }); 
-      }catch (err){
+      } catch (err) {
         const userQuests = await user.getActiveQuests();
         expect(userQuests).toHaveLength(1);
       }
