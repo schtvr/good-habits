@@ -5,6 +5,7 @@ import Achievement from '../models/achievement';
 import sequelize from '../models/index';
 import Quest from '../models/quest';
 import Task from '../models/task';
+import TaskHistory from '../models/taskHistory';
 describe('Tests for the models', () => {
   beforeAll(async () => {
     await dbInit();
@@ -14,14 +15,14 @@ describe('Tests for the models', () => {
     await sequelize.drop();
   });
 
-  let newUser: User;
+  let user: User;
   let achieveTemplate: AchievementTemplate;
   let achieve: Achievement;
   let quest: Quest;
   let task: Task;
 
   beforeEach(async () => {
-    newUser = await User.create({
+    user = await User.create({
       firstName: 'fuck',
       lastName: 'bob',
       userName: 'fuckbob',
@@ -35,7 +36,7 @@ describe('Tests for the models', () => {
       criteria: 'fuck bob 100 times',
     });
     achieve = await Achievement.create({
-      userId: newUser.id,
+      userId: user.id,
       templateId: achieveTemplate.id,
     });
     quest = await Quest.create({
@@ -61,11 +62,11 @@ describe('Tests for the models', () => {
 
   describe('User', () => {
     test('name on user should match input name', async () => {
-      expect(newUser.firstName).toBe('fuck');
-      expect(newUser.lastName).toBe('bob');
-      expect(newUser.userName).toBe('fuckbob');
-      expect(newUser.email).toBe('fuckbob.com');
-      expect(newUser.password).toBe('password');
+      expect(user.firstName).toBe('fuck');
+      expect(user.lastName).toBe('bob');
+      expect(user.userName).toBe('fuckbob');
+      expect(user.email).toBe('fuckbob.com');
+      expect(user.password).toBe('password');
     });
 
     test('Should not be able create users with duplicate emails or usernames', async () => {
@@ -131,11 +132,39 @@ describe('Tests for the models', () => {
     });
     
     test('able to add active quests to users', async () => {
-      const res = await quest.createActiveQuest({
-        userId: newUser.id,
+      await quest.createActiveQuest({
+        userId: user.id,
       });
+      let userQuests = await user.getActiveQuests();
+      expect(userQuests).toHaveLength(1);
 
-    })
+      const newQuest = await Quest.create({
+        duration: 10,
+        name: 'big shit test',
+        description: 'poo on bob 100 times',
+        category: 'poopoo category',
+        completionExp: 10000,
+      });
+      await newQuest.createActiveQuest({
+        userId: user.id
+      });
+      userQuests = await user.getActiveQuests();
+      expect(userQuests).toHaveLength(2);
+    });
+    
+    test('no duplicate quests', async () => {
+      try {
+        await quest.createActiveQuest({
+          userId: user.id,
+        }); 
+        await quest.createActiveQuest({
+          userId: user.id,
+        }); 
+      }catch (err){
+        const userQuests = await user.getActiveQuests();
+        expect(userQuests).toHaveLength(1);
+      }
+    });
   });
   
   describe('Achievements', () => {
@@ -148,10 +177,69 @@ describe('Tests for the models', () => {
     });
     
     test('AchievementTemplate should grant users achievements', async () => {
-      await achieveTemplate.createAchievement({
-        userId: newUser.id,
+      const bigChieve = await AchievementTemplate.create({
+        description: 'fuck2',
+        img: 'idc2',
+        category: 'idk2',
+        criteria: 'fuck2 bob 100 times',
       });
-      expect(await newUser.getAchievements()).toHaveLength(2);
+      await bigChieve.createAchievement({
+        userId: user.id
+      });
+      expect(await user.getAchievements()).toHaveLength(2);
     });
-  })
+    
+    test('no duplicate achievements', async () => {
+      try {
+        await achieveTemplate.createAchievement({
+          userId: user.id,
+        });
+        await achieveTemplate.createAchievement({
+          userId: user.id,
+        });
+      } catch (err) {
+        const userAchievements = await user.getAchievements();
+        expect(userAchievements).toHaveLength(1);
+      }
+    });
+  });
+
+  describe('Tasks', () => {
+    test('able to add active tasks to users', async () => {
+      await task.createTaskHistory({
+        userId: user.id,
+        questId: task.questId
+      });
+      const userTasks = await user.getTaskHistory();
+      expect(userTasks).toHaveLength(1);
+    });
+    
+    test('should not allow duplicate tasks', async () => {
+      try {
+        await task.createTaskHistory({
+          userId: user.id,
+          questId: task.questId
+        });
+        await task.createTaskHistory({
+          userId: user.id,
+          questId: task.questId
+        });
+      } catch (err) {
+        const userTasks = await user.getTaskHistory();
+        expect(userTasks).toHaveLength(1);
+      }
+    });
+    
+    test('should be able to mark tasks completed', async () => {
+      const taskHistory = await task.createTaskHistory({
+        userId: user.id,
+        questId: task.questId
+      });
+      
+      await taskHistory.complete();
+      expect(taskHistory.completed).toBe(true);
+      const dbTaskHistory = await TaskHistory.findOne({ where: { id: taskHistory.id }});
+      expect(dbTaskHistory?.completed).toBe(true);
+    });
+  });
 });
