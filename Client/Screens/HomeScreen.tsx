@@ -1,4 +1,7 @@
 import React from 'react';
+
+import {Text, View, Button, StyleSheet} from 'react-native';
+
 import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
 
@@ -40,6 +43,7 @@ const friends = [
     activeQuests: 'Couch to 5k',
   },
 ];
+
 
 const HomeScreen = () => {
   return (
