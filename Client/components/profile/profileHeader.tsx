@@ -6,7 +6,6 @@ import CircularProgressBar from './progressCircle';
 
 const ProfileHeader = () => {
 
-  console.log('user', user.profileUrl)
 
   return (
     <View style={styles.container}>

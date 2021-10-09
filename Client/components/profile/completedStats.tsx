@@ -17,7 +17,6 @@ const CompletedStats = () => {
         percent={35}
         radius={15}
         duration={1200}
-        style={styles.circularProgressBar}
       >
       <Text style={styles.pfp}>
         {user.level}
@@ -36,9 +35,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
   },
-  circularProgressBar: {
-    width: 50,
-  }
 })
 
 export default CompletedStats;
