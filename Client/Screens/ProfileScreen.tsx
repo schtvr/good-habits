@@ -6,7 +6,6 @@ import ProfileHeader from '../components/profile/profileHeader';
 const ProfileScreen = () => {
   return (
     <View>
-      <Text>Profile page!!</Text>
       <ProfileHeader />
       <CompletedStats />
     </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet} from 'react-native';
 import { user } from '../../screens/ProfileScreen';
 
 
@@ -9,27 +9,39 @@ const ProfileHeader = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: user.profileUrl
-        }}
-      />
+      <View style={styles.pfp}>
+        <Image
+          style={styles.image}
+          source={{
+            uri: user.profileUrl
+          }}
+        />
+        <Text style={styles.userName}>
+          { user.userName }
+        </Text>
+      </View>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  pfp: {
+    alignItems: 'center'
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    paddingBottom: 10,
   },
-  logo: {
-    width: 66,
-    height: 58,
+  userName: {
+    fontSize: 20,
   },
 });
 

@@ -5,6 +5,7 @@ import {View, Text, StyleSheet} from 'react-native';
 const CompletedStats = () => {
   return (
     <View>
+      
       <Text> 69 completed quests </Text>
     </View>
   );
