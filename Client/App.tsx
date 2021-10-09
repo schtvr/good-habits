@@ -2,6 +2,13 @@ import React, {Profiler} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
+
+import HomeScreen from './screens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import SocialScreen from './screens/SocialScreen';
+import TrophyRoomScreen from './screens/TrophyRoomScreen';
+import SettingsScreen from './screens/SettingsScreen';
+
 import {StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
