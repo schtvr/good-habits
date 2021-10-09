@@ -8,8 +8,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './Screens/HomeScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import SocialScreen from './Screens/SocialScreen';
-import TrophyRoomScreen from './Screens/TrophyRoomScreen';
-import SettingsScreen from './Screens/SettingsScreen';
+// import SettingsScreen from './Screens/SettingsScreen';
+import LeaderBoardScreen from './Screens/LeaderBoardScreen';
 
 /**
  * Sample React Native App
@@ -29,14 +29,14 @@ const App: () => Node = () => {
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
           <Tab.Screen name="Social" component={SocialScreen} />
-          <Tab.Screen name="TrophyRoom" component={TrophyRoomScreen} />
+          <Tab.Screen name="Leader Boards" component={LeaderBoardScreen} />
           {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
-
+  
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
