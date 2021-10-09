@@ -1,13 +1,10 @@
 import React from 'react';
 
-import {Text, View, Button, StyleSheet} from 'react-native';
-
 import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
 
-import CarouselComponent from '../Components/CarouselComponent';
-
-import Accordian from '../Components/Accordian';
+import CarouselComponent from '../components/CarouselComponent';
+import Accordian from '../components/Accordian';
 
 const quests = [
   {
