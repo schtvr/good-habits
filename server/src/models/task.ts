@@ -75,4 +75,10 @@ Task.init(
   },
 );
 
+Task.hasMany(TaskHistory, {
+  sourceKey: 'id',
+  foreignKey: 'taskId',
+  as: 'taskHistory'
+});
+
 export default Task;

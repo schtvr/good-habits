@@ -14,7 +14,7 @@ import ActiveQuest from './activeQuest';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 
-interface IUser {
+export interface IUser {
   id: number
   firstName: string
   lastName: string
@@ -115,6 +115,18 @@ User.hasMany(Achievement, {
   sourceKey: 'id',
   foreignKey: 'userId',
   as: 'achievements',
+});
+
+User.hasMany(ActiveQuest, {
+  sourceKey: 'id',
+  foreignKey: 'userId',
+  as: 'activeQuests'
+});
+
+User.hasMany(TaskHistory, {
+  sourceKey: 'id',
+  foreignKey: 'userId',
+  as: 'taskHistory'
 });
 
 export default User;

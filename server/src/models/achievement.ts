@@ -31,10 +31,12 @@ Achievement.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userAchievement',
       allowNull: false,
     },
     templateId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userAchievement',
       allowNull: false,
     },
   },

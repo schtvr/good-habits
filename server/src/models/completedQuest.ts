@@ -37,10 +37,12 @@ CompletedQuest.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userCompletedQuest',
       allowNull: false,
     },
     questId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userCompletedQuest',
       allowNull: false,
     },
     startDate: {

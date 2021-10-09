@@ -57,10 +57,12 @@ ActiveQuest.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userQuest',
       allowNull: false,
     },
     questId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userQuest',
       allowNull: false,
     },
     startDate: {

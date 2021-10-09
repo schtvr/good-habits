@@ -10,7 +10,7 @@ interface ITaskHistory {
   userId: number,
   taskId: number,
   questId: number,
-  completedDate: Date,
+  completedDate: Date | null,
   completed: boolean,
   textInput: string,
   userPicture: string,
@@ -25,13 +25,22 @@ class TaskHistory extends Model<ITaskHistory, ITaskHistoryCreationAttributes>
   public userId!: number;
   public taskId!: number;
   public questId!: number;
-  public completedDate!: Date;
+  public completedDate!: Date | null;
   public completed!: boolean;
   public textInput!: string;
   public userPicture!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  
+  public async complete () {
+    this.completed = true;
+    this.completedDate = new Date();
+    await TaskHistory.update(
+      { completed: this.completed, completedDate: this.completedDate },
+      { where:  { id: this.id }}
+    );
+  };
 }
 
 TaskHistory.init(
@@ -43,10 +52,12 @@ TaskHistory.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userTask',
       allowNull: false,
     },
     taskId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userTask',
       allowNull: false,
     },
     questId: {
@@ -54,20 +65,23 @@ TaskHistory.init(
       allowNull: false,
     },
     completedDate: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
+      type: DataTypes.DATE,
+      allowNull: true,
     },
     completed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
     textInput: {
       type: new DataTypes.STRING(255),
       allowNull: false,
+      defaultValue: ''
     },
     userPicture: {
       type: new DataTypes.STRING(255),
       allowNull: false,
+      defaultValue: ''
     },
   },
   {
