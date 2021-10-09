@@ -1,33 +1,51 @@
 import {
   Model,
   DataTypes,
-  Optional
+  Optional,
 } from 'sequelize';
 import sequelize from './index';
+import CompletedQuest from './completedQuest';
 
 interface IActiveQuest {
   id: number,
   userId: number,
   questId: number,
-  taskId: number
   startDate: Date,
   progress: number,
 }
 
 interface IActiveQuestCreationAttributes extends
-Optional<IActiveQuest, 'id' | 'userId' | 'questId'> {}
+Optional<IActiveQuest, 'id' | 'userId' | 'questId' | 'startDate'> {}
 
 class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes>
-implements IActiveQuest {
+  implements IActiveQuest {
   public id!: number;
   public userId!: number;
   public questId!: number;
-  public taskId!: number;
   public startDate!: Date;
   public progress!: number;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public async complete () {
+    try {
+      await CompletedQuest.create({
+        userId: this.userId,
+        questId: this.questId,
+        startDate: this.startDate,
+        progress: this.progress,
+      });
+      await ActiveQuest.destroy({
+        where: {
+          id: this.id,
+        },
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
 }
 
 ActiveQuest.init(
@@ -45,24 +63,21 @@ ActiveQuest.init(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    taskId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: new Date() 
     },
     progress: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: 0
-    }
+      defaultValue: 0,
+    },
   },
   {
     sequelize,
-    tableName: 'activeQuests'
-  }
+    tableName: 'activeQuests',
+  },
 );
 
 export default ActiveQuest;

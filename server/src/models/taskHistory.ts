@@ -1,7 +1,7 @@
 import {
   Model,
   DataTypes,
-  Optional
+  Optional,
 } from 'sequelize';
 import sequelize from './index';
 
@@ -20,7 +20,7 @@ interface ITaskHistoryCreationAttributes extends
 Optional<ITaskHistory, 'id'> {}
 
 class TaskHistory extends Model<ITaskHistory, ITaskHistoryCreationAttributes>
-implements ITaskHistory {
+  implements ITaskHistory {
   public id!: number;
   public userId!: number;
   public taskId!: number;
@@ -29,7 +29,7 @@ implements ITaskHistory {
   public completed!: boolean;
   public textInput!: string;
   public userPicture!: string;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -43,30 +43,37 @@ TaskHistory.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
     taskId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    EXPValue: {
+    questId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    nextTaskHistoryId: {
+    completedDate: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    previousTaskHistoryId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+    completed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
-
+    textInput: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+    },
+    userPicture: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+    },
   },
   {
     sequelize,
-    tableName: 'taskHistory'
-  }
+    tableName: 'taskHistory',
+  },
 );
 
 export default TaskHistory;
