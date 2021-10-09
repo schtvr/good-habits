@@ -2,9 +2,9 @@ import React from 'react';
 import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
 
-import CarouselComponent from '../Components/CarouselComponent';
+import CarouselComponent from '../components/CarouselComponent';
 
-import Accordian from '../Components/Accordian';
+import Accordian from '../components/Accordian';
 
 const quests = [
   {
@@ -33,7 +33,11 @@ const friends = [
     name: 'Sean',
     activeQuests: 'Improve posture',
   },
-  {id: 2, name: 'Steve', activeQuests: 'Couch to 5k'},
+  {
+    id: 2,
+    name: 'Steve',
+    activeQuests: 'Couch to 5k',
+  },
   {
     id: 3,
     name: 'Juan',
@@ -41,10 +45,14 @@ const friends = [
   },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.body}>
       <ScrollView style={{flex: 1}}>
+        <Button
+          title="Achievements"
+          onPress={() => navigation.navigate('Achievements')}
+        />
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
           <Text style={styles.level}>Lvl 1</Text>
