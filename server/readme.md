@@ -10,7 +10,7 @@
 
 ### Quests
 
-/quest/start - post: start a quest
+#### /quest/start - post: start a quest
 
 Requires JWT for authentication
 
@@ -32,7 +32,7 @@ Returns:
 }
 
 
-/quest/complete - post: complete a quest
+#### /quest/complete - post: complete a quest
 
 Requires JWT for authentication
 
@@ -48,23 +48,22 @@ Returns:
 }
 
 
-/quest/getActiveQuests - get: retrieves a user's active quests
+#### /quest/getActiveQuests - get: retrieves a user's active quests
 
 Requires JWT for authentication
 
-Returns:
-{
-  activeQuests: [activeQuest]
-}
+Returns:\
+{\
+  activeQuests: [activeQuest]\
+}\
 
 ### Tasks
 
-/task/:id - get: get details about a task (requires JWT)
+#### /task/:id - get: get details about a task (requires JWT)
 
 No other information required (id in url)
 
-
-/task/setComplete - post: mark a task completed (requires JWT)
+#### /task/setComplete - post: mark a task completed (requires JWT)
 
 Requires JWT for authentication
 Request should model:
