@@ -14,48 +14,58 @@
 
 Requires JWT
 
-Request should model:\
-body\
-{\
-  questId: number;\
+Request should model:
+```
+body
+{
+  questId: number;
 }
+```
 
-Returns:\
-{\
-  activeQuest: {\
-    id\
-    userId\
-    questId\
-    startDate\
-    progress\
-  }\
+Returns:
+```
+{
+  activeQuest: {
+    id
+    userId
+    questId
+    startDate
+    progress
+  }
 }
+```
 
 
 #### /quest/complete - post: complete a quest
 
 Requires JWT
 
-Request should model:\
-body\
-{\
-  questId: number;\
+Request should model:
+```
+body
+{
+  questId: number;
 }
+```
 
-Returns:\
-{\
-  'Quest completed'\
+Returns:
+```
+{
+  'Quest completed'
 }
+```
 
 
 #### /quest/getActiveQuests - get: retrieves a user's active quests
 
 Requires JWT
 
-Returns:\
-{\
-  activeQuests: [activeQuest]\
+Returns:
+```
+{
+  activeQuests: [activeQuest]
 }
+```
 
 ### Tasks
 
@@ -65,12 +75,14 @@ No other information required (id in url)
 
 #### /task/setComplete - post: mark a task completed (requires JWT)
 
-Requires JWT
+Requires JWT\
 Request should model:
+```
 body
 {
   taskId: number;
 }
+```
 
 
 
