@@ -36,11 +36,16 @@ class TaskHistory extends Model<ITaskHistory, ITaskHistoryCreationAttributes>
   public async complete () {
     this.completed = true;
     this.completedDate = new Date();
-    await TaskHistory.update(
-      { completed: this.completed, completedDate: this.completedDate },
-      { where:  { id: this.id }}
-    );
-  };
+    try {
+      await TaskHistory.update(
+        { completed: this.completed, completedDate: this.completedDate },
+        { where:  { id: this.id }}
+      );
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
 }
 
 TaskHistory.init(
