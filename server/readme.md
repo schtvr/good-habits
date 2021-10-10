@@ -4,58 +4,58 @@
 
 ### Authenticaton
 
-/login
-/user - post: create user
+/login\
+/user - post: create user\
 /user - get: get user by id (from JWT payload)
 
 ### Quests
 
 #### /quest/start - post: start a quest
 
-Requires JWT for authentication
+Requires JWT
 
-Request should model:
-body
-{
-  questId: number;
+Request should model:\
+body\
+{\
+  questId: number;\
 }
 
-Returns:
-{
-  activeQuest: {
-    id
-    userId
-    questId
-    startDate
-    progress
-  }
+Returns:\
+{\
+  activeQuest: {\
+    id\
+    userId\
+    questId\
+    startDate\
+    progress\
+  }\
 }
 
 
 #### /quest/complete - post: complete a quest
 
-Requires JWT for authentication
+Requires JWT
 
-Request should model:
-body
-{
-  questId: number;
+Request should model:\
+body\
+{\
+  questId: number;\
 }
 
-Returns:
-{
-  'Quest completed'
+Returns:\
+{\
+  'Quest completed'\
 }
 
 
 #### /quest/getActiveQuests - get: retrieves a user's active quests
 
-Requires JWT for authentication
+Requires JWT
 
 Returns:\
 {\
   activeQuests: [activeQuest]\
-}\
+}
 
 ### Tasks
 
@@ -65,7 +65,7 @@ No other information required (id in url)
 
 #### /task/setComplete - post: mark a task completed (requires JWT)
 
-Requires JWT for authentication
+Requires JWT
 Request should model:
 body
 {
