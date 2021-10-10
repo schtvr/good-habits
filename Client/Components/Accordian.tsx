@@ -14,8 +14,22 @@ if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const Accordian = ({title, data, btnText, btnText2}) => {
-  const [expanded, setExpanded] = useState(false);
+interface IProps {
+  title: string;
+  data: any;
+  btnText: string;
+  btnText2: string;
+  date: string;
+}
+
+const Accordian = ({
+  title,
+  data,
+  btnText,
+  btnText2,
+  date,
+}: IProps): JSX.Element => {
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -37,12 +51,15 @@ const Accordian = ({title, data, btnText, btnText2}) => {
       <View style={styles.parentHeader} />
       {expanded && (
         <View style={styles.child}>
-          <Text style={styles.content}>{data}</Text>
+          <View style={{flexDirection: 'column'}}>
+            <Text style={styles.content}>{data}</Text>
+            <Text style={styles.date}>Completion Date: {date}</Text>
+          </View>
+
           {btnText ? (
             <View style={styles.friendButtons}>
               <Button
                 title={btnText}
-                // type="outline"
                 buttonStyle={styles.btn}
                 onPress={() => console.log('hi')}
               />
@@ -85,7 +102,7 @@ const styles = StyleSheet.create({
   },
   friendButtons: {
     alignItems: 'flex-end',
-    width: 175,
+    width: 150,
   },
   btn: {
     marginBottom: 10,
@@ -104,8 +121,11 @@ const styles = StyleSheet.create({
     color: '#001233',
   },
   accoridianBtn: {
-    // flex: 1,
-    // width: 10,
+    fontSize: 20,
+    color: 'white',
+  },
+  date: {
+    paddingTop: 20,
   },
 });
 
