@@ -21,11 +21,11 @@ export interface IUser {
   userName: string
   email: string
   password: string
-  EXP: number
+  Exp: number
   level: number
 }
 
-interface IUserCreationAttributes extends Optional<IUser, 'id' | 'EXP' | 'level'> {}
+interface IUserCreationAttributes extends Optional<IUser, 'id' | 'Exp' | 'level'> {}
 
 class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public id!: number;
@@ -34,7 +34,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public userName!: string;
   public email!: string;
   public password!: string;
-  public EXP!: number;
+  public Exp!: number;
   public level!: number;
 
   public readonly createdAt!: Date;
@@ -94,7 +94,7 @@ User.init(
       type: new DataTypes.STRING(255),
       allowNull: false,
     },
-    EXP: {
+    Exp: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
