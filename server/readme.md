@@ -149,7 +149,7 @@ Reponses follow the following model:
 
 ### Authenticaton
 
-/login\
+/login
 
 Request:
 ```
