@@ -1,15 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
-
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
 
 const quests = [
   {
     id: 1,
-    duration: 350000,
+    duration: 3500,
     name: 'Improve posture',
     description: 'Correct your posture for 1 week',
     category: 'health',
@@ -18,7 +17,7 @@ const quests = [
   },
   {
     id: 2,
-    duration: 7900000,
+    duration: 79000000,
     name: 'couch to 5k',
     description: 'Run 5k within the time limit',
     category: 'fitness',
@@ -31,23 +30,63 @@ const friends = [
   {
     id: 1,
     name: 'Sean',
-    activeQuests: 'Improve posture',
+    activeQuests: ['Improve posture'],
   },
   {
     id: 2,
     name: 'Steve',
-    activeQuests: 'Couch to 5k',
+    activeQuests: ['Couch to 5k'],
   },
   {
     id: 3,
     name: 'Juan',
-    activeQuests: 'Couch to 5k',
+    activeQuests: ['Couch to 5k'],
   },
 ];
 
+interface IUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  EXP: number;
+  level: number;
+  friends: IFriends[];
+}
 
-const HomeScreen = ({navigation}) => {
+interface IFriends {
+  id: number;
+  name: string;
+  activeQuests: string;
+}
 
+interface IQuest {
+  id: number;
+  duration: number;
+  name: string;
+  description: string;
+  category: string;
+  missedCheckin: boolean;
+  completionEXP: number;
+}
+
+interface Props {
+  userFriends: IFriends[];
+  userQuests: IQuest[];
+  user: IUser;
+  navigation: any;
+}
+
+const HomeScreen = ({
+  navigation,
+  userFriends,
+  userQuests,
+  user,
+}: Props): JSX.Element => {
+  const [myQuests, setMyQuests] = useState<IQuest[]>([]);
+  const [myFriends, setMyFriends] = useState<IFriends[]>([]);
   return (
     <View style={styles.body}>
       <ScrollView style={{flex: 1}}>
@@ -76,15 +115,16 @@ const HomeScreen = ({navigation}) => {
     </View>
   );
 };
-
 const renderAccordians = () => {
   const items = [];
   for (let item of quests) {
+    const date = new Date(Date.now() + item.duration);
     items.push(
       <Accordian
         key={item.id}
         title={item.name}
         data={item.description}
+        date={date.toDateString()}
         btnText="completed"
         btnText2="upload"
       />,

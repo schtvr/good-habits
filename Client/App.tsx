@@ -1,4 +1,4 @@
-import React, {Profiler} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
@@ -6,6 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+
 
 
 import HomeScreen from './screens/HomeScreen';
@@ -39,12 +40,11 @@ const App: () => Node = () => {
             component={TabStack}
           />
           <Stack.Screen name="Achievements" component={AchievementsPage} />
-        </Stack.Navigator
+        </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
-
 
 const styles = StyleSheet.create({});
 

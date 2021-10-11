@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useRef} from 'react';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {
   View,
@@ -7,13 +7,32 @@ import {
   Image,
   SafeAreaView,
   TouchableOpacity,
+  ListRenderItem,
 } from 'react-native';
+interface IQuest {
+  id: number;
+  duration: number;
+  name: string;
+  description: string;
+  category: string;
+  missedCheckin: boolean;
+  completionEXP: number;
+}
+interface IFriends {
+  id: number;
+  name: string;
+  activeQuests: IQuest[];
+}
 
-const CarouselComponent = ({data}) => {
+interface IProps {
+  data: IFriends[];
+}
+
+const CarouselComponent = ({data}: IProps): JSX.Element => {
   const [active, setActive] = useState<number>(0);
   const ref = useRef(null);
 
-  const pagination = () => {
+  const pagination = (): JSX.Element => {
     return (
       <Pagination
         dotsLength={data.length}
@@ -31,7 +50,7 @@ const CarouselComponent = ({data}) => {
     );
   };
 
-  const renderItem = ({item}) => {
+  const renderItem: ListRenderItem<IFriends> = ({item}) => {
     return (
       <View style={styles.carousel}>
         <View>
