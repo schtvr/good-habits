@@ -85,14 +85,20 @@ const HomeScreen = ({
   userQuests,
   user,
 }: Props): JSX.Element => {
+
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
   const [myFriends, setMyFriends] = useState<IFriends[]>([]);
+
   return (
     <View style={styles.body}>
       <ScrollView style={{flex: 1}}>
         <Button
           title="Achievements"
           onPress={() => navigation.navigate('Achievements')}
+        />
+        <Button
+          title="Quest Details Screen"
+          onPress={() => navigation.navigate('QuestDetails')}
         />
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />

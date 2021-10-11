@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, ProgressBarAndroidBase} from 'react-native';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
-import QuestCard from '../components/profile/QuestCard';
+import QuestCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
 
 const ProfileScreen = () => {

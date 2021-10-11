@@ -11,9 +11,11 @@ import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
-// import SettingsScreen from './Screens/SettingsScreen';
+// import SettingsScreen from './screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
+import QuestDetailsScreen from './screens/QuestDetailsScreen'
 import LoginScreen from './screens/LoginScreen';
+
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,6 +62,14 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Main"
+            component={TabStack}
+          />
+          <Stack.Screen name="Achievements" component={AchievementsPage} />
+         
+
           {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
@@ -74,8 +84,10 @@ const App: () => Node = () => {
                 component={TabStack}
               />
               <Stack.Screen name="Achievements" component={AchievementsPage} />
+              <Stack.Screen name="QuestDetails" component={QuestDetailsScreen} />
             </>
           )}
+
         </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
