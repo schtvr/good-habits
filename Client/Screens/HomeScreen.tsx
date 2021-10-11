@@ -98,7 +98,7 @@ const HomeScreen = ({
         />
         <Button
           title="Quest Details Screen"
-          onPress={() => navigation.navigate('QuestDetails')}
+          onPress={() => navigation.navigate('QuestDetailsScreen')}
         />
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />

@@ -2,14 +2,14 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
-const QuestCard = (props) => {
+const QuestListCard = (props) => {
   const { cardTitle, questList } = props
   console.log('questcard', questList)
 
   return (
     <View>
       <Card>
-        <Card.Title>{cardTitle} </Card.Title>
+        <Text>{cardTitle} </Text>
         <Card.Divider/>
 
         { questList.map((quest, i) => {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export default QuestCard;
+export default QuestListCard;
 /*
 
     <Image

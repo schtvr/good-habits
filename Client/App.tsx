@@ -57,19 +57,12 @@ const TabStack = () => (
 //Remove the ! or change isAuthenticated to true to see other screens!
 
 const App: () => Node = () => {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="Main"
-            component={TabStack}
-          />
-          <Stack.Screen name="Achievements" component={AchievementsPage} />
          
-
           {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
@@ -84,7 +77,7 @@ const App: () => Node = () => {
                 component={TabStack}
               />
               <Stack.Screen name="Achievements" component={AchievementsPage} />
-              <Stack.Screen name="QuestDetails" component={QuestDetailsScreen} />
+              <Stack.Screen name="QuestDetailsScreen" component={QuestDetailsScreen} />
             </>
           )}
 
