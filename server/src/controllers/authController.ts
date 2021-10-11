@@ -16,10 +16,28 @@ const login = async (req: Request, res: Response) => {
     }
   });
 
-  if (!user) return res.status(404).send('User with that Username/Email not found.');
-  bcrypt.compare(req.body.password, user.password, (err, result) => {
+  if (!user) return res.status(403).send({
+    status: 'Bad',
+    message: 'Invalid username/email or password'
+  });
+  bcrypt.compare(req.body.password, user.password, (err, isValid) => {
+    if (err) res.status(500).send({
+      status: 'Bad', 
+      message: 'Not good very bad', 
+      error: err
+    });
+
+    if (!isValid) res.status(403).send({
+      status: 'Bad',
+      message: 'Invalid username/email or password',
+    });
+
     const token = jwt.sign(user.id.toString(), config.SECRET, { expiresIn: '1800s' });
-    res.json(token);
+    res.send({
+      status: 'Okay',
+      message: 'Enjoy your JWT',
+      token
+    });
   });
 };
 
@@ -27,15 +45,25 @@ const logout = async (req: Request, res: Response) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
-    return res.status(403).send('Unauthorized');
+    return res.status(403).send({
+      status: 'Bad',
+      message: 'Unauthorized'
+    });
   }
   try {
     Blacklist.create({
       jwt: token
     });
-    res.status(200).send('Logged out');
+    res.status(200).send({
+      status: 'Okay',
+      message: 'Logged out'
+    });
   } catch (err) {
-    res.status(500).send('Server error when logging out');
+    res.status(500).send({
+      status: 'Bad',
+      message: 'Server error when logging out',
+      error: err
+    });
   }
 };
 
