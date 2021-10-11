@@ -20,12 +20,12 @@ const completeTaskById = async (req: Request, res:Response) => {
   if (!req.user) return res.status(400).send({status: 'Bad' , message: 'Not authenticated'});
   if (!req.body.taskId) return res.status(422).send({status:'Bad', message: 'Missing taskId'});
   const foundTask = await req.user.getTaskHistory({ where: { id: req.body.taskId }});
-  //const result = foundTask.complete();
+  const result = await foundTask[0].complete();
 
-  //if (result) {return res.send({
-  //  status: 'Okay',
-  //  message: 'Task marked as completed',
-  //});}
+  if (result) {return res.send({
+    status: 'Okay',
+    message: 'Task marked as completed',
+  });}
 
 };
 
