@@ -12,7 +12,7 @@
   userName: string
   email: string
   password: string
-  Exp: string
+  exp: string
   level: number
 }
 ```
