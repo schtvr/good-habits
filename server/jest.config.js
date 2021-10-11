@@ -5,5 +5,4 @@ module.exports = {
     "^.+\\.(js|jsx)$": "babel-jest",
   },
   forceExit: true,
-  verbose: true,
 };
