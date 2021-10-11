@@ -18,8 +18,7 @@ interface IActiveQuest {
 interface IActiveQuestCreationAttributes extends
 Optional<IActiveQuest, 'id' | 'userId' | 'questId' | 'startDate'> {}
 
-class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes>
-implements IActiveQuest {
+class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> implements IActiveQuest {
   public id!: number;
   public userId!: number;
   public questId!: number;
@@ -30,19 +29,19 @@ implements IActiveQuest {
   public readonly updatedAt!: Date;
   
   // TODO: FIX THIS SHIT
-  public async getQuestTemplate () {
-    try {
-      const questTemplate = await Quest.findOne({
-        where: {
-          id: this.questId
-        }
-      });
-      if (!questTemplate) return undefined;
-      return questTemplate;
-    } catch (err) {
-      return undefined;
-    }
-  }
+  // public async getQuestTemplate () {
+  //   try {
+  //     const questTemplate = await Quest.findOne({
+  //       where: {
+  //         id: this.questId
+  //       }
+  //     });
+  //     if (!questTemplate) return undefined;
+  //     return questTemplate;
+  //   } catch (err) {
+  //     return undefined;
+  //   }
+  // }
 
   public async complete () {
     try {
