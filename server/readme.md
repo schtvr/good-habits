@@ -135,7 +135,6 @@ TaskHistory
 }
 ```
 
-
 ## Endpoints
 
 ### Authenticaton

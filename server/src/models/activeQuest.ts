@@ -28,20 +28,7 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   
-  // TODO: FIX THIS SHIT
-  // public async getQuestTemplate () {
-  //   try {
-  //     const questTemplate = await Quest.findOne({
-  //       where: {
-  //         id: this.questId
-  //       }
-  //     });
-  //     if (!questTemplate) return undefined;
-  //     return questTemplate;
-  //   } catch (err) {
-  //     return undefined;
-  //   }
-  // }
+
 
   public async complete () {
     try {
