@@ -16,6 +16,6 @@ router.post('/quest/complete', verify, quests.completeQuest);
 router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
 
 // TASK ROUTES
-router.post('/task/:id', verify, tasks.getTaskById);
+router.get('/task/:id', verify, tasks.getTaskById);
 router.post('/task/setComplete', verify , tasks.completeTaskById);
 export default router;

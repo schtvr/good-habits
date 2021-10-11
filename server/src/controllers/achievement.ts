@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
+import User from '../models/user';
 import Achievement from '../models/achievement';
 import AchievementTemplate from '../models/achievementTemplate';
 
+interface IUserReq {
+  user?: User
+}
+
 const getUserAchievements = async (req: Request, res: Response) => {
-  const { user } = req;
+  const { user }: IUserReq = req;
   if (!user) return res.status(400).send('Not authenticated');
   try {
     const achievements = await user.getAchievements();
@@ -27,10 +32,10 @@ const getAllAchievements = async (req: Request, res: Response) => {
 };
 
 const getAchievement = async (req: Request, res: Response) => {
-  const { user } = req;
-  const { achievementId } = req.body;
+  const { user }: IUserReq = req;
+  const { achievementId }: { achievementId: number } = req.body;
   if (!user) return res.status(400).send('Not authenticated');
-  if (!achievementId) return res.status(422).send('Missing form information');
+  if (achievementId === undefined) return res.status(422).send('Missing form information');
   try {
     const achieve = await AchievementTemplate.findOne({
       where: {
