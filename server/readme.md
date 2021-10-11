@@ -38,8 +38,7 @@ Returns:
 
 #### /quest/complete - post: complete a quest
 
-Requires JWT
-
+Requires JWT\
 Request should model:
 ```
 body
@@ -58,8 +57,7 @@ Returns:
 
 #### /quest/getActiveQuests - get: retrieves a user's active quests
 
-Requires JWT
-
+Requires JWT\
 Returns:
 ```
 {
@@ -81,6 +79,51 @@ Request should model:
 body
 {
   taskId: number;
+}
+```
+
+Returns:
+```
+{
+  to be determined
+}
+```
+
+###
+
+#### get: get user achievements (endpoint TBD)
+
+Requires JWT\
+
+Returns:
+```
+{
+  achievements: Achievement[]
+}
+```
+
+#### Get all achievements (templates)
+
+Returns:
+```
+{
+  allAchievements: Achievement[]
+}
+```
+
+### Get Achievement
+
+Request should model:
+```
+{
+  achievementId: number;
+}
+```
+
+Returns:
+```
+{
+  'Achievement granted'
 }
 ```
 
