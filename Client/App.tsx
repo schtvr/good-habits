@@ -7,10 +7,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
+
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SocialScreen from './screens/SocialScreen';
-import TrophyRoomScreen from './screens/TrophyRoomScreen';
+import LeaderBoardScreen from './screens/LeaderBoardScreen';
 // import SettingsScreen from './Screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
 
@@ -22,7 +23,7 @@ const TabStack = () => (
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
     <Tab.Screen name="Social" component={SocialScreen} />
-    <Tab.Screen name="TrophyRoom" component={TrophyRoomScreen} />
+    <Tab.Screen name="Leaderboards" component={LeaderBoardScreen} />
     {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
   </Tab.Navigator>
 );
@@ -38,11 +39,12 @@ const App: () => Node = () => {
             component={TabStack}
           />
           <Stack.Screen name="Achievements" component={AchievementsPage} />
-        </Stack.Navigator>
+        </Stack.Navigator
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
+
 
 const styles = StyleSheet.create({});
 
