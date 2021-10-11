@@ -18,7 +18,7 @@ const getUserAchievements = async (req: Request, res: Response) => {
     res.status(200).send({
       status: 'Okay',
       message: 'Achievements retrieved',
-      achievements
+      data: achievements
     });
   } catch (err) {
     res.status(500).send({
@@ -34,7 +34,7 @@ const getAllAchievements = async (req: Request, res: Response) => {
     res.status(200).send({
       status: 'Okay',
       message: 'Achievement templates retreieved',
-      allAchievements
+      data: allAchievements
     });
   } catch (err) {
     res.status(500).send({
@@ -80,7 +80,7 @@ const grantAchievement = async (req: Request, res: Response) => {
     return res.status(200).send({
       status: 'Okay',
       message: 'Achievement granted',
-      user
+      data: user
     });
   } catch (err) {
     res.status(500).send({

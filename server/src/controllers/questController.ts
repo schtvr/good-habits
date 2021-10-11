@@ -28,13 +28,13 @@ const startQuest = async (req: Request, res: Response) => {
     return res.status(200).send({
       status: 'Okay',
       message: 'Quest started',
-      activeQuest
+      data: activeQuest
     });
   } catch (err) {
     return res.status(500).send({
       status: 'Bad',
       message: 'Error starting quest.',
-      error: err
+      data: err
     });
   }
 };
@@ -72,7 +72,7 @@ const completeQuest = async (req: Request, res: Response) => {
     return res.status(500).send({
       status: 'Bad',
       message: 'Server errored when completing quest.',
-      error: err
+      data: err
     });
   }
 };
@@ -87,13 +87,13 @@ const getUserActiveQuests = async (req: Request, res: Response) => {
     res.status(200).send({
       status: 'Okay',
       message: 'Retreived user\'s active quests',
-      activeQuests: userQuests
+      data: userQuests
     });
   } catch (err) {
     res.status(500).send({
       status: 'Bad',
       message: 'Error retrieving user\'s quests',
-      error: err
+      data: err
     });
   }
 };
@@ -104,13 +104,13 @@ const getQuestTemplates = async (req: Request, res: Response) => {
     res.status(200).send({
       status: 'Okay',
       message: 'Retrieved quest templates',
-      quests: allQuests
+      data: allQuests
     });
   } catch (err) {
     res.status(500).send({
       status: 'Bad',
       message: 'Error retrieving quests',
-      error: err
+      data: err
     });
   }
 };
@@ -135,13 +135,13 @@ const getQuestTasks = async (req: Request, res: Response) => {
     return res.status(200).send({
       status: 'Okay',
       message: 'Retreived quest tasks',
-      tasks
+      data: tasks
     });
   } catch (err) {
     res.status(500).send({
       status: 'Bad',
       message: 'Error retrieving quest tasks',
-      error: err
+      data: err
     });
   }
 };

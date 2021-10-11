@@ -7,11 +7,16 @@ import config from '../../config';
 import Blacklist from '../models/blacklist';
 
 const login = async (req: Request, res: Response) => {
+  const { emailOrUserName, password } = req.body;
+  if (!emailOrUserName || !password) return res.status(403).send({
+    status: 'Bad',
+    message: 'Include username/email and password'
+  });
   const user = await User.findOne({
     where : {
       [Op.or] : [
-        {email: req.body.email},
-        {userName: req.body.userName}
+        { email: emailOrUserName },
+        { userName: emailOrUserName }
       ]
     }
   });
@@ -20,23 +25,23 @@ const login = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Invalid username/email or password'
   });
-  bcrypt.compare(req.body.password, user.password, (err, isValid) => {
-    if (err) res.status(500).send({
+  bcrypt.compare(password, user.password, (err, isValid) => {
+    if (err) return res.status(500).send({
       status: 'Bad', 
       message: 'Not good very bad', 
-      error: err
+      data: err
     });
-
-    if (!isValid) res.status(403).send({
+    
+    if (!isValid) return res.status(403).send({
       status: 'Bad',
       message: 'Invalid username/email or password',
     });
 
-    const token = jwt.sign(user.id.toString(), config.SECRET, { expiresIn: '1800s' });
+    const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '1800s' });
     res.send({
       status: 'Okay',
       message: 'Enjoy your JWT',
-      token
+      data: token
     });
   });
 };
@@ -51,7 +56,7 @@ const logout = async (req: Request, res: Response) => {
     });
   }
   try {
-    Blacklist.create({
+    await Blacklist.create({
       jwt: token
     });
     res.status(200).send({
@@ -62,7 +67,7 @@ const logout = async (req: Request, res: Response) => {
     res.status(500).send({
       status: 'Bad',
       message: 'Server error when logging out',
-      error: err
+      data: err
     });
   }
 };

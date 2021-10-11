@@ -12,8 +12,7 @@ router.get('/user', verify , user.findUserById);
 
 //AUTH ROUTES
 router.post('/login', auth.login);
-router.post('/logout', auth.logout);
-
+router.post('/logout', verify, auth.logout);
 
 // QUEST ROUTES
 router.post('/quest/start', verify, quests.startQuest);

@@ -50,6 +50,7 @@ AchievementTemplate
   img: string
   category: string
   criteria: string
+  completionExp: number
 }
 ```
 
@@ -137,9 +138,36 @@ TaskHistory
 
 ## Endpoints
 
+Reponses follow the following model:
+```
+{
+  status: 'Bad' | 'Good'
+  message: 'some response message handwritten by victor and/or timbo slice'
+  data: whatever data you want bb
+}
+```
+
 ### Authenticaton
 
 /login\
+
+Request:
+```
+{
+  emailOrUserName: string
+  password: string
+}
+```
+
+/logout
+
+Request:
+```
+headers: {
+  Authorization: Bearer JsonWebTokenHere
+}
+```
+
 /user - post: create user\
 /user - get: get user by id (from JWT payload)
 
@@ -149,10 +177,13 @@ TaskHistory
 
 Requires JWT
 
-Request should model:
+Request:
 ```
-body
-{
+headers: {
+  Authorization: Bearer JsonWebTokenHere
+}
+
+body: {
   questId: number;
 }
 ```
@@ -160,7 +191,7 @@ body
 Returns:
 ```
 {
-  activeQuest: {
+  data: {
     id
     userId
     questId
@@ -169,7 +200,6 @@ Returns:
   }
 }
 ```
-
 
 #### /quest/complete - post: complete a quest
 
@@ -182,21 +212,13 @@ body
 }
 ```
 
-Returns:
-```
-{
-  'Quest completed'
-}
-```
-
-
 #### /quest/getActiveQuests - get: retrieves a user's active quests
 
 Requires JWT\
 Returns:
 ```
 {
-  activeQuests: activeQuest[]
+  data: activeQuest[]
 }
 ```
 
@@ -233,7 +255,7 @@ Requires JWT
 Returns:
 ```
 {
-  achievements: Achievement[]
+  data: Achievement[]
 }
 ```
 
@@ -242,7 +264,7 @@ Returns:
 Returns:
 ```
 {
-  allAchievements: Achievement[]
+  data: Achievement[]
 }
 ```
 
@@ -252,13 +274,6 @@ Request should model:
 ```
 {
   achievementId: number;
-}
-```
-
-Returns:
-```
-{
-  'Achievement granted'
 }
 ```
 

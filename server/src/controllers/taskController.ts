@@ -26,7 +26,6 @@ const completeTaskById = async (req: Request, res:Response) => {
     status: 'Okay',
     message: 'Task marked as completed',
   });}
-
 };
 
 export default {
