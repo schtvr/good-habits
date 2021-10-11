@@ -61,7 +61,7 @@ Requires JWT\
 Returns:
 ```
 {
-  activeQuests: [activeQuest]
+  activeQuests: activeQuest[]
 }
 ```
 
