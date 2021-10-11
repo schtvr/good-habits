@@ -1,5 +1,140 @@
 # API documentation
 
+## Data Models
+
+### User
+
+```
+{
+  id: number
+  firstName: string
+  lastName: string
+  userName: string
+  email: string
+  password: string
+  exp: string
+  level: number
+}
+```
+
+User has many:
+```
+Achievement
+ActiveQuest
+CompletedQuest
+TaskHistory
+```
+
+### Achievement
+
+```
+{
+  id: number
+  userId: number
+  templateId: number
+}
+```
+
+Belongs to: 
+```
+User
+AchievementTemplate
+```
+
+### AchievementTemplate
+
+```
+{
+  id: number
+  description: string
+  img: string
+  category: string
+  criteria: string
+}
+```
+
+Has many:
+```
+Achievement
+```
+
+### Quests
+
+```
+{
+  id: number
+  duration: number
+  name: string
+  description: string
+  category: string
+  completionExp: number
+}
+```
+
+Has many:
+```
+Task
+Active Quests
+```
+
+### ActiveQuest
+
+```
+{
+  id: number
+  userId: number
+  questId: number
+  startDate: Date
+  progress: number 
+}
+```
+
+### CompletedQuest
+
+// Add completed date here?
+
+```
+{
+  id: number
+  userId: number
+  questId: number
+  startDate: Date
+  progress: Date
+}
+```
+
+### Task
+
+```
+{
+  id: number
+  questId: number
+  description: string
+  expValue: number
+  index: number
+}
+```
+
+Has many:
+```
+TaskHistory
+```
+
+### TaskHistory
+
+```
+{
+  id: number
+  userId: number
+  taskId: number
+  questId: number
+  completedDate: Date | null
+  complted: boolean
+  textInput: string
+  userPictures: string
+}
+```
+
 ## Endpoints
 
 ### Authenticaton
