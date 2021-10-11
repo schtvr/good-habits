@@ -3,20 +3,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 
-import HomeScreen from './screens/HomeScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import SocialScreen from './screens/SocialScreen';
-import TrophyRoomScreen from './screens/TrophyRoomScreen';
-import SettingsScreen from './screens/SettingsScreen';
-
 import {StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-import HomeScreen from './Screens/HomeScreen';
-import ProfileScreen from './Screens/ProfileScreen';
-import SocialScreen from './Screens/SocialScreen';
-// import SettingsScreen from './Screens/SettingsScreen';
-import LeaderBoardScreen from './Screens/LeaderBoardScreen';
+import HomeScreen from './screens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import SocialScreen from './screens/SocialScreen';
+// import SettingsScreen from './screens/SettingsScreen';
+import LeaderBoardScreen from './screens/LeaderBoardScreen';
 
 /**
  * Sample React Native App
@@ -36,7 +30,7 @@ const App: () => Node = () => {
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
           <Tab.Screen name="Social" component={SocialScreen} />
-          <Tab.Screen name="Leader Boards" component={LeaderBoardScreen} />
+          <Tab.Screen name="Leaderboards" component={LeaderBoardScreen} />
           {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
         </Tab.Navigator>
       </NavigationContainer>
