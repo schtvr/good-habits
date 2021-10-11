@@ -17,6 +17,7 @@ export interface IAchievementTemplate {
   img: string
   category: string
   criteria: string
+  completionExp: number
 }
 interface IAchievementTemplateCreationAttributes extends Optional<IAchievementTemplate, 'id'> {}
 
@@ -27,6 +28,7 @@ class AchievementTemplate extends Model<IAchievementTemplate, IAchievementTempla
   public img!: string;
   public category!: string;
   public criteria!: string;
+  public completionExp!: number
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -64,7 +66,10 @@ AchievementTemplate.init(
       type: new DataTypes.STRING(255),
       allowNull: false,
     },
-
+    completionExp: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false
+    }
   },
   {
     sequelize,

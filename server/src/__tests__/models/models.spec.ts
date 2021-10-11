@@ -1,11 +1,11 @@
-import dbInit from '../models/init';
-import User from '../models/user';
-import AchievementTemplate from '../models/achievementTemplate';
-import Achievement from '../models/achievement';
-import sequelize from '../models/index';
-import Quest from '../models/quest';
-import Task from '../models/task';
-import TaskHistory from '../models/taskHistory';
+import dbInit from '../../models/init';
+import User from '../../models/user';
+import AchievementTemplate from '../../models/achievementTemplate';
+import Achievement from '../../models/achievement';
+import sequelize from '../../models/index';
+import Quest from '../../models/quest';
+import Task from '../../models/task';
+import TaskHistory from '../../models/taskHistory';
 describe('Tests for the models', () => {
   beforeAll(async () => {
     await dbInit();
@@ -34,6 +34,7 @@ describe('Tests for the models', () => {
       img: 'idc',
       category: 'idk',
       criteria: 'fuck bob 100 times',
+      completionExp: 100
     });
     achieve = await Achievement.create({
       userId: user.id,
@@ -182,6 +183,7 @@ describe('Tests for the models', () => {
         img: 'idc2',
         category: 'idk2',
         criteria: 'fuck2 bob 100 times',
+        completionExp: 100
       });
       await bigChieve.createAchievement({
         userId: user.id
