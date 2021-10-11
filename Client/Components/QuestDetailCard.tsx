@@ -13,7 +13,7 @@ const QuestDetailCard = () => {
     duration: 1000*60*60*24*14,
     name: 'Couch to 5K',
     description: 'Get your lazy booty off of the sofa and kick it into high gear! This quest guides you through the process of building your endurance with a final goal of running a 5K.',
-    category: 'physical',
+    category: 'mental',
     completionExp: '50'
   }
   const { duration, name, description, category, completionExp } = quest
@@ -21,10 +21,10 @@ const QuestDetailCard = () => {
   return (
     <Card>
       <View style={styles.container}>
-        <Image style={styles.image} source={require('../assets/avatar.png')} />
+        <Image style={styles.image} source={require('../assets/activity.png')} />
 
         <View style={styles.textArea}>
-          <Text style={{fontSize: 18, fontWeight:'bold' }} >{name}</Text>
+          <Text style={{fontSize: 18, fontWeight:'bold', color: color[category]}} >{name}</Text>
           <Text>Duration: {msToDays(duration)} days  |  EXP: {completionExp}</Text><Card.Divider />
           <Text style={{marginBottom: 10}}>{description}</Text>
         </View>

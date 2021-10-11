@@ -1,15 +1,14 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import { Card } from 'react-native-elements'
 
 const QuestCard = (props) => {
   const { cardTitle, questList } = props
-  console.log('questcard', questList)
 
   return (
     <View>
       <Card>
-        <Card.Title>{cardTitle} </Card.Title>
+        <Card.Title>{cardTitle}</Card.Title>
         <Card.Divider/>
 
         { questList.map((quest, i) => {
@@ -26,7 +25,6 @@ const QuestCard = (props) => {
 
 const styles = StyleSheet.create({
   activeQuestList: {
-
   },
   name: {
     flexDirection: 'row'
@@ -34,11 +32,3 @@ const styles = StyleSheet.create({
 })
 
 export default QuestCard;
-/*
-
-    <Image
-      style={styles.image}
-      resizeMode="cover"
-      source={{ uri: quest.avatar }}
-    />
-*/
