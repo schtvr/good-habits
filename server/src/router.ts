@@ -8,15 +8,15 @@ const router = express.Router();
 
 // USER ROUTES
 router.post('/user', user.createUser);
-router.get('/user', verify , user.findUserById);
+router.get('/user/', verify , user.findUserById);
 
 //AUTH ROUTES
 router.post('/login', auth.login);
 router.post('/logout', verify, auth.logout);
 
 // QUEST ROUTES
-router.post('/quest/start', verify, quests.startQuest);
-router.post('/quest/complete', verify, quests.completeQuest);
+router.post('/quest/start/:questId', verify, quests.startQuest);
+router.post('/quest/complete/:questId', verify, quests.completeQuest);
 router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
 
 // TASK ROUTES
