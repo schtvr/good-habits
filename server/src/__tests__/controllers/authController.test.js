@@ -3,8 +3,7 @@ import supertest from 'supertest';
 import sequelize from '../../models/index';
 import bcrypt from 'bcrypt';
 import 'regenerator-runtime/runtime';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-
+import jwt from 'jsonwebtoken';
 import router from '../../router';
 import dbInit from '../../models/init';
 import User from '../../models/user';
