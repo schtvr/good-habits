@@ -3,12 +3,9 @@ import User from '../models/user';
 import Achievement from '../models/achievement';
 import AchievementTemplate from '../models/achievementTemplate';
 
-interface IUserReq {
-  user?: User
-}
 
 const getUserAchievements = async (req: Request, res: Response) => {
-  const { user }: IUserReq = req;
+  const { user } = req;
   if (!user) return res.status(400).send({
     status: 'Bad',
     message: 'Not authenticated'
@@ -43,10 +40,9 @@ const getAllAchievements = async (req: Request, res: Response) => {
     });
   }
 };
-
 const grantAchievement = async (req: Request, res: Response) => {
-  const { user }: IUserReq = req;
-  const { achievementId }: { achievementId: number } = req.body;
+  const { user } = req;
+  const achievementId:string = req.params.achievementId;
   if (!user) return res.status(400).send('Not authenticated');
   if (achievementId === undefined) return res.status(422).send({
     status: 'Bad',

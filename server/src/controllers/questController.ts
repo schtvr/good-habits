@@ -1,5 +1,6 @@
 import { Request, Response, Express } from 'express';
 import Quest from '../models/quest';
+import ActiveQuest from '../models/activeQuest';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return res.status(400).send({
@@ -7,13 +8,13 @@ const startQuest = async (req: Request, res: Response) => {
     message: 'Not authenticated'
   });
 
-  if (!req.questId) return res.status(422).send({
+  if (!req.params.questId) return res.status(422).send({
     status: 'Bad',
     message: 'Missing form information'
   });
 
   try {
-    const questToStart = await Quest.findOne({ where: { id: req.questId }});
+    const questToStart = await Quest.findOne({ where: { id: req.params.questId }});
     if (!questToStart) return res.status(422).send({
       status: 'Bad',
       message: 'Invalid quest Id'
@@ -21,6 +22,13 @@ const startQuest = async (req: Request, res: Response) => {
     const activeQuest = await questToStart.createActiveQuest({
       userId: req.user.id
     });
+    
+    const allQuests = await ActiveQuest.findAll({
+      where: {
+        id: 1
+      }
+    });
+    //console.log(allQuests);
     if (!activeQuest) res.status(500).send({
       status: 'Bad',
       message: 'Error creating quest'
@@ -44,16 +52,16 @@ const completeQuest = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Not authenticated'
   });
-  if (!req.questId) return res.status(422).send({
+  if (!req.params.questId) return res.status(422).send({
     status: 'Bad',
     message: 'Missing form information'
   });
   
-  const { user } = req;
+  const user = req.user;
   try {
     const questToComplete = await req.user.getActiveQuests({ 
       where: { 
-        id: req.questId 
+        id: req.params.questId 
       }
     }); 
     if (!questToComplete) return res.status(422).send({
@@ -116,7 +124,7 @@ const getQuestTemplates = async (req: Request, res: Response) => {
 };
 
 const getQuestTasks = async (req: Request, res: Response) => {
-  const { questId } = req.body;
+  const questId = req.params.questId;
   if (!questId) return res.status(422).send({
     status: 'Bad',
     message: 'Invalid form, please send questId'
