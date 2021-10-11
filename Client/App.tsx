@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import HomeScreen from './screens/HomeScreen';
@@ -30,14 +30,25 @@ const AuthStack = () => (
   </Auth.Navigator>
 );
 
-//TabStack
+//Tabstack
+const headerRight = () => (
+  <View style={styles.header}>
+    <TouchableOpacity onPress={() => alert('Notifications!')}>
+      <Text style={styles.icons}>🔔</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => alert('Search!')}>
+      <Text style={styles.icons}>🔍</Text>
+    </TouchableOpacity>
+  </View>
+);
+
 const TabStack = () => (
   <Tab.Navigator initialRouteName="Home">
-    <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Profile" component={ProfileScreen} />
-    <Tab.Screen name="Social" component={SocialScreen} />
-    <Tab.Screen name="Leaderboards" component={LeaderBoardScreen} />
-    {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+    <Tab.Screen name="Home" component={HomeScreen} options={{headerRight}}/>
+    <Tab.Screen name="Profile" component={ProfileScreen} options={{headerRight}}/>
+    <Tab.Screen name="Social" component={SocialScreen} options={{headerRight}}/>
+    <Tab.Screen name="Leaderboards" component={LeaderBoardScreen} options={{headerRight}}/>
+    {/* <Tab.Screen name="Settings" component={SettingsScreen} /> options={{headerRight}} */}
   </Tab.Navigator>
 );
 
@@ -66,11 +77,20 @@ const App: () => Node = () => {
             </>
           )}
         </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+        </NavigationContainer>
+      </SafeAreaProvider>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    paddingRight: 30,
+  },
+  icons: {
+    margin: 10,
+    fontSize: 20
+  }
+});
 
 export default App;
