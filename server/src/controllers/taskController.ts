@@ -13,7 +13,6 @@ const getTaskById = async (req: Request, res:Response) => {
     message: 'Enjoy your task poggers xD rawr *holds up spork*\nnewline (please retweet, don\'t forget to smash that mfkin like button my guy)',
     foundTask
   });
-
 };
 
 
@@ -21,12 +20,12 @@ const completeTaskById = async (req: Request, res:Response) => {
   if (!req.user) return res.status(400).send({status: 'Bad' , message: 'Not authenticated'});
   if (!req.body.taskId) return res.status(422).send({status:'Bad', message: 'Missing taskId'});
   const foundTask = await req.user.getTaskHistory({ where: { id: req.body.taskId }});
-  const result = foundTask.complete();
+  //const result = foundTask.complete();
 
-  if (result) {return res.send({
-    status: 'Okay',
-    message: 'Task marked as completed',
-  });}
+  //if (result) {return res.send({
+  //  status: 'Okay',
+  //  message: 'Task marked as completed',
+  //});}
 
 };
 

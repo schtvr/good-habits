@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-import { IVerifiedRequest } from '../middlewares/auth';
+import { Request, Response, Express } from 'express';
 import Quest from '../models/quest';
 
 const startQuest = async (req: Request, res: Response) => {
@@ -7,10 +6,12 @@ const startQuest = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Not authenticated'
   });
+
   if (!req.questId) return res.status(422).send({
     status: 'Bad',
     message: 'Missing form information'
   });
+
   try {
     const questToStart = await Quest.findOne({ where: { id: req.questId }});
     if (!questToStart) return res.status(422).send({
@@ -47,6 +48,8 @@ const completeQuest = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Missing form information'
   });
+  
+  const { user } = req;
   try {
     const questToComplete = await req.user.getActiveQuests({ 
       where: { 
@@ -58,6 +61,9 @@ const completeQuest = async (req: Request, res: Response) => {
       message: 'Invalid quest Id'
     });
     questToComplete[0].complete();
+    
+
+
     return res.status(200).send({
       status: 'Okay',
       message: 'Quest completed'
@@ -71,7 +77,7 @@ const completeQuest = async (req: Request, res: Response) => {
   }
 };
 
-const getUserActiveQuests = async (req: IVerifiedRequest, res: Response) => {
+const getUserActiveQuests = async (req: Request, res: Response) => {
   if (!req.user) return res.status(400).send({
     status: 'Bad',
     message: 'Not authenticated'

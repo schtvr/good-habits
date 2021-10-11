@@ -1,19 +1,15 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, Express} from 'express';
 import User from '../models/user';
 import Blacklist from '../models/blacklist';
-export interface IVerifiedRequest extends Request{
-  user: User | undefined
-}
 
-const verify = async (req: IVerifiedRequest, res: Response, next: NextFunction) => {
+const verify = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
     return res.status(403).send('Unauthorized');
   }
-  // check for token in blacklist
   const isBlacklisted:Blacklist | null = await Blacklist.findOne({
     where: {
       jwt: token
