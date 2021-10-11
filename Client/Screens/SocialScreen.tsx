@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, ImageSourcePropType} from 'react-native';
 import {ListRenderItem, TouchableOpacity, Image} from 'react-native';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
 
 import {Card, ListItem, Button, Icon} from 'react-native-elements';
 
@@ -9,51 +9,121 @@ const friends = [
   {
     id: 1,
     name: 'Sean',
-    completedQuests: ['drink water'],
-    activeQuests: ['Improve posture', 'Couch to 5k'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'couch to 5k',
+        EXP: 150,
+      },
+    ],
+    activeQuests: ['Improve posture'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
   {
     id: 2,
     name: 'Steve',
-    completedQuests: ['drink water', 'Improve posture'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'Improve posture',
+        EXP: 100,
+      },
+    ],
     activeQuests: ['Couch to 5k'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
   {
     id: 3,
     name: 'Juan',
-    completedQuests: ['drink water', 'Improve posture'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'Improve posture',
+        EXP: 100,
+      },
+    ],
     activeQuests: ['Couch to 5k'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
   {
     id: 4,
     name: 'Juan',
-    completedQuests: ['drink water', 'Improve posture'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'Improve posture',
+        EXP: 100,
+      },
+    ],
     activeQuests: ['Couch to 5k'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
   {
     id: 5,
     name: 'Juan',
-    completedQuests: ['drink water', 'Improve posture'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'Improve posture',
+        EXP: 100,
+      },
+    ],
     activeQuests: ['Couch to 5k'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
   {
     id: 6,
     name: 'Juan',
-    completedQuests: ['drink water', 'Improve posture'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'Improve posture',
+        EXP: 100,
+      },
+    ],
     activeQuests: ['Couch to 5k'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
   {
     id: 7,
     name: 'Juan',
-    completedQuests: ['drink water', 'Improve posture'],
+    completedQuests: [
+      {
+        name: 'drink water',
+        EXP: 50,
+      },
+      {
+        name: 'Improve posture',
+        EXP: 100,
+      },
+    ],
     activeQuests: ['Couch to 5k'],
     url: require('../assets/friend1.png'),
+    level: 5,
   },
 ];
 interface IFriends {
@@ -62,24 +132,38 @@ interface IFriends {
   completedQuests: [];
   activeQuests: [];
   url: ImageSourcePropType;
+  level: number;
 }
 const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
   return (
     <>
       <TouchableOpacity>
         <Card>
-          <Card.Title>CARD WITH DIVIDER</Card.Title>
-          <Card.Divider />
-
-          <View key={index}>
+          <Card.Title style={styles.text}>{item.name}</Card.Title>
+          <Card.Divider
+            color={'black'}
+            inset={true}
+            insetType={'middle'}
+            subHeader={`Current Quest: ${item.activeQuests}`}
+            subHeaderStyle={styles.text}
+          />
+          <View style={{flexDirection: 'column'}}>
             <Image
-              style={styles.image}
               resizeMode="cover"
               source={require('../assets/friend1.png')}
             />
-            <Card.Divider />
-
-            <Text>{item.name}</Text>
+            <Text>Lvl {item.level}</Text>
+          </View>
+          <View style={{position: 'absolute', left: 100, top: 60}}>
+            <Text style={{paddingLeft: 10}}></Text>
+            <Text style={styles.text}>Completed Quests: </Text>
+            {item.completedQuests.map((quest, index) => {
+              return (
+                <Text style={styles.questName} key={index}>
+                  {quest.name}
+                </Text>
+              );
+            })}
           </View>
         </Card>
       </TouchableOpacity>
@@ -89,15 +173,16 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
 
 const SocialScreen = () => {
   return (
-    <View>
-      <Text style={styles.title}>All Friends!</Text>
-
-      <FlatList
-        data={friends}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderItems}
-      />
-    </View>
+    <SafeAreaView style={{flex: 1, paddingBottom: 45}}>
+      <View>
+        <Text style={styles.title}>All Friends!</Text>
+        <FlatList
+          data={friends}
+          keyExtractor={item => item.id.toString()}
+          renderItem={renderItems}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -107,7 +192,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
   },
-  image: {},
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  questName: {
+    fontSize: 16,
+  },
 });
 
 export default SocialScreen;
