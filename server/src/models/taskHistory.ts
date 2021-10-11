@@ -1,7 +1,7 @@
 import {
   Model,
   DataTypes,
-  Optional
+  Optional,
 } from 'sequelize';
 import sequelize from './index';
 
@@ -10,7 +10,7 @@ interface ITaskHistory {
   userId: number,
   taskId: number,
   questId: number,
-  completedDate: Date,
+  completedDate: Date | null,
   completed: boolean,
   textInput: string,
   userPicture: string,
@@ -20,18 +20,32 @@ interface ITaskHistoryCreationAttributes extends
 Optional<ITaskHistory, 'id'> {}
 
 class TaskHistory extends Model<ITaskHistory, ITaskHistoryCreationAttributes>
-implements ITaskHistory {
+  implements ITaskHistory {
   public id!: number;
   public userId!: number;
   public taskId!: number;
   public questId!: number;
-  public completedDate!: Date;
+  public completedDate!: Date | null;
   public completed!: boolean;
   public textInput!: string;
   public userPicture!: string;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  
+  public async complete () {
+    this.completed = true;
+    this.completedDate = new Date();
+    try {
+      await TaskHistory.update(
+        { completed: this.completed, completedDate: this.completedDate },
+        { where:  { id: this.id }}
+      );
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
 }
 
 TaskHistory.init(
@@ -43,30 +57,42 @@ TaskHistory.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      unique: 'userTask',
+      allowNull: false,
     },
     taskId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      unique: 'userTask',
+      allowNull: false,
     },
-    EXPValue: {
+    questId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    nextTaskHistoryId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+    completedDate: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
-    previousTaskHistoryId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+    completed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
-
+    textInput: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
+    },
+    userPicture: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
+    },
   },
   {
     sequelize,
-    tableName: 'taskHistory'
-  }
+    tableName: 'taskHistory',
+  },
 );
 
 export default TaskHistory;

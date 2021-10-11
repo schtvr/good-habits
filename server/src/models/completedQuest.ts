@@ -1,7 +1,7 @@
 import {
   Model,
   DataTypes,
-  Optional
+  Optional,
 } from 'sequelize';
 import sequelize from './index';
 
@@ -17,13 +17,13 @@ interface ICompletedQuestCreationAttributes extends
 Optional<ICompletedQuest, 'id' | 'userId' | 'questId'> {}
 
 class CompletedQuest extends Model<ICompletedQuest, ICompletedQuestCreationAttributes>
-implements ICompletedQuest {
+  implements ICompletedQuest {
   public id!: number;
   public userId!: number;
   public questId!: number;
   public startDate!: Date;
   public progress!: number;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -37,10 +37,12 @@ CompletedQuest.init(
     },
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userCompletedQuest',
       allowNull: false,
     },
     questId: {
       type: DataTypes.INTEGER.UNSIGNED,
+      unique: 'userCompletedQuest',
       allowNull: false,
     },
     startDate: {
@@ -50,13 +52,13 @@ CompletedQuest.init(
     progress: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: 0
-    }
+      defaultValue: 0,
+    },
   },
   {
     sequelize,
-    tableName: 'completedQuests'
-  }
+    tableName: 'completedQuests',
+  },
 );
 
 export default CompletedQuest;

@@ -7,14 +7,14 @@ import {
   Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
-  Optional
+  Optional,
 } from 'sequelize';
 import Achievement from './achievement';
 import ActiveQuest from './activeQuest';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 
-interface IUser {
+export interface IUser {
   id: number
   firstName: string
   lastName: string
@@ -36,28 +36,28 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public password!: string;
   public EXP!: number;
   public level!: number;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
+
   public getAchievements!: HasManyGetAssociationsMixin<Achievement>;
   public addAchievement!: HasManyAddAssociationMixin<Achievement, number>;
   public hasAchievement!: HasManyHasAssociationMixin<Achievement, number>;
   public countAchievements!: HasManyCountAssociationsMixin;
   public createAchievement!: HasManyCreateAssociationMixin<Achievement>;
-  
+
   public getActiveQuests!: HasManyGetAssociationsMixin<ActiveQuest>;
   public addActiveQuest!: HasManyAddAssociationMixin<ActiveQuest, number>;
   public hasActiveQuest!: HasManyHasAssociationMixin<ActiveQuest, number>;
   public countActiveQuests!: HasManyCountAssociationsMixin;
   public createActiveQuest!: HasManyCreateAssociationMixin<ActiveQuest>;
-  
+
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
   public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
   public countTaskHistory!: HasManyCountAssociationsMixin;
   public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
-  
+
   public static associations: {
     achievements: Association<User, Achievement>,
     activeQuests: Association<User, ActiveQuest>,
@@ -74,19 +74,21 @@ User.init(
     },
     firstName: {
       type: new DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     lastName: {
       type: new DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     userName: {
       type: new DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
+      unique: true,
     },
     email: {
       type: new DataTypes.STRING(128),
-      allowNull: false 
+      allowNull: false,
+      unique: true,
     },
     password: {
       type: new DataTypes.STRING(255),
@@ -100,19 +102,31 @@ User.init(
     level: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: 1
+      defaultValue: 1,
     },
   },
   {
     tableName: 'users',
     sequelize,
-  }
+  },
 );
 
 User.hasMany(Achievement, {
   sourceKey: 'id',
   foreignKey: 'userId',
-  as: 'achievements'
+  as: 'achievements',
+});
+
+User.hasMany(ActiveQuest, {
+  sourceKey: 'id',
+  foreignKey: 'userId',
+  as: 'activeQuests'
+});
+
+User.hasMany(TaskHistory, {
+  sourceKey: 'id',
+  foreignKey: 'userId',
+  as: 'taskHistory'
 });
 
 export default User;

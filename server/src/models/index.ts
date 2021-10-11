@@ -1,7 +1,7 @@
 import {
   Sequelize,
-  Dialect
-} from "sequelize";
+  Dialect,
+} from 'sequelize';
 import cfg from '../../config';
 
 const sqlConfig = {
@@ -11,7 +11,7 @@ const sqlConfig = {
     max: 25,
     min: 0,
     acquire: 30000,
-    idle: 10000
+    idle: 10000,
   },
   logging: false,
 };

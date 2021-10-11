@@ -4,8 +4,9 @@
   "description": "habit",
   "main": "index.ts",
   "scripts": {
-    "test": "jest --detectOpenHandles",
-    "start": "ts-node src/index.ts"
+    "test": "jest --detectOpenHandles --runInBand",
+    "start": "ts-node src/index.ts",
+    "lint": "npx eslint src/**/*.ts"
   },
   "keywords": [
     "habit"
@@ -13,18 +14,30 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
+    "@types/jsonwebtoken": "^8.5.5",
     "@types/node": "^16.10.3",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
     "jest": "^27.2.5",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"

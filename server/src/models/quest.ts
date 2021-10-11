@@ -7,9 +7,10 @@ import {
   Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
-  Optional
+  Optional,
 } from 'sequelize';
 import ActiveQuest from './activeQuest';
+import Task from './task';
 import sequelize from './index';
 
 interface IQuest {
@@ -18,34 +19,39 @@ interface IQuest {
   name: string
   description: string
   category: string
-  missedCheckIn: boolean
-  completionExpValue: number
+  completionExp: number
 }
 
 interface IQuestCreationAttributes extends
 Optional<IQuest, 'id'> {}
 
 class Quest extends Model<IQuest, IQuestCreationAttributes>
-implements IQuest {
+  implements IQuest {
   public id!: number;
   public duration!: number;
   public name!: string;
   public description!: string;
   public category!: string;
-  public missedCheckIn!: boolean;
-  public completionExpValue!: number;
+  public completionExp!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
+
   public getActiveQuests!: HasManyGetAssociationsMixin<ActiveQuest>;
   public addActiveQuest!: HasManyAddAssociationMixin<ActiveQuest, number>;
   public hasActiveQuest!: HasManyHasAssociationMixin<ActiveQuest, number>;
   public countActiveQuests!: HasManyCountAssociationsMixin;
   public createActiveQuest!: HasManyCreateAssociationMixin<ActiveQuest>;
-  
+
+  public getTasks!: HasManyGetAssociationsMixin<Task>;
+  public addTask!: HasManyAddAssociationMixin<Task, number>;
+  public hasTask!: HasManyHasAssociationMixin<Task, number>;
+  public countTasks!: HasManyCountAssociationsMixin;
+  public createTask!: HasManyCreateAssociationMixin<Task>;
+
   public static associations: {
-    activeQuests: Association<Quest, ActiveQuest>
+    activeQuests: Association<Quest, ActiveQuest>,
+    tasks: Association<Quest, Task>
   };
 }
 
@@ -72,20 +78,27 @@ Quest.init(
       type: new DataTypes.STRING(128),
       allowNull: false,
     },
-    missedCheckIn: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    completionExpValue: {
+    completionExp: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     sequelize,
-    tableName: 'quests'
-  }
+    tableName: 'quests',
+  },
 );
+
+Quest.hasMany(Task, {
+  sourceKey: 'id',
+  foreignKey: 'questId',
+  as: 'tasks',
+});
+
+Quest.hasMany(ActiveQuest, {
+  sourceKey: 'id',
+  foreignKey: 'questId',
+  as: 'activeQuests',
+});
 
 export default Quest;

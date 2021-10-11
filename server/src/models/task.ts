@@ -7,7 +7,7 @@ import {
   Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
-  Optional
+  Optional,
 } from 'sequelize';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
@@ -15,33 +15,31 @@ import TaskHistory from './taskHistory';
 interface ITask {
   id: number,
   questId: number,
-  taskDescription: string,
-  EXPValue: number,
-  nextTaskId: number,
-  previousTaskId: number,
+  description: string,
+  expValue: number,
+  index: number,
 }
 
 interface ITaskCreationAttributes extends
-Optional<ITask, 'id'> {}
+Optional<ITask, 'id' | 'questId'> {}
 
 class Task extends Model<ITask, ITaskCreationAttributes>
-implements ITask {
+  implements ITask {
   public id!: number;
   public questId!: number;
-  public taskDescription!: string;
-  public EXPValue!: number;
-  public nextTaskId!: number;
-  public previousTaskId!: number;
-  
+  public description!: string;
+  public expValue!: number;
+  public index!: number;
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
+
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
   public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
   public countTaskHistory!: HasManyCountAssociationsMixin;
   public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
-  
+
   public static associations: {
     taskHistory: Association<Task, TaskHistory>
   };
@@ -56,30 +54,31 @@ Task.init(
     },
     questId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    taskDescription: {
-      type:  new DataTypes.STRING(1000),
-      allowNull: false
+    description: {
+      type: new DataTypes.STRING(1000),
+      allowNull: false,
     },
-    EXPValue: {
+    expValue: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    nextTaskId: {
+    index: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+      allowNull: false,
     },
-    previousTaskId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
-    },
-
   },
   {
     sequelize,
-    tableName: 'tasks'
-  }
+    tableName: 'tasks',
+  },
 );
+
+Task.hasMany(TaskHistory, {
+  sourceKey: 'id',
+  foreignKey: 'taskId',
+  as: 'taskHistory'
+});
 
 export default Task;
