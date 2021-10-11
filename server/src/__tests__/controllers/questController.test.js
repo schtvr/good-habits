@@ -60,7 +60,7 @@ describe('Quest Controller', () => {
     expect(res.body.message).toBe('Quest started');
   });
   test('Should\'nt be able to joined a non-created quest', async () => {
-    const res = await request.post('/quest/start/543543734587863457845378654378645367734').set(
+    const res = await request.post('/quest/start/15151').set(
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );

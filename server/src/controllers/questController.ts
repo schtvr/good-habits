@@ -14,6 +14,11 @@ const startQuest = async (req: Request, res: Response) => {
   });
 
   try {
+    const uniqueness = await ActiveQuest.findOne({where: {userId:  req.user.id, questId: req.params.questId }})
+    if (uniqueness) return res.status(422).send({
+      status: 'Bad',
+      message: 'Duplicate quest'
+    });
     const questToStart = await Quest.findOne({ where: { id: req.params.questId }});
     if (!questToStart) return res.status(422).send({
       status: 'Bad',
@@ -23,12 +28,6 @@ const startQuest = async (req: Request, res: Response) => {
       userId: req.user.id
     });
     
-    const allQuests = await ActiveQuest.findAll({
-      where: {
-        id: 1
-      }
-    });
-    //console.log(allQuests);
     if (!activeQuest) res.status(500).send({
       status: 'Bad',
       message: 'Error creating quest'

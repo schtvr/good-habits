@@ -46,7 +46,7 @@ class AchievementTemplate extends Model<IAchievementTemplate, IAchievementTempla
 AchievementTemplate.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -67,7 +67,7 @@ AchievementTemplate.init(
       allowNull: false,
     },
     completionExp: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false
     }
   },

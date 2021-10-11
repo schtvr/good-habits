@@ -53,17 +53,17 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
 ActiveQuest.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userQuest',
       allowNull: false,
     },
     questId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userQuest',
       allowNull: false,
     },
@@ -73,7 +73,7 @@ ActiveQuest.init(
       defaultValue: new Date() 
     },
     progress: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },

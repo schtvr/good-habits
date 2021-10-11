@@ -58,12 +58,12 @@ class Quest extends Model<IQuest, IQuestCreationAttributes>
 Quest.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     duration: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     name: {
@@ -79,7 +79,7 @@ Quest.init(
       allowNull: false,
     },
     completionExp: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
