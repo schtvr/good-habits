@@ -13,8 +13,9 @@ import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
-// import SettingsScreen from './Screens/SettingsScreen';
+// import SettingsScreen from './screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
+import QuestDetailsScreen from './screens/QuestDetailsScreen'
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -40,6 +41,7 @@ const App: () => Node = () => {
             component={TabStack}
           />
           <Stack.Screen name="Achievements" component={AchievementsPage} />
+          <Stack.Screen name="QuestDetails" component={QuestDetailsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

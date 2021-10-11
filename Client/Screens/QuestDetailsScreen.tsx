@@ -1,7 +1,8 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import QuestDetailCard from '../components/QuestDetailCard'
-import QuestCard from '../components/QuestListCard'
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import QuestDetailCard from '../components/QuestDetailCard';
+import QuestCard from '../components/QuestListCard';
+import { ThemeProvider } from 'react-native-elements';
 
 
 const QuestDetailsScreen = () => {
@@ -22,6 +23,7 @@ const QuestDetailsScreen = () => {
         cardTitle='Tasks to complete quest'
         questList={mockTaskList}
       />
+
     </View>
   )
 }
