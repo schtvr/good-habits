@@ -89,11 +89,11 @@ Returns:
 }
 ```
 
-###
+### Achievements
 
 #### get: get user achievements (endpoint TBD)
 
-Requires JWT\
+Requires JWT
 
 Returns:
 ```
@@ -111,7 +111,7 @@ Returns:
 }
 ```
 
-### Get Achievement
+### Achievement Completed
 
 Request should model:
 ```
