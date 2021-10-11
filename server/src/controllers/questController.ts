@@ -29,7 +29,7 @@ const completeQuest = async (req: Request, res: Response) => {
     }); 
     if (!questToComplete) return res.status(422).send('Invalid quest Id');
     questToComplete[0].complete();
-    return res.status(200).send('Quest completed')
+    return res.status(200).send('Quest completed');
   } catch (err) {
     return res.status(500).send('Server errored when completing quest.');
   }

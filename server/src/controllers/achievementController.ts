@@ -53,7 +53,7 @@ const getAchievement = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = {
+export default {
   getUserAchievements,
   getAllAchievements,
   getAchievement
