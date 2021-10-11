@@ -87,7 +87,6 @@ const HomeScreen = ({
 }: Props): JSX.Element => {
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
   const [myFriends, setMyFriends] = useState<IFriends[]>([]);
-
   return (
     <View style={styles.body}>
       <ScrollView style={{flex: 1}}>
