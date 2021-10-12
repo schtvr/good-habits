@@ -3,7 +3,7 @@ import Quest from '../models/quest';
 import ActiveQuest from '../models/activeQuest';
 import User from '../models/user';
 import sendRes from '../funcs/sendRes';
-import checkQuestAchievements from '../funcs/checkQuestAchievements';
+import checkAchievements from '../funcs/checkQuestAchievements';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -26,8 +26,6 @@ const startQuest = async (req: Request, res: Response) => {
     const activeQuest = await questToStart.createActiveQuest({
       userId: req.user.id
     });
-    
-    const quests = await req.user.getActiveQuests();
     
     if (!activeQuest) sendRes(res, false, 500, 'Error creating quest');
     
@@ -60,6 +58,7 @@ const completeQuest = async (req: Request, res: Response) => {
       }
     });
     if (!template) return sendRes(res, false, 422, 'Invalid quest Id');
+    if (!await questToComplete[0].complete()) sendRes(res, false, 500, 'Server error completing quest');
     
     user.exp += template.completionExp;
     await User.update(
@@ -68,8 +67,8 @@ const completeQuest = async (req: Request, res: Response) => {
         id: user.id
       }});
     
-    if (!await questToComplete[0].complete()) sendRes(res, false, 500, 'Server error completing quest');
-    await checkQuestAchievements(user);
+    await checkAchievements(user, 'Quests');
+
     return sendRes(res, true, 200, 'Quest completed', user.exp);
   } catch (err) {
     return sendRes(res, false, 500, 'Server errored when completing quest.', err);

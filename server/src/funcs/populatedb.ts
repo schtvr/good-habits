@@ -32,21 +32,21 @@ const populateDb = async () => {
       name: 'Couch to 5k',
       duration: 30,
       description: 'Get off your fat ass and run 5 kilometeres',
-      category: 'health',
-      completionExp: 10000
+      category: 'Health',
+      completionExp: 1000
     });
     await Quest.create({
       name: 'Posture check!',
       duration: 14,
       description: 'Check ya posture, goon',
-      category: 'health',
-      completionExp: 5000
+      category: 'Health',
+      completionExp: 500
     });
     await Quest.create({
       name: 'Take your meds',
       duration: 7,
       description: 'Take your anti-psychotics',
-      category: 'health',
+      category: 'Health',
       completionExp: 300
     });
     await Quest.create({
