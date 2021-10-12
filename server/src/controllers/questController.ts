@@ -27,8 +27,6 @@ const startQuest = async (req: Request, res: Response) => {
       userId: req.user.id
     });
     
-    const quests = await req.user.getActiveQuests();
-    
     if (!activeQuest) sendRes(res, false, 500, 'Error creating quest');
     
     return sendRes(res, true, 200, 'Quest started', activeQuest);

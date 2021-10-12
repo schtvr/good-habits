@@ -1,6 +1,7 @@
 import Task from '../models/task';
 import { Request, Response } from 'express';
 import sendRes from '../funcs/sendRes';
+import checkAchievements from '../funcs/checkQuestAchievements';
 
 const getTaskById = async (req: Request, res:Response) => {
   if (!req.params.id) return sendRes(res, false, 422, 'Missing taskId');
@@ -19,6 +20,7 @@ const completeTaskById = async (req: Request, res:Response) => {
   const foundTask = await req.user.getTaskHistory({ where: { id: req.params.taskId }});
 
   const result = await foundTask[0].complete();
+  await checkAchievements(req.user, 'Tasks');
   if (result) return sendRes(res, true, 200, 'Task completed');
 };
 
