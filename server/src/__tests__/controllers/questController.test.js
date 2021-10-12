@@ -7,6 +7,8 @@ import User from '../../models/user';
 import router from '../../router';
 import dbInit from '../../models/init';
 import Quest from '../../models/quest';
+import populateDb from '../../../populatedb';
+import AchievementTemplate from '../../models/achievementTemplate';
 
 describe('Quest Controller', () => {
   const app = express();
@@ -20,6 +22,7 @@ describe('Quest Controller', () => {
   let loginRes;
   beforeAll(async () => {
     await dbInit();
+    await populateDb();
     user = await User.create({
       firstName: 'BobisCringe',
       lastName: 'FuckoDasdds',
@@ -37,7 +40,7 @@ describe('Quest Controller', () => {
     loginRes = await request.post('/login').send({
       emailOrUserName: 'fuckoBadssadadadsob',
       password: 'bigshitasdasdadster123'
-    }); 
+    });
   });
   afterAll(async () => {
     await User.destroy({
@@ -108,6 +111,15 @@ describe('Quest Controller', () => {
     expect(activeQuests).toHaveLength(0);
     expect(completedQuests).toHaveLength(1);
     expect(res.body.status).toBe('Okay');
+    
+    const achievements = await user.getAchievements();
+    const template = await AchievementTemplate.findOne({
+      where: {
+        id: achievements[0].templateId
+      }
+    });
+    expect(achievements).toHaveLength(1);
+    expect(template.description).toBe('Complete your first quest');
   });
   
   test('only complete quests once', async () => {

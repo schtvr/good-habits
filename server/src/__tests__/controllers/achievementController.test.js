@@ -34,10 +34,11 @@ describe('Achievement controller', () => {
       password: 'sussybakka'
     }); 
     template = await AchievementTemplate.create({
+      name: 'bobFucker',
       description: 'fuck bob 100 times',
       img: '',
       category: 'bob fucking category',
-      criteria: 'Fuck bob 100 times',
+      criteria: 100,
       completionExp: 200
     });
   });
@@ -51,10 +52,11 @@ describe('Achievement controller', () => {
     const templates = res.body.data;
     expect(templates).toHaveLength(1);
     await AchievementTemplate.create({
+      name: 'Poo!',
       description: 'poo',
       category: 'toilet category',
       completionExp: 1000,
-      criteria: 'take a poo',
+      criteria: 1,
       img: ''
     });
     const res2 = await request.get('/achievement/templates');

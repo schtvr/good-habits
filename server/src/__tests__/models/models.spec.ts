@@ -30,10 +30,11 @@ describe('Tests for the models', () => {
       password: 'password',
     });
     achieveTemplate = await AchievementTemplate.create({
+      name: 'fuck',
       description: 'fuck',
       img: 'idc',
       category: 'idk',
-      criteria: 'fuck bob 100 times',
+      criteria: 100,
       completionExp: 100
     });
     achieve = await Achievement.create({
@@ -200,10 +201,11 @@ describe('Tests for the models', () => {
     
     test('AchievementTemplate should grant users achievements', async () => {
       const bigChieve = await AchievementTemplate.create({
+        name: 'fuck2',
         description: 'fuck2',
         img: 'idc2',
         category: 'idk2',
-        criteria: 'fuck2 bob 100 times',
+        criteria: 200,
         completionExp: 100
       });
       await bigChieve.createAchievement({
