@@ -26,8 +26,6 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
-
 
   public async complete () {
     try {
