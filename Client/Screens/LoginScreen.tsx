@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Button} from 'react-native';
-import {Input, Text} from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn, stateSelector } from '../redux/userSlice'
 
@@ -10,7 +8,10 @@ const mockLogin = {
     password: 'testerman',
 }
 
-const LoginScreen = (): JSX.Element => {
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Input, Text, Button} from 'react-native-elements';
+
+const LoginScreen = ({navigation}): JSX.Element => {
   const [userState, setUserState] = useState({
     userNameOrEmail: '',
     password: '',
@@ -71,7 +72,14 @@ const LoginScreen = (): JSX.Element => {
         autoCapitalize="none"
         secureTextEntry
       />
-      <Button title="Sign In" onPress={() => signInUser()} />
+      <Button
+        title="Sign In"
+        onPress={() => signInUser()}
+        buttonStyle={styles.btnStyle}
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <Text style={styles.link}>Dont have an account? Go to register!</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -87,6 +95,15 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     borderBottomColor: 'black',
     borderBottomWidth: 1,
+  },
+  link: {
+    color: '#2e7eff',
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  btnStyle: {
+    width: 150,
+    alignSelf: 'center',
   },
 });
 
