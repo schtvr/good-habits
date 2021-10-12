@@ -11,13 +11,28 @@ import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
-// import SettingsScreen from './Screens/SettingsScreen';
+// import SettingsScreen from './screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
+import QuestDetailsScreen from './screens/QuestDetailsScreen'
+import LoginScreen from './screens/LoginScreen';
 
+const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+//AuthStack
+const AuthStack = () => (
+  <Auth.Navigator>
+    <Auth.Screen
+      name="signUp"
+      component={LoginScreen}
+      options={{headerShown: false}}
+    />
+  </Auth.Navigator>
+);
+
+//Tabstack
 const headerRight = () => (
   <View style={styles.header}>
     <TouchableOpacity onPress={() => alert('Notifications!')}>
@@ -75,21 +90,31 @@ const TabStack = () => (
   </Tab.Navigator>
 );
 
+//Remove the ! or change isAuthenticated to true to see other screens!
+
 const App: () => Node = () => {
+  const isAuthenticated = true;
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="Main"
-            component={TabStack}
-          />
-          <Stack.Screen
-            name="Achievements"
-            component={AchievementsPage}
-            options={{headerRight}}
-          />
+        <Stack.Navigator>       
+          {!isAuthenticated ? (
+            <Stack.Screen
+              name="Auth"
+              component={AuthStack}
+              options={{headerShown: false}}
+            />
+          ) : (
+            <>
+              <Stack.Screen
+                options={{headerShown: false}}
+                name="Main"
+                component={TabStack}
+              />
+              <Stack.Screen name="Achievements" component={AchievementsPage} />
+              <Stack.Screen name="QuestDetailsScreen" component={QuestDetailsScreen} />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

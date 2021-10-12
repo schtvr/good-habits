@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, ProgressBarAndroidBase} from 'react-native';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
-import QuestCard from '../components/profile/QuestCard';
+import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
 
 const ProfileScreen = () => {
@@ -11,10 +11,10 @@ const ProfileScreen = () => {
       <ProfileHeader />
       <CuratedTrophies />
       <CompletedStats />
-      <QuestCard
+      <QuestListCard
         cardTitle="User's active quests"
         questList={user.activeQuests}/>
-      <QuestCard
+      <QuestListCard
         cardTitle="User's previous quests"
         questList={user.questHistory}/>
     </View>
