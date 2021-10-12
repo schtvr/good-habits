@@ -142,7 +142,7 @@ TaskHistory
 Reponses follow the following model:
 ```
 {
-  status: 'Bad' | 'Good'
+  status: 'Bad' | 'Okay'
   message: 'some response message handwritten by victor and/or timbo slice'
   data: whatever data you want bb
 }
