@@ -5,7 +5,6 @@ import {
 } from 'sequelize';
 import sequelize from './index';
 import CompletedQuest from './completedQuest';
-import Quest from './quest';
 
 interface IActiveQuest {
   id: number,
@@ -27,8 +26,6 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
-
 
   public async complete () {
     try {
@@ -38,11 +35,7 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
         startDate: this.startDate,
         progress: this.progress,
       });
-      await ActiveQuest.destroy({
-        where: {
-          id: this.id,
-        },
-      });
+      await this.destroy();
       return true;
     } catch (err) {
       return false;
@@ -53,17 +46,17 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
 ActiveQuest.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userQuest',
       allowNull: false,
     },
     questId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userQuest',
       allowNull: false,
     },
@@ -73,7 +66,7 @@ ActiveQuest.init(
       defaultValue: new Date() 
     },
     progress: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },

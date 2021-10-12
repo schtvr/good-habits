@@ -25,17 +25,17 @@ class Achievement extends Model<IAchievement, IAchievementCreationAttributes>
 Achievement.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userAchievement',
       allowNull: false,
     },
     templateId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userAchievement',
       allowNull: false,
     },

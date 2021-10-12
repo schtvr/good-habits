@@ -3,13 +3,10 @@ import supertest from 'supertest';
 import sequelize from '../../models/index';
 import bcrypt from 'bcrypt';
 import 'regenerator-runtime/runtime';
-import jwt from 'jsonwebtoken';
 import User from '../../models/user';
 import router from '../../router';
 import dbInit from '../../models/init';
 import Quest from '../../models/quest';
-import config from '../../../config';
-import Blacklist from '../../models/blacklist';
 
 describe('Quest Controller', () => {
   const app = express();
@@ -60,12 +57,13 @@ describe('Quest Controller', () => {
     expect(res.body.message).toBe('Quest started');
   });
   test('Should\'nt be able to joined a non-created quest', async () => {
-    const res = await request.post('/quest/start/543543734587863457845378654378645367734').set(
+    const res = await request.post('/quest/start/15151').set(
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );
     expect(res.body.status).toBe('Bad');
     expect(res.body.message).toBe('Invalid quest Id');
+    
   });
 
   test('Quest should appear as one of the user\'s active quests', async () => {
@@ -84,5 +82,42 @@ describe('Quest Controller', () => {
     expect(res2.body.data).toHaveLength(1);
   });
 
-
+  test('Shouldn\'t be able to join a quest twice', async () => {
+    const res = await request.post(`/quest/start/${quest.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.status).toBe('Bad');
+    expect(res.body.message).toBe('Duplicate quest');
+  });
+  
+  test('should complete quests', async () => {
+    const res = await request.post(`/quest/complete/${quest.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    const userCompleted = await User.findOne({
+      where: {
+        id: user.id
+      }
+    });
+    expect(userCompleted.exp).toBe(10);
+      
+    const activeQuests = await userCompleted.getActiveQuests();
+    const completedQuests = await userCompleted.getCompletedQuests();
+    expect(activeQuests).toHaveLength(0);
+    expect(completedQuests).toHaveLength(1);
+    expect(res.body.status).toBe('Okay');
+  });
+  
+  test('only complete quests once', async () => {
+    const res = await request.post(`/quest/complete/${quest.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.status).toBe('Bad');
+    expect(res.body.message).toBe('Invalid quest Id');
+    const completedQuests = await user.getCompletedQuests();
+    expect(completedQuests).toHaveLength(1);
+  });
 });

@@ -31,17 +31,17 @@ class CompletedQuest extends Model<ICompletedQuest, ICompletedQuestCreationAttri
 CompletedQuest.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userCompletedQuest',
       allowNull: false,
     },
     questId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userCompletedQuest',
       allowNull: false,
     },
@@ -50,7 +50,7 @@ CompletedQuest.init(
       allowNull: false,
     },
     progress: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },

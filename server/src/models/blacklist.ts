@@ -25,7 +25,7 @@ class Blacklist extends Model<IBlacklist, IBlacklistCreationAttributes>
 Blacklist.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },

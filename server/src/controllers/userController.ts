@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import config from '../../config';
 import bcrypt from 'bcrypt';
-
+import { Op } from 'sequelize';
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
 const createUser = async (req: Request, res:Response) => {
@@ -66,6 +66,39 @@ const findUserById = async (req: Request, res: Response) => {
     });
   }
 };
+const addUserByUserName = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const user = req.user;
+  if (!userId || !user) return res.status(403).send({
+    status: 'Bad',
+    message: 'Did not send userId or Username, or not authenticated',
+  });
+  try {
+    const userToFollow = await User.findOne({
+      where: {
+        userName: userId
+      }
+    });
+    if  (!userToFollow) return res.status(404).send({
+      status: 'Bad',
+      message: 'No user with that Id or Username',
+    });
+    //Added because you can friend multiple people at once
+    user.addUser([userToFollow.id]);
+    return res.status(200).send({
+      status: 'Okay',
+      message: 'User has been added',
+    });
+  } catch (err) {
+    return res.status(500).send({
+      status: 'Bad',
+      message: 'Internal Server Error',
+      data: err,
+    });
+  }
+
+};
+
 
 const userWithoutPassword = (user: User) => {
   return {
@@ -78,5 +111,6 @@ const userWithoutPassword = (user: User) => {
 
 export default {
   createUser,
-  findUserById
+  findUserById,
+  addUserByUserName
 };

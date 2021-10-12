@@ -51,22 +51,22 @@ class TaskHistory extends Model<ITaskHistory, ITaskHistoryCreationAttributes>
 TaskHistory.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userTask',
       allowNull: false,
     },
     taskId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       unique: 'userTask',
       allowNull: false,
     },
     questId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     completedDate: {

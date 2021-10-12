@@ -22,12 +22,21 @@ describe('User controller', () => {
     password: bcrypt.hashSync('bigshitter123', 10),
     email: 'fuckoBob123@fuckbob.com'
   };
+  const dummyUser2 = {
+    firstName: 'thingsadas',
+    lastName: 'lol',
+    userName: 'HAHAHAHAH',
+    password: bcrypt.hashSync('shitcringepassword', 10),
+    email: 'HAHAHAHAH@fuckbob.com'
+  };
   
   let user;
+  let otherUser;
   
   beforeAll(async () => {
     await dbInit();
     user = await User.create(dummyUser);
+    otherUser = await User.create(dummyUser2);
   });
   
   afterAll(async () => {
@@ -89,7 +98,20 @@ describe('User controller', () => {
       expect(body.user.password).toBe(undefined);
       expect(body.user.email).toBe('fuckoBob123@fuckbob.com');
     });
-
   });
 
+  describe('Friends List functionality', () => {
+    test('Should be able to add as friend', async () => {
+      const token = jwt.sign({ userId: user.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      const res = await request.post(`/user/friend/${dummyUser2.userName}`).set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      //console.log(res);
+
+
+    });
+  })
 });

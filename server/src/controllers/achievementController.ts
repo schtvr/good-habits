@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
-import Achievement from '../models/achievement';
 import AchievementTemplate from '../models/achievementTemplate';
+import Achievement from '../models/achievement';
 
 
 const getUserAchievements = async (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ const getUserAchievements = async (req: Request, res: Response) => {
 
 const getAllAchievements = async (req: Request, res: Response) => {
   try {
-    const allAchievements = await Achievement.findAll();
+    const allAchievements = await AchievementTemplate.findAll();
     res.status(200).send({
       status: 'Okay',
       message: 'Achievement templates retreieved',
@@ -42,13 +42,28 @@ const getAllAchievements = async (req: Request, res: Response) => {
 };
 const grantAchievement = async (req: Request, res: Response) => {
   const { user } = req;
-  const achievementId:string = req.params.achievementId;
-  if (!user) return res.status(400).send('Not authenticated');
+  const achievementId: string = req.params.id;
+  if (!user) return res.status(400).send({
+    status: 'Bad',
+    message: 'Not authenticated'
+  });
   if (achievementId === undefined) return res.status(422).send({
     status: 'Bad',
     message: 'Missing form information'
   });
   try {
+    const hasAchieve = await Achievement.findOne({
+      where: {
+        userId: user.id,
+        templateId: achievementId
+      }
+    });
+    
+    if (hasAchieve) return res.status(403).send({
+      status: 'Bad',
+      message: 'User already has this achievement'
+    });
+
     const achieve = await AchievementTemplate.findOne({
       where: {
         id: achievementId
@@ -68,7 +83,7 @@ const grantAchievement = async (req: Request, res: Response) => {
 
     user.exp += achieve.completionExp;
     await User.update(
-      { ...user },
+      { exp: user.exp },
       { where: {
         id: user.id
       }}
@@ -76,7 +91,7 @@ const grantAchievement = async (req: Request, res: Response) => {
     return res.status(200).send({
       status: 'Okay',
       message: 'Achievement granted',
-      data: user
+      data: user.exp
     });
   } catch (err) {
     res.status(500).send({

@@ -106,6 +106,27 @@ describe('Tests for the models', () => {
         expect(bobs2).toHaveLength(1);
       }
     });
+
+
+    test('Should be able to add friend', async () => {
+      const thing1 = await User.create({
+        firstName: 'thing',
+        lastName: '1',
+        userName: 'thing1',
+        email: 'thing1.com',
+        password: 'password',
+      });
+      const thing2 = await User.create({
+        firstName: 'thing',
+        lastName: '2',
+        userName: 'thing2',
+        email: 'thing2.com',
+        password: 'password',
+      });
+
+      await thing1.addUser([thing2.id]);
+      expect(await thing1.countUser()).toBe(1);
+    });
   });
 
   describe('Quest', () => {

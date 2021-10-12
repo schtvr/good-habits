@@ -7,12 +7,19 @@ import {
   Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
   Optional,
 } from 'sequelize';
 import Achievement from './achievement';
 import ActiveQuest from './activeQuest';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
+import CompletedQuest from './completedQuest';
+import FriendList from './friendList';
 
 export interface IUser {
   id: number
@@ -51,6 +58,18 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public hasActiveQuest!: HasManyHasAssociationMixin<ActiveQuest, number>;
   public countActiveQuests!: HasManyCountAssociationsMixin;
   public createActiveQuest!: HasManyCreateAssociationMixin<ActiveQuest>;
+  
+  public getCompletedQuests!: HasManyGetAssociationsMixin<CompletedQuest>;
+  public addCompletedQuest!: HasManyAddAssociationMixin<CompletedQuest, number>;
+  public hasCompletedQuest!: HasManyHasAssociationMixin<CompletedQuest, number>;
+  public countCompletedQuests!: HasManyCountAssociationsMixin;
+  public createCompletedQuest!: HasManyCreateAssociationMixin<CompletedQuest>;
+
+  public getUser!: BelongsToManyGetAssociationsMixin<FriendList>;
+  public addUser!: BelongsToManyAddAssociationsMixin<FriendList, number>;
+  public hasUser!: BelongsToManyHasAssociationMixin<FriendList, number>;
+  public countUser!: BelongsToManyCountAssociationsMixin;
+  public createUser!: BelongsToManyCreateAssociationMixin<FriendList>;
 
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
@@ -61,14 +80,16 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public static associations: {
     achievements: Association<User, Achievement>,
     activeQuests: Association<User, ActiveQuest>,
-    taskHistory: Association<User, TaskHistory>
+    taskHistory: Association<User, TaskHistory>,
+    completedQuests: Association<User, CompletedQuest>,
+    friendList: Association<User, FriendList>
   };
 }
 
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -95,12 +116,12 @@ User.init(
       allowNull: false,
     },
     exp: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },
     level: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
     },
@@ -128,5 +149,14 @@ User.hasMany(TaskHistory, {
   foreignKey: 'userId',
   as: 'taskHistory'
 });
+
+User.hasMany(CompletedQuest, {
+  sourceKey: 'id',
+  foreignKey: 'userId',
+  as: 'completedQuests'
+});
+
+User.belongsToMany(User, { as: 'User', foreignKey: 'id', through: 'friendList' });
+User.belongsToMany(User, { as: 'Friend', foreignKey: 'friendId', through: 'friendList' });
 
 export default User;

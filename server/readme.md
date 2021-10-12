@@ -117,6 +117,7 @@ Active Quests
 ```
 
 Has many:
+
 ```
 TaskHistory
 ```
@@ -169,9 +170,27 @@ headers: {
 ```
 
 /user - post: create user\
-/user - get: get user by id (from JWT payload)
 
-### Quests
+Request:
+```
+{
+  userName: string
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+}
+```
+
+/user
+
+```
+headers: {
+  Authorization: Bearer JsonWebTokenHere
+}
+```
+
+### Quests ANYTHING PAST HERE IS NOT UP TO DATE
 
 #### /quest/start - post: start a quest
 
