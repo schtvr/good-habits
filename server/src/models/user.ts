@@ -7,6 +7,11 @@ import {
   Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
   Optional,
 } from 'sequelize';
 import Achievement from './achievement';
@@ -60,11 +65,11 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public countCompletedQuests!: HasManyCountAssociationsMixin;
   public createCompletedQuest!: HasManyCreateAssociationMixin<CompletedQuest>;
 
-  public getFriends!: HasManyGetAssociationsMixin<FriendList>;
-  public addFriend!: HasManyAddAssociationMixin<FriendList, number>;
-  public hasFriend!: HasManyHasAssociationMixin<FriendList, number>;
-  public countFriends!: HasManyCountAssociationsMixin;
-  public createFriend!: HasManyCreateAssociationMixin<FriendList>;
+  public getUser!: BelongsToManyGetAssociationsMixin<FriendList>;
+  public addUser!: BelongsToManyAddAssociationsMixin<FriendList, number>;
+  public hasUser!: BelongsToManyHasAssociationMixin<FriendList, number>;
+  public countUser!: BelongsToManyCountAssociationsMixin;
+  public createUser!: BelongsToManyCreateAssociationMixin<FriendList>;
 
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
@@ -77,7 +82,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
     activeQuests: Association<User, ActiveQuest>,
     taskHistory: Association<User, TaskHistory>,
     completedQuests: Association<User, CompletedQuest>,
-    friends: Association<User, FriendList>
+    friendList: Association<User, FriendList>
   };
 }
 
@@ -151,7 +156,7 @@ User.hasMany(CompletedQuest, {
   as: 'completedQuests'
 });
 
-User.belongsToMany(User, {as: 'User', foreignKey: 'id', through: 'friends'});
-User.belongsToMany(User, {as: 'Friend', foreignKey: 'FriendId', through: 'friends'});
+User.belongsToMany(User, { as: 'User', foreignKey: 'id', through: 'friendList' });
+User.belongsToMany(User, { as: 'Friend', foreignKey: 'friendId', through: 'friendList' });
 
 export default User;

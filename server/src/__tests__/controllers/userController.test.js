@@ -90,4 +90,10 @@ describe('User controller', () => {
       expect(body.user.email).toBe('fuckoBob123@fuckbob.com');
     });
   });
+
+  describe('Friends List functionality', () => {
+    test('Should be able to add as friend', async () => {
+
+    });
+  })
 });

@@ -7,13 +7,13 @@ import sequelize from './index';
 
 interface IFriendList {
   id: number,
-  FriendId: number,
+  friendId: number,
 }
 
 class FriendList extends Model<IFriendList>
   implements IFriendList {
   public id!: number;
-  public FriendId!: number;
+  public friendId!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -23,9 +23,10 @@ FriendList.init(
   {
     id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false,
     },
-    FriendId: {
+    friendId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -33,7 +34,7 @@ FriendList.init(
   },
   {
     sequelize,
-    tableName: 'friends',
+    tableName: 'friendList',
   },
 );
 
