@@ -66,8 +66,7 @@ const findUserById = async (req: Request, res: Response) => {
     });
   }
 };
-
-const addUserByIdOrUserName = async (req: Request, res: Response) => {
+const addUserByUserName = async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const user = req.user;
   if (!userId || !user) return res.status(403).send({
@@ -77,10 +76,7 @@ const addUserByIdOrUserName = async (req: Request, res: Response) => {
   try {
     const userToFollow = await User.findOne({
       where: {
-        [Op.or] : [
-          { id: userId},
-          { userName: userId }
-        ]
+        userName: userId
       }
     });
     if  (!userToFollow) return res.status(404).send({
@@ -116,5 +112,5 @@ const userWithoutPassword = (user: User) => {
 export default {
   createUser,
   findUserById,
-  addUserByIdOrUserName
+  addUserByUserName
 };
