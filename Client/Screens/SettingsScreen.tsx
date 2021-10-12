@@ -1,3 +1,4 @@
+import {LOCALURL} from 'react-native-dotenv';
 import React, {useState} from 'react';
 import {
   View,
@@ -7,10 +8,35 @@ import {
   ScrollView,
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
+import {signOut} from '../redux/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingsScreen = ({navigation}) => {
+  const [userToken, setToken] = useState('');
+
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    setToken(token);
+  };
+  getToken();
+
   const [checked, setChecked] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const dispatch = useDispatch();
+  const logoutUser = async () => {
+    dispatch(
+      signOut({
+        api: {
+          url: 'logout',
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      }),
+    );
+  };
   return (
     <ScrollView>
       <View style={styles.blocks}>
@@ -22,7 +48,7 @@ const SettingsScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.blocks}>
-        <TouchableOpacity onPress={() => console.log('Log Out')}>
+        <TouchableOpacity onPress={() => logoutUser()}>
           <Text style={styles.content}>Logout</Text>
           <Text>Log out of your account</Text>
         </TouchableOpacity>
