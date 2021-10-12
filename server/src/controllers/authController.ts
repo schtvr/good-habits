@@ -5,13 +5,11 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../../config';
 import Blacklist from '../models/blacklist';
+import sendRes from '../funcs/sendRes';
 
 const login = async (req: Request, res: Response) => {
   const { emailOrUserName, password } = req.body;
-  if (!emailOrUserName || !password) return res.status(403).send({
-    status: 'Bad',
-    message: 'Include username/email and password'
-  });
+  if (!emailOrUserName || !password) return sendRes(res, false, 403, 'Include username/email and password');
   const user = await User.findOne({
     where : {
       [Op.or] : [
@@ -21,54 +19,27 @@ const login = async (req: Request, res: Response) => {
     }
   });
 
-  if (!user) return res.status(403).send({
-    status: 'Bad',
-    message: 'Invalid username/email or password'
-  });
+  if (!user) return sendRes(res, false, 403, 'Invalid username/email or password');
   bcrypt.compare(password, user.password, (err, isValid) => {
-    if (err) return res.status(500).send({
-      status: 'Bad', 
-      message: 'Not good very bad', 
-      data: err
-    });
-    
-    if (!isValid) return res.status(403).send({
-      status: 'Bad',
-      message: 'Invalid username/email or password',
-    });
+    if (err) return sendRes(res, false, 500, 'Not good very bad', err);
+    if (!isValid) return sendRes(res, false, 403, 'Invalid username/email or password');
 
     const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '1800s' });
-    res.send({
-      status: 'Okay',
-      message: 'Enjoy your JWT',
-      data: token
-    });
+    return sendRes(res, true, 200, 'Enjoy your JWT', token);
   });
 };
 
 const logout = async (req: Request, res: Response) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token) {
-    return res.status(403).send({
-      status: 'Bad',
-      message: 'Unauthorized'
-    });
-  }
+  if (!token) return sendRes(res, false, 403, 'Unauthorized'); 
   try {
     await Blacklist.create({
       jwt: token
     });
-    res.status(200).send({
-      status: 'Okay',
-      message: 'Logged out'
-    });
+    return sendRes(res, true, 200, 'Logged out');
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Server error when logging out',
-      data: err
-    });
+    return sendRes(res, false, 500, 'Server error when logging out', err);
   }
 };
 
