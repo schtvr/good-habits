@@ -20,6 +20,7 @@ import {Provider} from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 import QuestDetailsScreen from './screens/QuestDetailsScreen';
 import LoginScreen from './screens/LoginScreen';
+import RegisterPage from './screens/RegisterPage';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,10 +28,15 @@ const Stack = createNativeStackNavigator();
 
 //AuthStack
 const AuthStack = () => (
-  <Auth.Navigator>
+  <Auth.Navigator initialRouteName="Register">
     <Auth.Screen
-      name="signUp"
+      name="signIn"
       component={LoginScreen}
+      options={{headerShown: false}}
+    />
+    <Auth.Screen
+      name="Register"
+      component={RegisterPage}
       options={{headerShown: false}}
     />
   </Auth.Navigator>
@@ -106,7 +112,7 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {!isAuthenticated ? (
+          {isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
