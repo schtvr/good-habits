@@ -13,9 +13,14 @@ import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
 // import SettingsScreen from './screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
+
+import { store } from './redux/store';
+import { Provider } from "react-redux";
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 import QuestDetailsScreen from './screens/QuestDetailsScreen'
 import LoginScreen from './screens/LoginScreen';
+
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -132,4 +137,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
