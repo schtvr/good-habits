@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
+
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
 const createUser = async (req: Request, res:Response) => {
