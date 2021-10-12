@@ -145,7 +145,6 @@ export default {
   getQuestTasks
 };
 
-
 const sendRes = (res: Response, isGood: boolean, status: number, message: string, data?: any) => {
   res.status(status).send({
     status: `${isGood ? 'Okay' : 'Bad'}`,

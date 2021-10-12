@@ -20,6 +20,7 @@ router.post('/logout', verify, auth.logout);
 router.post('/quest/start/:questId', verify, quests.startQuest);
 router.post('/quest/complete/:questId', verify, quests.completeQuest);
 router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
+router.get('/quests', quests.getQuestTemplates);
 
 // TASK ROUTES
 router.get('/task/:id', verify, tasks.getTaskById);

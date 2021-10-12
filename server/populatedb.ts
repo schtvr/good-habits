@@ -74,6 +74,14 @@ const populatedDb = async () => {
     completionExp: 100
   });
   await AchievementTemplate.create({
+    name: 'Task noob',
+    description: 'Complete your first task',
+    img: '',
+    criteria: 1,
+    category: 'Tasks',
+    completionExp: 100 
+  });
+  await AchievementTemplate.create({
     name: 'Task master',
     description: 'Complete 25 tasks',
     img: '',

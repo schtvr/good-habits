@@ -1,7 +1,6 @@
 import Task from '../models/task';
 import { Request, Response } from 'express';
 
-
 const getTaskById = async (req: Request, res:Response) => {
   if (!req.params.id) return res.status(422).send({status: 'bad', message: 'Missing taskId'});
   const foundTask = await Task.findOne({
