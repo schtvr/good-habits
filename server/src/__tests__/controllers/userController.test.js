@@ -94,9 +94,9 @@ describe('User controller', () => {
       );
       const { body } = res;
       expect(body.status).toBe('Okay');
-      expect(body.user.userName).toBe('fuckoBob');
-      expect(body.user.password).toBe(undefined);
-      expect(body.user.email).toBe('fuckoBob123@fuckbob.com');
+      expect(body.data.userName).toBe('fuckoBob');
+      expect(body.data.password).toBe(undefined);
+      expect(body.data.email).toBe('fuckoBob123@fuckbob.com');
     });
   });
 
@@ -109,8 +109,6 @@ describe('User controller', () => {
         'Authorization',
         `Bearer ${token}`
       );
-      //console.log(res);
-
 
     });
   })
