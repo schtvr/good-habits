@@ -70,7 +70,7 @@ describe('Quest Controller', () => {
   });
 
   test('Quest should appear as one of the user\'s active quests', async () => {
-    await request.post('/quest/getActiveQuests').set(
+    await request.post('/quest').set(
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );
@@ -78,7 +78,7 @@ describe('Quest Controller', () => {
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );
-    const res2 = await request.get('/quest/getActiveQuests').set(
+    const res2 = await request.get('/quest').set(
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );

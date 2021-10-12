@@ -151,7 +151,7 @@ Reponses follow the following model:
 
 ### Authenticaton
 
-/login
+#### /login - METHOD: post
 
 Request:
 ```
@@ -161,7 +161,7 @@ Request:
 }
 ```
 
-/logout
+#### /logout - METHOD: post
 
 Request:
 ```
@@ -170,7 +170,7 @@ headers: {
 }
 ```
 
-/user - post: create user\
+##### /user - METHOD: post - create a user
 
 Request:
 ```
@@ -183,7 +183,7 @@ Request:
 }
 ```
 
-/user
+#### /user - METHOD: GET - retrieve user information
 
 ```
 headers: {
@@ -191,9 +191,9 @@ headers: {
 }
 ```
 
-### Quests ANYTHING PAST HERE IS NOT UP TO DATE
+### Quests
 
-#### /quest/start - post: start a quest
+#### /quest/start/:questId - METHOD: POST - start a quest
 
 Requires JWT
 
@@ -202,47 +202,27 @@ Request:
 headers: {
   Authorization: Bearer JsonWebTokenHere
 }
+```
 
-body: {
-  questId: number;
+#### /quest/complete/:questId - METHOD: POST - complete a quest
+
+Request:
+```
+headers: {
+  Authorization: Bearer JsonWebTokenHere
 }
 ```
 
-Returns:
+#### /quest - METHOD: GET - retrieves a user's active quests
+
+Request:
 ```
-{
-  data: {
-    id
-    userId
-    questId
-    startDate
-    progress
-  }
+headers: {
+  Authorization: Bearer JsonWebTokenHere
 }
 ```
 
-#### /quest/complete - post: complete a quest
-
-Requires JWT\
-Request should model:
-```
-body
-{
-  questId: number;
-}
-```
-
-#### /quest/getActiveQuests - get: retrieves a user's active quests
-
-Requires JWT\
-Returns:
-```
-{
-  data: activeQuest[]
-}
-```
-
-### Tasks
+### Tasks IGNORE THESE - NOT FUNCTIONAL
 
 #### /task/:id - get: get details about a task (requires JWT)
 
@@ -268,34 +248,22 @@ Returns:
 
 ### Achievements
 
-#### get: get user achievements (endpoint TBD)
+#### /achievement - METHOD: GET - retrieve user achievements
 
-Requires JWT
-
-Returns:
+Request:
 ```
-{
-  data: Achievement[]
+headers: {
+  Authorization: Bearer JsonWebTokenHere
 }
 ```
 
-#### Get all achievements (templates)
+#### /achievement/templates - METHOD: GET - retrieve all achievement templates
 
-Returns:
+### /achievement/:id - METHOD: POST - grant user achievement 
+
+Request:
 ```
-{
-  data: Achievement[]
+headers: {
+  Authorization: Bearer JsonWebTokenHere
 }
 ```
-
-### Achievement Completed
-
-Request should model:
-```
-{
-  achievementId: number;
-}
-```
-
-
-
