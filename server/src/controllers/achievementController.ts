@@ -83,7 +83,7 @@ const grantAchievement = async (req: Request, res: Response) => {
 
     user.exp += achieve.completionExp;
     await User.update(
-      { ...user },
+      { exp: user.exp },
       { where: {
         id: user.id
       }}
@@ -91,6 +91,7 @@ const grantAchievement = async (req: Request, res: Response) => {
     return res.status(200).send({
       status: 'Okay',
       message: 'Achievement granted',
+      data: user.exp
     });
   } catch (err) {
     res.status(500).send({

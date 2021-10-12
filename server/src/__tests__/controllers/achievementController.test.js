@@ -95,6 +95,22 @@ describe('Achievement controller', () => {
   });
   
   test('grants user experience', async () => {
-
+    const currUser = await User.findOne({
+      where: {
+        id: user.id
+      }
+    });
+    const res = await request.post('/achievement/2').set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.status).toBe('Okay');
+    expect(res.body.data).toBe(currUser.exp + 1000);
+    const updatedUser = await User.findOne({
+      where: {
+        id: user.id
+      }
+    }); 
+    expect(updatedUser.exp).toBe(currUser.exp + 1000);
   });
 });
