@@ -122,9 +122,8 @@ const populateDb = async () => {
       category: 'Tasks',
       completionExp: 2500 
     });
-    console.log('Database populated');
   } catch (err) {
-    console.log('Database already populated');
+    return;
   }
 };
 
