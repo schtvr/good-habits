@@ -129,4 +129,8 @@ User.hasMany(TaskHistory, {
   as: 'taskHistory'
 });
 
+User.belongsToMany(User, {as: 'User', foreignKey: 'id', through: 'Follow'});
+User.belongsToMany(User, {as: 'Friend', foreignKey: 'FirendId', through: 'Follow'});
+
+
 export default User;
