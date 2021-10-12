@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import QuestDetailCard from '../components/QuestDetailCard';
 import QuestListCard from '../components/QuestListCard';
-import { ThemeProvider } from 'react-native-elements';
+import FriendListRow from '../components/FriendListRow';
 
 
 const QuestDetailsScreen = () => {
@@ -19,8 +19,9 @@ const QuestDetailsScreen = () => {
   return (
     <View>
       <QuestDetailCard />
+      <FriendListRow />
       <QuestListCard
-        cardTitle='Tasks to complete quest'
+        cardTitle='Tasks to complete quest:'
         questList={mockTaskList}
       />
 
