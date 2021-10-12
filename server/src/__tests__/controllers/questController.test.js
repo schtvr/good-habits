@@ -110,6 +110,15 @@ describe('Quest Controller', () => {
     expect(completedQuests).toHaveLength(1);
     expect(res.body.status).toBe('Okay');
   });
-
-
+  
+  test('only complete quests once', async () => {
+    const res = await request.post(`/quest/complete/${quest.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.status).toBe('Bad');
+    expect(res.body.message).toBe('Invalid quest Id');
+    const completedQuests = await user.getCompletedQuests();
+    expect(completedQuests).toHaveLength(1);
+  });
 });

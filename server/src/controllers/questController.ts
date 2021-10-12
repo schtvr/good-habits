@@ -9,10 +9,7 @@ const startQuest = async (req: Request, res: Response) => {
     message: 'Not authenticated'
   });
 
-  if (!req.params.questId) return res.status(422).send({
-    status: 'Bad',
-    message: 'Missing form information'
-  });
+  if (!req.params.questId) return sendRes(res, false, 422, 'Missing Form information');
 
   try {
     const uniqueness = await ActiveQuest.findOne({ 
@@ -20,63 +17,49 @@ const startQuest = async (req: Request, res: Response) => {
         userId: req.user.id, 
         questId: req.params.questId }
     });
-    if (uniqueness) return res.status(422).send({
-      status: 'Bad',
-      message: 'Duplicate quest'
-    });
+    if (uniqueness) return sendRes(res, false, 422, 'Duplicate quest');
+    
     const questToStart = await Quest.findOne({ 
       where: { 
         id: req.params.questId }
     });
-    if (!questToStart) return res.status(422).send({
-      status: 'Bad',
-      message: 'Invalid quest Id'
-    });
+    if (!questToStart) return sendRes(res, false, 422, 'Invalid quest Id');
+    
     const activeQuest = await questToStart.createActiveQuest({
       userId: req.user.id
     });
     
-    if (!activeQuest) res.status(500).send({
-      status: 'Bad',
-      message: 'Error creating quest'
-    });
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'Quest started',
-      data: activeQuest
-    });
+    if (!activeQuest) sendRes(res, false, 500, 'Error creating quest');
+    
+    return sendRes(res, true, 200, 'Quest started', activeQuest);
+    
   } catch (err) {
-    return res.status(500).send({
-      status: 'Bad',
-      message: 'Error starting quest.',
-      data: err
-    });
+    return sendRes(res, false, 500, 'Error starting quest', err);
   }
 };
 
 const completeQuest = async (req: Request, res: Response) => {
   const { user } = req;
-  if (!user) return res.status(400).send({
-    status: 'Bad',
-    message: 'Not authenticated'
-  });
-  if (!req.params.questId) return res.status(422).send({
-    status: 'Bad',
-    message: 'Missing form information'
-  });
+  if (!user) return sendRes(res, false, 400, 'Not authenticated');
+  
+  if (!req.params.questId) return sendRes(res, false, 422, 'Missing form information');
   
   try {
     const questToComplete = await user.getActiveQuests({ 
       where: { 
         id: req.params.questId 
       }
-    }); 
+    });
+    
+    if (!questToComplete || questToComplete.length === 0) 
+    return sendRes(res, false, 422, 'Invalid quest Id');
+    
     const template = await Quest.findOne({
       where: {
         id: questToComplete[0].questId
       }
     });
-    if (!questToComplete || !template) return res.status(422).send({
+    if (!template) return res.status(422).send({
       status: 'Bad',
       message: 'Invalid quest Id'
     });
@@ -96,7 +79,7 @@ const completeQuest = async (req: Request, res: Response) => {
     return res.status(200).send({
       status: 'Okay',
       message: 'Quest completed',
-      user: req.user
+      exp: user.exp
     });
   } catch (err) {
     return res.status(500).send({
@@ -182,4 +165,13 @@ export default {
   getUserActiveQuests,
   getQuestTemplates,
   getQuestTasks
+};
+
+
+const sendRes = (res: Response, isGood: boolean, status: number, message: string, data?: any) => {
+  res.status(status).send({
+    status: `${isGood ? 'Okay' : 'Bad'}`,
+    message,
+    data: data
+  });
 };
