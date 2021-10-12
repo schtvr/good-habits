@@ -13,13 +13,13 @@ import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
-
-import QuestDetailsScreen from './screens/QuestDetailsScreen';
-import LoginScreen from './screens/LoginScreen';
 import ProfileSettings from './components/ProfileSettings';
+import {store} from './redux/store';
+import {Provider} from 'react-redux';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
-
+import QuestDetailsScreen from './screens/QuestDetailsScreen';
+import LoginScreen from './screens/LoginScreen';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +90,11 @@ const TabStack = () => (
         },
       }}
     />
-    <Tab.Screen name="Settings" component={SettingsScreen} /> options={{headerRight}}
+    <Tab.Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{headerRight}}
+    />
   </Tab.Navigator>
 );
 
@@ -101,7 +105,7 @@ const App: () => Node = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator>       
+        <Stack.Navigator>
           {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
@@ -120,11 +124,12 @@ const App: () => Node = () => {
                 name="QuestDetailsScreen"
                 component={QuestDetailsScreen}
               />
+              <Stack.Screen
+                name="ProfileSettings"
+                component={ProfileSettings}
+              />
             </>
           )}
-          <>
-            <Stack.Screen name="ProfileSettings" component={ProfileSettings} />
-          </>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
@@ -142,4 +147,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
