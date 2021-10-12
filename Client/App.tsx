@@ -31,7 +31,7 @@ const Stack = createNativeStackNavigator();
 
 //AuthStack
 const AuthStack = () => (
-  <Auth.Navigator initialRouteName="Register">
+  <Auth.Navigator initialRouteName="signIn">
     <Auth.Screen
       name="signIn"
       component={LoginScreen}
@@ -116,7 +116,7 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {isAuthenticated ? (
+          {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
