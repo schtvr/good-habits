@@ -13,6 +13,8 @@ import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
 // import SettingsScreen from './Screens/SettingsScreen';
 import AchievementsPage from './screens/AchievementsPage';
+import { store } from './redux/store';
+import { Provider } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -66,4 +68,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
