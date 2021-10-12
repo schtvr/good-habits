@@ -7,6 +7,7 @@ const CreateQuest = () => {
     const getAllQuests = async () => {
       const res = await fetch('http://localhost:3001/quests');
       const jsonRes = await res.json();
+      console.log(jsonRes);
     }
   }, [])
   const updateForm = (newState) => {
