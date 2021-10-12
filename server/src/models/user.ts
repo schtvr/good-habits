@@ -14,6 +14,7 @@ import ActiveQuest from './activeQuest';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 import CompletedQuest from './completedQuest';
+import FriendList from './friendList';
 
 export interface IUser {
   id: number
@@ -59,6 +60,12 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public countCompletedQuests!: HasManyCountAssociationsMixin;
   public createCompletedQuest!: HasManyCreateAssociationMixin<CompletedQuest>;
 
+  public getFriends!: HasManyGetAssociationsMixin<FriendList>;
+  public addFriend!: HasManyAddAssociationMixin<FriendList, number>;
+  public hasFriend!: HasManyHasAssociationMixin<FriendList, number>;
+  public countFriends!: HasManyCountAssociationsMixin;
+  public createFriend!: HasManyCreateAssociationMixin<FriendList>;
+
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
   public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
@@ -69,7 +76,8 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
     achievements: Association<User, Achievement>,
     activeQuests: Association<User, ActiveQuest>,
     taskHistory: Association<User, TaskHistory>,
-    completedQuests: Association<User, CompletedQuest>
+    completedQuests: Association<User, CompletedQuest>,
+    friends: Association<User, FriendList>
   };
 }
 
@@ -143,7 +151,7 @@ User.hasMany(CompletedQuest, {
   as: 'completedQuests'
 });
 
-User.belongsToMany(User, {as: 'User', foreignKey: 'id', through: 'Follow'});
-User.belongsToMany(User, {as: 'Friend', foreignKey: 'FirendId', through: 'Follow'});
+User.belongsToMany(User, {as: 'User', foreignKey: 'id', through: 'friends'});
+User.belongsToMany(User, {as: 'Friend', foreignKey: 'FriendId', through: 'friends'});
 
 export default User;
