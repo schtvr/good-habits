@@ -24,7 +24,7 @@ const apiService = store => next => action => {
   }
   
   console.log('passed api');
-  fetch(api.url, {method, body, headers})
+  fetch(`localHost${api.url}`, {method, body, headers})
   .then(res => res.json())
   .then(data => {
     store.dispatch({ type: `${action.type}_SUCCESS`, data});

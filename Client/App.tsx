@@ -21,6 +21,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 import QuestDetailsScreen from './screens/QuestDetailsScreen';
 import LoginScreen from './screens/LoginScreen';
 
+import { stateSelector } from './redux/userSlice'
+import { useDispatch, useSelector } from 'react-redux';
+
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -101,7 +104,8 @@ const TabStack = () => (
 //Remove the ! or change isAuthenticated to true to see other screens!
 
 const App: () => Node = () => {
-  const isAuthenticated = true;
+  const { isAuthenticated } = useSelector(stateSelector);
+  console.log(isAuthenticated);
   return (
     <SafeAreaProvider>
       <NavigationContainer>

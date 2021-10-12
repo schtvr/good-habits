@@ -1,9 +1,13 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { InteractionManagerStatic } from 'react-native';
 
 interface IState {
   user: {
     userName: string,
     email: string,
+    id: number,
+    exp: number,
+    level: number
   },
   isAuthenticated: boolean
 }
@@ -12,6 +16,9 @@ const initialState: IState = {
   user: {
     userName: '',
     email: '',
+    id: 0,
+    exp: 0,
+    level: 0,
   },
   isAuthenticated: false
 };
@@ -21,6 +28,9 @@ export const userSlice = createSlice({
     user: {
       userName: '',
       email: '',
+      id: 0,
+      exp: 0,
+      level: 0,
     },
     isAuthenticated: false
   },
@@ -36,7 +46,6 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
     },
     signIn: (state, body) => {
-      // const { payload } = body;
       console.log('userSlice:');
       console.log('state', state);
       console.log('body', body);
@@ -49,6 +58,7 @@ export const userSlice = createSlice({
 });
 
 export const { signIn, signOut, clearState } = userSlice.actions;
-// export const authSelector = (state) => state.authInfo.isAuthenticated;
-// export const userSelector = (state) => state.authInfo.user;
+export const authSelector = (state) => state.authInfo.isAuthenticated;
+export const userSelector = (state) => state.authInfo.user;
+export const stateSelector = (state) => state.authInfo;
 export default userSlice.reducer;
