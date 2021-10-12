@@ -52,17 +52,14 @@ const completeQuest = async (req: Request, res: Response) => {
     });
     
     if (!questToComplete || questToComplete.length === 0) 
-    return sendRes(res, false, 422, 'Invalid quest Id');
+      return sendRes(res, false, 422, 'Invalid quest Id');
     
     const template = await Quest.findOne({
       where: {
         id: questToComplete[0].questId
       }
     });
-    if (!template) return res.status(422).send({
-      status: 'Bad',
-      message: 'Invalid quest Id'
-    });
+    if (!template) return sendRes(res, false, 422, 'Invalid quest Id');
     
     user.exp += template.completionExp;
     await User.update(
@@ -70,44 +67,20 @@ const completeQuest = async (req: Request, res: Response) => {
       { where: {
         id: user.id
       }});
-    if (!await questToComplete[0].complete()) {
-      return res.status(500).send({
-        status: 'Bad',
-        message: 'Server error completing quest'
-      });
-    }
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'Quest completed',
-      exp: user.exp
-    });
+    if (!await questToComplete[0].complete()) sendRes(res, false, 500, 'Server error completing quest');
+    return sendRes(res, true, 200, 'Quest completed', user.exp);
   } catch (err) {
-    return res.status(500).send({
-      status: 'Bad',
-      message: 'Server errored when completing quest.',
-      data: err
-    });
+    return sendRes(res, false, 500, 'Server errored when completing quest.', err);
   }
 };
 
 const getUserActiveQuests = async (req: Request, res: Response) => {
-  if (!req.user) return res.status(400).send({
-    status: 'Bad',
-    message: 'Not authenticated'
-  });
+  if (!req.user) return sendRes(res, false, 422, 'Not authenticated');
   try {
     const userQuests = await req.user.getActiveQuests();
-    res.status(200).send({
-      status: 'Okay',
-      message: 'Retreived user\'s active quests',
-      data: userQuests
-    });
+    return sendRes(res, true, 200, 'Retreived user\'s active quests', userQuests);
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Error retrieving user\'s quests',
-      data: err
-    });
+    return sendRes(res, false, 500, 'Error retrieving user\'s quests', err);
   }
 };
 
