@@ -115,5 +115,6 @@ const userWithoutPassword = (user: User) => {
 
 export default {
   createUser,
-  findUserById
+  findUserById,
+  addUserByIdOrUserName
 };
