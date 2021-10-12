@@ -7,7 +7,6 @@ import User from '../../models/user';
 import router from '../../router';
 import dbInit from '../../models/init';
 import Quest from '../../models/quest';
-import ActiveQuest from '../../models/activeQuest';
 
 describe('Quest Controller', () => {
   const app = express();

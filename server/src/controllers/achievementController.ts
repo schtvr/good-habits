@@ -27,7 +27,7 @@ const getUserAchievements = async (req: Request, res: Response) => {
 
 const getAllAchievements = async (req: Request, res: Response) => {
   try {
-    const allAchievements = await Achievement.findAll();
+    const allAchievements = await AchievementTemplate.findAll();
     res.status(200).send({
       status: 'Okay',
       message: 'Achievement templates retreieved',
@@ -42,7 +42,7 @@ const getAllAchievements = async (req: Request, res: Response) => {
 };
 const grantAchievement = async (req: Request, res: Response) => {
   const { user } = req;
-  const achievementId:string = req.params.achievementId;
+  const achievementId: string = req.params.id;
   if (!user) return res.status(400).send('Not authenticated');
   if (achievementId === undefined) return res.status(422).send({
     status: 'Bad',
