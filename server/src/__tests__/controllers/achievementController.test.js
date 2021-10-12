@@ -64,6 +64,37 @@ describe('Achievement controller', () => {
   });
   
   test('grant user achievement', async () => {
+    const res = await request.post(`/achievement/${template.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    
+    expect(res.body.status).toBe('Okay');
+    expect(res.body.message).toBe('Achievement granted');
+    const grantedAchieves = await user.getAchievements();
+    expect(grantedAchieves).toHaveLength(1);
+  });
+  
+  test('retrieve user\'s achievements', async () => {
+    const res = await request.get('/achievement/').set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.data).toHaveLength(1);
+  });
+  
+  test('no double achievements', async () => {
+    const res = await request.post(`/achievement/${template.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.status).toBe('Bad');
+    expect(res.body.message).toBe('User already has this achievement');
+    const grantedAchieves = await user.getAchievements();
+    expect(grantedAchieves).toHaveLength(1);
+  });
+  
+  test('grants user experience', async () => {
 
   });
 });
