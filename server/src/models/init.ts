@@ -6,6 +6,7 @@ import Quest from './quest';
 import Task from './task';
 import TaskHistory from './taskHistory';
 import Blacklist from './blacklist';
+import CompletedQuest from './completedQuest';
 
 const dbInit = async () => {
   await User.sync();
@@ -16,6 +17,7 @@ const dbInit = async () => {
   await Task.sync();
   await TaskHistory.sync();
   await Blacklist.sync();
+  await CompletedQuest.sync();
 };
 
 export default dbInit;

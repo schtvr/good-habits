@@ -5,7 +5,6 @@ import {
 } from 'sequelize';
 import sequelize from './index';
 import CompletedQuest from './completedQuest';
-import Quest from './quest';
 
 interface IActiveQuest {
   id: number,
@@ -38,11 +37,7 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
         startDate: this.startDate,
         progress: this.progress,
       });
-      await ActiveQuest.destroy({
-        where: {
-          id: this.id,
-        },
-      });
+      await this.destroy();
       return true;
     } catch (err) {
       return false;

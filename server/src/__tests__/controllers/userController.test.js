@@ -89,7 +89,5 @@ describe('User controller', () => {
       expect(body.user.password).toBe(undefined);
       expect(body.user.email).toBe('fuckoBob123@fuckbob.com');
     });
-
   });
-
 });

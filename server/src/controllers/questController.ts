@@ -55,7 +55,8 @@ const startQuest = async (req: Request, res: Response) => {
 };
 
 const completeQuest = async (req: Request, res: Response) => {
-  if (!req.user) return res.status(400).send({
+  const { user } = req;
+  if (!user) return res.status(400).send({
     status: 'Bad',
     message: 'Not authenticated'
   });
@@ -64,7 +65,6 @@ const completeQuest = async (req: Request, res: Response) => {
     message: 'Missing form information'
   });
   
-  const user = req.user;
   try {
     const questToComplete = await user.getActiveQuests({ 
       where: { 
@@ -81,17 +81,22 @@ const completeQuest = async (req: Request, res: Response) => {
       message: 'Invalid quest Id'
     });
     
-    req.user.exp += template.completionExp;
+    user.exp += template.completionExp;
     await User.update(
-      { ...req.user },
+      { exp: user.exp },
       { where: {
-        id: req.user.id
+        id: user.id
       }});
-    questToComplete[0].complete();
-
+    if (!await questToComplete[0].complete()) {
+      return res.status(500).send({
+        status: 'Bad',
+        message: 'Server error completing quest'
+      });
+    }
     return res.status(200).send({
       status: 'Okay',
-      message: 'Quest completed'
+      message: 'Quest completed',
+      user: req.user
     });
   } catch (err) {
     return res.status(500).send({

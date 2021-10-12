@@ -3,13 +3,11 @@ import supertest from 'supertest';
 import sequelize from '../../models/index';
 import bcrypt from 'bcrypt';
 import 'regenerator-runtime/runtime';
-import jwt from 'jsonwebtoken';
 import User from '../../models/user';
 import router from '../../router';
 import dbInit from '../../models/init';
 import Quest from '../../models/quest';
-import config from '../../../config';
-import Blacklist from '../../models/blacklist';
+import ActiveQuest from '../../models/activeQuest';
 
 describe('Quest Controller', () => {
   const app = express();
@@ -92,6 +90,25 @@ describe('Quest Controller', () => {
     );
     expect(res.body.status).toBe('Bad');
     expect(res.body.message).toBe('Duplicate quest');
+  });
+  
+  test('should complete quests', async () => {
+    const res = await request.post(`/quest/complete/${quest.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    const userCompleted = await User.findOne({
+      where: {
+        id: user.id
+      }
+    });
+    expect(userCompleted.exp).toBe(10);
+      
+    const activeQuests = await userCompleted.getActiveQuests();
+    const completedQuests = await userCompleted.getCompletedQuests();
+    expect(activeQuests).toHaveLength(0);
+    expect(completedQuests).toHaveLength(1);
+    expect(res.body.status).toBe('Okay');
   });
 
 
