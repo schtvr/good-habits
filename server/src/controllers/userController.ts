@@ -3,22 +3,21 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import config from '../../config';
 import bcrypt from 'bcrypt';
-import { Op } from 'sequelize';
+import sendRes from '../funcs/sendRes';
+
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
 const createUser = async (req: Request, res:Response) => {
   try {
     const { body } = req;
-    if (!body || !body.password || !body.firstName || !body.lastName ||
-    !body.userName || !body.email) return res.status(403).send({
-      status: 'Bad',
-      message: 'Missing form data'
-    });
-    const { password } = req.body;
+    const { password, firstName, lastName, userName, email } = req.body;
+    if (!body || !password || !firstName || !lastName ||
+    !userName || !email) return sendRes(res, false, 403, 'Missing form data');
+
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) res.sendStatus(500);
       try {
-        const user = await User.create({ ...req.body, password: hash });
+        const user = await User.create({ ...body, password: hash });
         const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '7d' });
         res.send({
           status: 'Okay',
@@ -27,24 +26,17 @@ const createUser = async (req: Request, res:Response) => {
           user: userWithoutPassword(user)
         });
       } catch (err) {
-        return res.status(400).send({
-          status: 'Bad',
-          message: 'Duplicate username or email'
-        });
+        return sendRes(res, false, 400, 'Duplicate username or email');
       }
     });
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Server error creating user',
-      data: err
-    });
+    return sendRes(res, false, 500, 'Server error creating user', err);
   }
 };
 
 const findUserById = async (req: Request, res: Response) => {
   const user = req.user;
-  if (!user) return res.status(403).send('Unauthorized token');
+  if (!user) return sendRes(res, false, 403, 'Unauthorized token');
   try {
     const userInfo = await User.findOne({
       where: {
@@ -53,52 +45,30 @@ const findUserById = async (req: Request, res: Response) => {
     });
 
     if (!userInfo) return res.status(404).send('No user found with that id');
-    res.send({
-      status: 'Okay',
-      message: 'Here is the user lol',
-      user: userWithoutPassword(userInfo)
-    });
+    return sendRes(res, true, 200, 'Here is the user lol', userWithoutPassword(user));
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Server error finding user',
-      data: err
-    });
+    return sendRes(res, false, 500, 'Server error finding user', err);
   }
 };
 const addUserByUserName = async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const user = req.user;
-  if (!userId || !user) return res.status(403).send({
-    status: 'Bad',
-    message: 'Did not send userId or Username, or not authenticated',
-  });
+  if (!userId || !user) return sendRes(res, false, 403, 'Did not send userId or Username, or not authenticated');
   try {
     const userToFollow = await User.findOne({
       where: {
         userName: userId
       }
     });
-    if  (!userToFollow) return res.status(404).send({
-      status: 'Bad',
-      message: 'No user with that Id or Username',
-    });
+    if  (!userToFollow) return sendRes(res, false, 404, 'No user with that Id or Username');
+
     //Added because you can friend multiple people at once
     user.addUser([userToFollow.id]);
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'User has been added',
-    });
+    return sendRes(res, true, 200, 'User has been added');
   } catch (err) {
-    return res.status(500).send({
-      status: 'Bad',
-      message: 'Internal Server Error',
-      data: err,
-    });
+    return sendRes(res, false, 500, 'Internal Server Error', err);
   }
-
 };
-
 
 const userWithoutPassword = (user: User) => {
   return {
