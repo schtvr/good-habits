@@ -14,7 +14,7 @@ const startQuest = async (req: Request, res: Response) => {
   });
 
   try {
-    const uniqueness = await ActiveQuest.findOne({where: {userId:  req.user.id, questId: req.params.questId }})
+    const uniqueness = await ActiveQuest.findOne({where: {userId:  req.user.id, questId: req.params.questId }});
     if (uniqueness) return res.status(422).send({
       status: 'Bad',
       message: 'Duplicate quest'
