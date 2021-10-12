@@ -9,6 +9,7 @@ const router = express.Router();
 // USER ROUTES
 router.post('/user', user.createUser);
 router.get('/user/', verify , user.findUserById);
+router.post('/user/friend/:userId', verify, user.addUserByIdOrUserName);
 
 //AUTH ROUTES
 router.post('/login', auth.login);
