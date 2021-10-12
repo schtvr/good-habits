@@ -15,15 +15,15 @@ const SettingsScreen = ({navigation}) => {
     <ScrollView>
       <View style={styles.blocks}>
         <Text style={styles.headers}>Account</Text>
-        <Text style={styles.content}>Profile </Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('ProfileSettings')}>
+          <Text style={styles.content}>Profile </Text>
           <Text>Edit your profile</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.blocks}>
-        <Text style={styles.content}>Logout</Text>
         <TouchableOpacity onPress={() => console.log('Log Out')}>
+          <Text style={styles.content}>Logout</Text>
           <Text>Log out of your account</Text>
         </TouchableOpacity>
       </View>
@@ -45,11 +45,7 @@ const SettingsScreen = ({navigation}) => {
         <Text>Remind you to log in</Text>
 
         <View style={{position: 'absolute', right: 0, top: 10}}>
-          <CheckBox
-            onPress={() => setChecked(!checked)}
-            title="Click Here"
-            checked={checked}
-          />
+          <CheckBox onPress={() => setChecked(!checked)} checked={checked} />
         </View>
       </View>
       <View style={styles.blocks}>
@@ -59,7 +55,6 @@ const SettingsScreen = ({navigation}) => {
         <View style={{position: 'absolute', right: 0, top: 10}}>
           <CheckBox
             onPress={() => setIsChecked(!isChecked)}
-            title="Click Here"
             checked={isChecked}
           />
         </View>

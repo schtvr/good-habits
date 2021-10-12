@@ -1,41 +1,49 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {Overlay, Button} from 'react-native-elements';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {Overlay, Button, Input} from 'react-native-elements';
 
 const ProfileSettings = () => {
   const [visible, setVisible] = useState(false);
+  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const toggleOverlay = () => {
     setVisible(!visible);
+  };
+  const toggleOverlay2 = () => {
+    setShow(!show);
+  };
+  const toggleOverlay3 = () => {
+    setOpen(!open);
   };
 
   return (
     <View>
       <View style={styles.blocks}>
-        <Text style={styles.headers}>Display Name</Text>
         <TouchableOpacity onPress={toggleOverlay}>
+          <Text style={styles.headers}>Display Name</Text>
           <Text style={styles.content}>username...</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.blocks}>
-        <Text style={styles.headers}>Change password</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={toggleOverlay2}>
+          <Text style={styles.headers}>Change password</Text>
           <Text>Password....</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.blocks}>
-        <TouchableOpacity>
-          <Text style={styles.headers}>About</Text>
+        <TouchableOpacity onPress={toggleOverlay3}>
+          <Text style={styles.headers}>Change Profile Picture</Text>
+          <Image source={require('../assets/avatar.png')} />
         </TouchableOpacity>
-        <Text>About msg</Text>
       </View>
-
+      {/* Overlay for username */}
       <Overlay
         isVisible={visible}
         onBackdropPress={toggleOverlay}
         overlayStyle={{height: 200, width: 300}}>
-        <Text>Hello from Overlay!</Text>
+        <Text style={styles.content}>Change username</Text>
         <View
           style={{
             alignItems: 'center',
@@ -44,6 +52,7 @@ const ProfileSettings = () => {
             flex: 1,
             justifyContent: 'flex-end',
           }}>
+          <Input />
           <Button
             title="Save"
             buttonStyle={{
@@ -58,6 +67,79 @@ const ProfileSettings = () => {
             buttonStyle={{width: 100, borderRadius: 10}}
             titleStyle={{color: '#383be0'}}
             onPress={toggleOverlay}
+          />
+        </View>
+      </Overlay>
+      {/* OverLay for password */}
+      <Overlay
+        isVisible={show}
+        onBackdropPress={toggleOverlay2}
+        overlayStyle={{height: 200, width: 300}}>
+        <Text style={styles.content}>Change password</Text>
+        <View
+          style={{
+            alignItems: 'center',
+            borderColor: 'black',
+            borderWidth: 1,
+            flex: 1,
+            justifyContent: 'flex-end',
+          }}>
+          <Input />
+          <Button
+            title="Save"
+            buttonStyle={{
+              width: 100,
+              borderRadius: 10,
+              backgroundColor: '#383be0',
+            }}
+          />
+          <Button
+            title="cancel"
+            type="clear"
+            buttonStyle={{width: 100, borderRadius: 10}}
+            titleStyle={{color: '#383be0'}}
+            onPress={toggleOverlay2}
+          />
+        </View>
+      </Overlay>
+      {/* Overlay for Profile Picture */}
+      <Overlay
+        isVisible={open}
+        onBackdropPress={toggleOverlay3}
+        overlayStyle={{height: 250, width: 300}}>
+        <Text style={styles.content}>Change profile picture</Text>
+        <View
+          style={{
+            alignItems: 'center',
+            borderColor: 'black',
+            borderWidth: 1,
+            flex: 1,
+            justifyContent: 'flex-end',
+          }}>
+          <Button
+            title="Upload"
+            buttonStyle={{
+              marginBottom: 55,
+              marginLeft: 200,
+              borderRadius: 10,
+              backgroundColor: '#383be0',
+            }}
+            // type="clear"
+          />
+          <Button
+            title="Save"
+            buttonStyle={{
+              width: 100,
+              borderRadius: 10,
+              backgroundColor: '#383be0',
+            }}
+          />
+          <Button
+            title="cancel"
+            type="clear"
+            buttonStyle={{width: 100, borderRadius: 10}}
+            titleStyle={{color: '#383be0'}}
+            onPress={toggleOverlay3}
           />
         </View>
       </Overlay>
