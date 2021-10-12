@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Input, Text, Button} from 'react-native-elements';
+import { useDispatch, useSelector } from 'react-redux';
+import { signIn, stateSelector } from '../redux/userSlice'
+import { LOCALURL } from "react-native-dotenv"
 
 // /user - post: create user
 // /user - get: get user by id (from JWT payload)
@@ -12,6 +15,21 @@ const RegisterPage = ({navigation}): JSX.Element => {
     email: '',
     password: '',
   });
+
+  const state = useSelector(stateSelector);
+  const dispatch = useDispatch();
+  console.log(LOCALURL);
+  const signInUser = async () => {
+    console.log('signing in-----------------------------------')
+    dispatch(signIn({
+      api: {
+        url: 'user',
+        method: 'POST',
+        body: {...userState},
+      }
+    }));
+  } 
+
   return (
     <View style={styles.container}>
       <Text h3 h3Style={styles.headerTitle}>
@@ -66,7 +84,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
       />
       <Button
         title="Register"
-        onPress={() => console.log('hello')}
+        onPress={() => signInUser()}
         buttonStyle={styles.btnStyle}
       />
       <TouchableOpacity onPress={() => navigation.navigate('signIn')}>

@@ -1,5 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { InteractionManagerStatic } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 interface IState {
   user: {
@@ -38,13 +39,14 @@ export const userSlice = createSlice({
       state.user = initialState.user;
       state.isAuthenticated = false;
     },
-    signIn: (state, body) => {
-      console.log('userSlice:');
-      console.log('state', state);
-      console.log('body', body);
+    signIn: (state, body)  => {
       state.user = {
-        ...body.payload.user
+        ...body.data.user
       };
+      const setToken = async () =>{
+        await AsyncStorage.setItem("token", body.data.token);
+      }
+      setToken();
       state.isAuthenticated = true;
     }
   }

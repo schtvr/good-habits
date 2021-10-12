@@ -4,6 +4,7 @@ import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const quests = [
   {
@@ -88,6 +89,13 @@ const HomeScreen = ({
 
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
   const [myFriends, setMyFriends] = useState<IFriends[]>([]);
+  const [userToken, setToken] = useState('');
+
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem('token')
+    setToken(token);
+  }
+  getToken();
 
   return (
     <View style={styles.body}>

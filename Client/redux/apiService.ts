@@ -1,7 +1,7 @@
-
+import { LOCALURL } from "react-native-dotenv"
 
 const apiService = store => next => action => {
-  console.log('inside apiService', action)
+  console.log('inside apiService', action);
   if (!action?.payload?.api) return next(action);
   const api = action.payload.api;
   
@@ -12,28 +12,17 @@ const apiService = store => next => action => {
     ...defaultHeaders,
     ...api.headers
   };
-
-  const mock = {
-    type: "user/signIn",
-    payload: {
-      user: {
-      userName: 'tester',
-      email: 'testerman',
-      }
-    }
-  }
   
-  console.log('passed api');
-  fetch(`localHost${api.url}`, {method, body, headers})
+  next({ type: `${action.type}_REQUEST` });
+
+  fetch((`${LOCALURL}/${api.url}`), {method, body, headers})
   .then(res => res.json())
   .then(data => {
-    store.dispatch({ type: `${action.type}_SUCCESS`, data});
+    store.dispatch({ type: action.type, data});
   })
   .catch(error => {
-    console.log('in error');
-    store.dispatch(mock);
+    store.dispatch({type: action.type, error});
   });  
-  next({ type: `${action.type}_REQUEST` });
 };
 
 export default apiService;
