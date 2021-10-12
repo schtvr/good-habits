@@ -25,14 +25,7 @@ const initialState: IState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    user: {
-      userName: '',
-      email: '',
-      id: 0,
-      exp: 0,
-      level: 0,
-    },
-    isAuthenticated: false
+    ...initialState
   },
   reducers: {
     clearState: (state) => {

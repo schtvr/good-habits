@@ -49,10 +49,10 @@ const AuthStack = () => (
 const headerRight = () => (
   <View style={styles.header}>
     <TouchableOpacity onPress={() => alert('Notifications!')}>
-      <Text style={styles.icons}>🔔</Text>
+      <MaterialCommunityIcons style={styles.icons} name="notifications-none" size={30} />
     </TouchableOpacity>
     <TouchableOpacity onPress={() => alert('Search!')}>
-      <Text style={styles.icons}>🔍</Text>
+      <MaterialCommunityIcons style={styles.icons} name="search" size={30} />
     </TouchableOpacity>
   </View>
 );
@@ -102,7 +102,12 @@ const TabStack = () => (
     <Tab.Screen
       name="Settings"
       component={SettingsScreen}
-      options={{headerRight}}
+      options={{
+        headerRight,
+        tabBarIcon: () => {
+          return <MaterialCommunityIcons name="settings" size={26} />;
+        },
+      }}
     />
   </Tab.Navigator>
 );
@@ -153,7 +158,6 @@ const styles = StyleSheet.create({
   },
   icons: {
     margin: 10,
-    fontSize: 20,
   },
 });
 
