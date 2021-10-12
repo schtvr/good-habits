@@ -66,6 +66,7 @@ describe('Quest Controller', () => {
     );
     expect(res.body.status).toBe('Bad');
     expect(res.body.message).toBe('Invalid quest Id');
+    
   });
 
   test('Quest should appear as one of the user\'s active quests', async () => {
@@ -82,6 +83,15 @@ describe('Quest Controller', () => {
       `Bearer ${loginRes.body.data}`
     );
     expect(res2.body.data).toHaveLength(1);
+  });
+
+  test('Shouldn\'t be able to join a quest twice', async () => {
+    const res = await request.post(`/quest/start/${quest.id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res.body.status).toBe('Bad');
+    expect(res.body.message).toBe('Duplicate quest');
   });
 
 
