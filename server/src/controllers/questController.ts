@@ -1,6 +1,7 @@
 import { Request, Response, Express } from 'express';
 import Quest from '../models/quest';
 import ActiveQuest from '../models/activeQuest';
+import User from '../models/user';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return res.status(400).send({
@@ -14,12 +15,19 @@ const startQuest = async (req: Request, res: Response) => {
   });
 
   try {
-    const uniqueness = await ActiveQuest.findOne({where: {userId:  req.user.id, questId: req.params.questId }})
+    const uniqueness = await ActiveQuest.findOne({ 
+      where: {
+        userId: req.user.id, 
+        questId: req.params.questId }
+    });
     if (uniqueness) return res.status(422).send({
       status: 'Bad',
       message: 'Duplicate quest'
     });
-    const questToStart = await Quest.findOne({ where: { id: req.params.questId }});
+    const questToStart = await Quest.findOne({ 
+      where: { 
+        id: req.params.questId }
+    });
     if (!questToStart) return res.status(422).send({
       status: 'Bad',
       message: 'Invalid quest Id'
@@ -58,18 +66,28 @@ const completeQuest = async (req: Request, res: Response) => {
   
   const user = req.user;
   try {
-    const questToComplete = await req.user.getActiveQuests({ 
+    const questToComplete = await user.getActiveQuests({ 
       where: { 
         id: req.params.questId 
       }
     }); 
-    if (!questToComplete) return res.status(422).send({
+    const template = await Quest.findOne({
+      where: {
+        id: questToComplete[0].questId
+      }
+    });
+    if (!questToComplete || !template) return res.status(422).send({
       status: 'Bad',
       message: 'Invalid quest Id'
     });
-    questToComplete[0].complete();
     
-
+    req.user.exp += template.completionExp;
+    await User.update(
+      { ...req.user },
+      { where: {
+        id: req.user.id
+      }});
+    questToComplete[0].complete();
 
     return res.status(200).send({
       status: 'Okay',
