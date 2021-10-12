@@ -4,7 +4,6 @@ import ActiveQuest from '../models/activeQuest';
 import User from '../models/user';
 import sendRes from '../funcs/sendRes';
 import checkQuestAchievements from '../funcs/checkQuestAchievements';
-import sendRes from '../funcs/sendRes';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
