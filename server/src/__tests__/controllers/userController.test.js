@@ -8,6 +8,7 @@ import router from '../../router';
 import dbInit from '../../models/init';
 import User from '../../models/user';
 import config from '../../../config';
+import populateDb from '../../funcs/populatedb';
 
 describe('User controller', () => {
   const app = express();
@@ -35,6 +36,7 @@ describe('User controller', () => {
   
   beforeAll(async () => {
     await dbInit();
+    await populateDb();
     user = await User.create(dummyUser);
     otherUser = await User.create(dummyUser2);
   });

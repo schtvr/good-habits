@@ -176,7 +176,7 @@ const createAchievements = async () => {
     img: '',
     criteria: 5,
     category: 'Tasks',
-    completionExp: 150 
+    completionExp: 100
   });
   await AchievementTemplate.create({
     name: 'Grinder',
