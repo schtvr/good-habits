@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 import sendRes from '../funcs/sendRes';
 import stripPassword from '../funcs/stripPassword';
 import userAttributes from '../util/userAttributes';
+import { createUpdate } from '../interfaces/Update';
+import checkAchievements from '../funcs/checkAchievements';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -159,6 +161,7 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
     }); 
   }
 };
+
 const acceptFriendRequest = async (req: Request, res: Response) => {
   const userName = req.params.id;
   const user = req.user;
@@ -185,10 +188,10 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     await user.removeRequestee([userToFriend.id]);
     await user.addFriends(userToFriend.id);
     await userToFriend.addFriends(user.id);
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'Friend request accepted'
-    });
+    
+    const update = createUpdate();
+    await checkAchievements(user, 'Social', update);
+    return sendRes(res, true, 200, 'Friend request accepted', update);
   } catch (err) {
     res.status(500).send({
       status: 'Bad',
