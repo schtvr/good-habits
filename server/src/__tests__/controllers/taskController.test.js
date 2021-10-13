@@ -58,7 +58,11 @@ describe ('Task Controller', () => {
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );
+    const data = res.body.data;
     const chieves = await user.getAchievements();
+    expect(data.tasks).toHaveLength(1);
+    expect(data.gainedExp).not.toBe(0);
+    expect(data.tasks[0].name).toBe(tasks[0].name);
     expect(chieves).toHaveLength(1);
   });
 });
