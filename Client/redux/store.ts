@@ -9,7 +9,6 @@ export const store = configureStore({
     authInfo: userSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiService),
-  // preloadedState,
 });
 
 setupListeners(store.dispatch)
