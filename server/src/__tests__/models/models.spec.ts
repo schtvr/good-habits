@@ -47,12 +47,15 @@ describe('Tests for the models', () => {
       description: 'poo on bob 100 times',
       category: 'poo category',
       completionExp: 10000,
+      taskCount: 1
     });
     task = await Task.create({
       questId: quest.id,
+      name: 'big poo time',
       description: 'poo on bob',
-      expValue: 10,
+      completionExp: 10,
       index: 1,
+      day: 0
     });
   });
 
@@ -146,9 +149,11 @@ describe('Tests for the models', () => {
 
     test('able to create tasks', async () => {
       await quest.createTask({
+        name: 'pupper',
         description: 'make a new task',
-        expValue: 100,
+        completionExp: 100,
         index: 2,
+        day: 0
       });
       const questsTasks = await quest.getTasks();
       expect(questsTasks).toHaveLength(2);
@@ -167,6 +172,7 @@ describe('Tests for the models', () => {
         description: 'poo on bob 100 times',
         category: 'poopoo category',
         completionExp: 10000,
+        taskCount: 5
       });
       await newQuest.createActiveQuest({
         userId: user.id

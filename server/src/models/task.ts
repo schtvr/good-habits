@@ -15,9 +15,11 @@ import TaskHistory from './taskHistory';
 interface ITask {
   id: number,
   questId: number,
+  name: string,
   description: string,
-  expValue: number,
+  completionExp: number,
   index: number,
+  day: number,
 }
 
 interface ITaskCreationAttributes extends
@@ -27,9 +29,11 @@ class Task extends Model<ITask, ITaskCreationAttributes>
   implements ITask {
   public id!: number;
   public questId!: number;
+  public name!: string;
   public description!: string;
-  public expValue!: number;
+  public completionExp!: number;
   public index!: number;
+  public day!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -56,15 +60,23 @@ Task.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    name: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+    },
     description: {
       type: new DataTypes.STRING(1000),
       allowNull: false,
     },
-    expValue: {
+    completionExp: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     index: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    day: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

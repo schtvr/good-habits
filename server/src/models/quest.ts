@@ -20,6 +20,7 @@ interface IQuest {
   description: string
   category: string
   completionExp: number
+  taskCount: number
 }
 
 interface IQuestCreationAttributes extends
@@ -33,6 +34,7 @@ class Quest extends Model<IQuest, IQuestCreationAttributes>
   public description!: string;
   public category!: string;
   public completionExp!: number;
+  public taskCount!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -82,6 +84,11 @@ Quest.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    taskCount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    }
   },
   {
     sequelize,
