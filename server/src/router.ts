@@ -34,7 +34,8 @@ router.get('/quests', quests.getQuestTemplates);
 
 // TASK ROUTES
 router.get('/task/:id', verify, tasks.getTaskById);
-router.post('/task/setComplete', verify , tasks.completeTaskById);
+router.post('/task/:taskId', verify , tasks.completeTaskById);
+router.get('/task/quest/:questId', tasks.getQuestTasks);
 
 //ACHIEVEMENT ROUTES
 router.get('/achievement/templates', achievements.getAllAchievements);

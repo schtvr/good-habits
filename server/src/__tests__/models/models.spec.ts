@@ -271,14 +271,12 @@ describe('Tests for the models', () => {
     });
     
     test('should be able to mark tasks completed', async () => {
-      const taskHistory = await task.createTaskHistory({
-        userId: user.id,
-        questId: task.questId
-      });
-      
-      await taskHistory.complete();
-      expect(taskHistory.completed).toBe(true);
-      const dbTaskHistory = await TaskHistory.findOne({ where: { id: taskHistory.id }});
+      const completedTask = await task.complete(
+        user.id,
+        true
+      );
+      expect(completedTask.completed).toBe(true);
+      const dbTaskHistory = await TaskHistory.findOne({ where: { id: completedTask.id }});
       expect(dbTaskHistory?.completed).toBe(true);
     });
   });

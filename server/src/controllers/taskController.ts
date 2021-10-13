@@ -30,7 +30,7 @@ const completeTaskById = async (req: Request, res:Response) => {
     });
     if (!task) return sendRes(res, false, 403, 'Invalid task id');
     
-    await task.complete(user.id);
+    await task.complete(user.id, true);
     const update = createUpdate();
     update.gainedExp += task.completionExp;
     update.tasks.push(task);

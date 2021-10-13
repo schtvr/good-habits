@@ -49,12 +49,12 @@ describe ('Task Controller', () => {
   });
   
   test('retrieve a quest\'s tasks', async () => {
-    const res = await request.get(`/tasks/quest/${quest.id}`);
+    const res = await request.get(`/task/quest/${quest.id}`);
     expect(res.body.data).toHaveLength(quest.taskCount);
   });
   
   test('complete a task', async () => {
-    const res = await request.post(`/tasks/${tasks[0].id}`).set(
+    const res = await request.post(`/task/${tasks[0].id}`).set(
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );

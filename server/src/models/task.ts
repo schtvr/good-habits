@@ -45,11 +45,13 @@ class Task extends Model<ITask, ITaskCreationAttributes>
   public countTaskHistory!: HasManyCountAssociationsMixin;
   public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
   
-  public async complete (userId: number) {
-    await this.createTaskHistory({
+  public async complete (userId: number, done: boolean) {
+    const completedTask = await this.createTaskHistory({
       userId,
-      questId: this.questId
+      questId: this.questId,
+      completed: done ? true : false
     });
+    return completedTask;
   }
 
   public static associations: {
