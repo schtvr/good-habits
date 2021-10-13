@@ -1,19 +1,12 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn, stateSelector } from '../redux/userSlice'
-
-
-const mockLogin = {
-  userNameOrEmail: 'testerman',
-    password: 'testerman',
-}
-
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Input, Text, Button} from 'react-native-elements';
 
 const LoginScreen = ({navigation}): JSX.Element => {
   const [userState, setUserState] = useState({
-    userNameOrEmail: '',
+    emailOrUserName: '',
     password: '',
   });
   const [loginError, setLoginError] = useState('');
@@ -23,23 +16,15 @@ const LoginScreen = ({navigation}): JSX.Element => {
 
   const signInUser = async () => {
     console.log(userState);
-    // const res = await UserService.signIn(userState);
-    // if (res.error) {
-    //   setServerRes(res.error);
-    //   return;
-    // }
-    // await AsyncStorage.setItem('token', res.token);
-    if (userState.userNameOrEmail==mockLogin.userNameOrEmail) {
-      console.log('logged in', state)
-      return dispatch(signIn({
-        type: 'FETCH',
-        api: {
-          url: '/users'
-        }
+    console.log('logging in in', state)
+    dispatch(signIn({
+      api: {
+        method: 'POST',
+        url: 'login',
+        body: {...userState},
       }
-      ));
-    }
-    setLoginError('Wrong username or password');
+    }))
+    setLoginError(state.error);
   } 
 
   return (
@@ -54,9 +39,9 @@ const LoginScreen = ({navigation}): JSX.Element => {
         leftIcon={{type: 'font-awesome', name: 'user'}}
         label="Username or Email"
         placeholder="John Doe"
-        value={userState.userNameOrEmail}
-        onChangeText={userNameOrEmail =>
-          setUserState({...userState, userNameOrEmail})
+        value={userState.emailOrUserName}
+        onChangeText={emailOrUserName =>
+          setUserState({...userState, emailOrUserName})
         }
         autoCapitalize="none"
         autoCorrect={false}

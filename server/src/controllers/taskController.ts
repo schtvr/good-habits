@@ -13,6 +13,7 @@ const getTaskById = async (req: Request, res:Response) => {
         id: req.params.id
       }
     });
+    if (!foundTask) return sendRes(res, false, 422, 'No task found with that id');
     return sendRes(res, true, 200, 'Enjoy your task poggers xD rawr *holds up spork*\nnewline (please retweet, don\'t forget to smash that mfkin like button my guy)', foundTask);
   } catch (err) {
     return sendRes(res, false, 500, 'Server error getting task', err);

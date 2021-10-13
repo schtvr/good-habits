@@ -7,7 +7,7 @@ import User from '../../models/user';
 import router from '../../router';
 import dbInit from '../../models/init';
 import Quest from '../../models/quest';
-import populateDb from '../../funcs/populatedb';
+import populateDb from '../../funcs/populateDb/populatedb';
 import AchievementTemplate from '../../models/achievementTemplate';
 
 describe('Quest Controller', () => {

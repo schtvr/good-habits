@@ -34,7 +34,7 @@ router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
 router.get('/quests', quests.getQuestTemplates);
 
 // TASK ROUTES
-router.get('/task/:id', verify, tasks.getTaskById);
+router.get('/task/:id', tasks.getTaskById);
 router.post('/task/:taskId', verify , tasks.completeTaskById);
 router.get('/task/quest/:questId', tasks.getQuestTasks);
 router.get('/task', verify, tasks.getTaskHistory);
