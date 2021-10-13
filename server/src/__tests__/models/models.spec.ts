@@ -128,8 +128,17 @@ describe('Tests for the models', () => {
         password: 'password',
       });
 
-      await thing1.addUser([thing2.id]);
-      expect(await thing1.countUser()).toBe(1);
+      await thing1.addRequestees(thing2.id);
+      expect(await thing1.countRequestees()).toBe(1);
+      expect(await thing2.hasRequester(thing1.id)).toBe(true);
+      expect(await thing1.hasRequestee(thing2.id)).toBe(true);
+      expect(await thing1.countFriends()).toBe(0);
+      await thing1.addFriends(thing2.id);
+      await thing1.removeRequestee([thing2.id]);
+      expect(await thing2.hasRequester(thing1.id)).toBe(false);
+      expect(await thing1.hasRequestee(thing2.id)).toBe(false);
+      expect(await thing1.countFriends()).toBe(1);
+      expect(await thing1.countRequestees()).toBe(0);
     });
   });
 

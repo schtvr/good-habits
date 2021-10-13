@@ -50,25 +50,27 @@ const findUserById = async (req: Request, res: Response) => {
     return sendRes(res, false, 500, 'Server error finding user', err);
   }
 };
-const addUserByUserName = async (req: Request, res: Response) => {
-  const userId = req.params.userId;
-  const user = req.user;
-  if (!userId || !user) return sendRes(res, false, 403, 'Did not send userId or Username, or not authenticated');
-  try {
-    const userToFollow = await User.findOne({
-      where: {
-        userName: userId
-      }
-    });
-    if  (!userToFollow) return sendRes(res, false, 404, 'No user with that Id or Username');
+// const addUserByUserName = async (req: Request, res: Response) => {
+//   const userId = req.params.userId;
+//   const user = req.user;
+//   if (!userId || !user) return sendRes(res, false, 403, 'Did not send userId or Username, or not authenticated');
+//   try {
+//     const userToFollow = await User.findOne({
+//       where: {
+//         userName: userId
+//       }
+//     });
+//     if  (!userToFollow) return sendRes(res, false, 404, 'No user with that Id or Username');
 
-    //Added because you can friend multiple people at once
-    user.addUser([userToFollow.id]);
-    return sendRes(res, true, 200, 'User has been added');
-  } catch (err) {
-    return sendRes(res, false, 500, 'Internal Server Error', err);
-  }
-};
+//     //Added because you can friend multiple people at once
+//     user.addUser([userToFollow.id]);
+//     return sendRes(res, true, 200, 'User has been added');
+//   } catch (err) {
+//     return sendRes(res, false, 500, 'Internal Server Error', err);
+//   }
+// };
+
+
 
 const userWithoutPassword = (user: User) => {
   return {
@@ -82,5 +84,4 @@ const userWithoutPassword = (user: User) => {
 export default {
   createUser,
   findUserById,
-  addUserByUserName
 };
