@@ -38,6 +38,16 @@ const createUser = async (req: Request, res:Response) => {
   }
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return sendRes(res, false, 403, 'Unauthorized token');
+  try {
+
+  } catch(err) {
+    return sendRes(res, false, 500, 'internal server error', err);
+  }
+}
+
 const findUserById = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Unauthorized token');
@@ -307,5 +317,6 @@ export default {
   getFriendRequestReceived,
   getFriendRequestSent,
   putFriendRequest,
-  getFriends
+  getFriends,
+  getAllUsers
 };
