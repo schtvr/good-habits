@@ -83,6 +83,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public hasFriend!: BelongsToManyHasAssociationMixin<FriendList, number>;
   public countFriends!: BelongsToManyCountAssociationsMixin;
   public createFriend!: BelongsToManyCreateAssociationMixin<FriendList>;
+  public removeFriend!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
 
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;

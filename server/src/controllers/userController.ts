@@ -254,6 +254,40 @@ const cancelFriendRequest = async (req: Request, res: Response) => {
 };
 
 const unfriend = async (req: Request, res: Response) => {
+  const userName = req.params.id;
+  const user = req.user;
+  if (!userName || !user) return res.status(403).send({
+    status: 'Bad',
+    message: 'Missing userId or not authenticated',
+  });
+  try { 
+    const userToUnFriend = await User.findOne({
+      where: {
+        userName
+      }
+    });
+    if (!userToUnFriend) return res.status(404).send({
+      status: 'Bad',
+      message: 'You sent me a user that doesn\'t exist dumdum',
+    });
+
+    const checkFriend = await user.hasFriend(userToUnFriend.id);
+    if (!checkFriend) return res.status(404).send({
+      status: 'Bad',
+      message: 'BaBaBOi they don\'t have that person as friend',
+    });
+    await user.removeFriend([userToUnFriend.id]);
+    return res.status(200).send({
+      status: 'Okay',
+      message: 'Friendship ended with user hahahah'
+    });
+  } catch (err) {
+    res.status(500).send({
+      status: 'Bad',
+      message: 'Internal Server Error',
+      data: err,
+    }); 
+  }
 };
 
 
