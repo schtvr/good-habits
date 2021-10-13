@@ -191,6 +191,8 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     
     const update = createUpdate();
     await checkAchievements(user, 'Social', update);
+    await checkAchievements(userToFriend, 'Social', createUpdate());
+
     return sendRes(res, true, 200, 'Friend request accepted', update);
   } catch (err) {
     res.status(500).send({
