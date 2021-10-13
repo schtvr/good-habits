@@ -3,7 +3,7 @@ import cfg from '../config';
 import dbInit from './models/init';
 import router from './router';
 import cors from 'cors';
-import populateDb from './funcs/populatedb';
+import populateDb from './funcs/populateDb/populatedb';
 const app = express();
 
 const corsConfig = {

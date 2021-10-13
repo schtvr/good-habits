@@ -8,7 +8,7 @@ import router from '../../router';
 import dbInit from '../../models/init';
 import User from '../../models/user';
 import config from '../../../config';
-import populateDb from '../../funcs/populatedb';
+import populateDb from '../../funcs/populateDb/populatedb';
 
 describe('User controller', () => {
   const app = express();
