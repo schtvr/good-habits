@@ -4,14 +4,14 @@ import {
   HasManyGetAssociationsMixin,
   HasManyAddAssociationMixin,
   HasManyHasAssociationMixin,
-  Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
-  BelongsToManyCreateAssociationMixin,
+  Association,
   BelongsToManyGetAssociationsMixin,
-  BelongsToManyCountAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
   BelongsToManyHasAssociationMixin,
-  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
   Optional,
 } from 'sequelize';
 import Achievement from './achievement';
@@ -65,11 +65,17 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public countCompletedQuests!: HasManyCountAssociationsMixin;
   public createCompletedQuest!: HasManyCreateAssociationMixin<CompletedQuest>;
 
-  public getUser!: BelongsToManyGetAssociationsMixin<FriendList>;
-  public addUser!: BelongsToManyAddAssociationsMixin<FriendList, number>;
+  public getUsers!: BelongsToManyGetAssociationsMixin<FriendList>;
+  public addUser!: BelongsToManyAddAssociationMixin<FriendList, number>;
   public hasUser!: BelongsToManyHasAssociationMixin<FriendList, number>;
-  public countUser!: BelongsToManyCountAssociationsMixin;
+  public countUsers!: BelongsToManyCountAssociationsMixin;
   public createUser!: BelongsToManyCreateAssociationMixin<FriendList>;
+
+  public getFriends!: BelongsToManyGetAssociationsMixin<FriendList>;
+  public addFriend!: BelongsToManyAddAssociationMixin<FriendList, number>;
+  public hasFriend!: BelongsToManyHasAssociationMixin<FriendList, number>;
+  public countFriends!: BelongsToManyCountAssociationsMixin;
+  public createFriend!: BelongsToManyCreateAssociationMixin<FriendList>;
 
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
@@ -156,7 +162,9 @@ User.hasMany(CompletedQuest, {
   as: 'completedQuests'
 });
 
-User.belongsToMany(User, { as: 'User', foreignKey: 'id', through: 'friendList' });
-User.belongsToMany(User, { as: 'Friend', foreignKey: 'friendId', through: 'friendList' });
+User.belongsToMany(User, { as: 'Friends', through: 'friends' });
+User.belongsToMany(User, { as: 'Requestees', sourceKey: 'id', through: 'friendRequests', foreignKey: 'requesterId', onDelete: 'CASCADE'});
+User.belongsToMany(User, { as: 'Requesters', sourceKey: 'id', through: 'friendRequests', foreignKey: 'requesteeId', onDelete: 'CASCADE'});
+
 
 export default User;
