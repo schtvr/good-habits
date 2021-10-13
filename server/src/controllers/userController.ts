@@ -5,6 +5,7 @@ import config from '../../config';
 import bcrypt from 'bcrypt';
 import sendRes from '../funcs/sendRes';
 import stripPassword from '../funcs/stripPassword';
+import userAttributes from '../util/userAttributes';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -121,19 +122,7 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friendRequests = await user.getRequestees({
-      attributes: {
-        include: ['id', 'userName'],
-        exclude: [
-          'password',
-          'email',
-          'exp',
-          'level',
-          'firstName',
-          'lastName',
-        ]
-      }
-    });
+    const friendRequests = await user.getRequestees(userAttributes);
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friend requests loser',
@@ -156,19 +145,7 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friendRequests = await user.getRequesters({
-      attributes: {
-        include: ['id', 'userName'],
-        exclude: [
-          'password',
-          'email',
-          'exp',
-          'level',
-          'firstName',
-          'lastName',
-        ]
-      }
-    });
+    const friendRequests = await user.getRequesters(userAttributes);
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friend requests loser',
@@ -226,7 +203,7 @@ const getFriends = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friends = await user.getFriends();
+    const friends = await user.getFriends(userAttributes);
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friends loser',
