@@ -105,10 +105,20 @@ describe('User controller', () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      const res = await request.post(`/user/friend/${dummyUser2.userName}`).set(
+      const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
       );
+      expect(res.body.status).toBe('Okay');
+      expect(res.body.message).toBe('Friend request sent');
+      const res2 = await request.get('/user/friendRequestReceived').set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      console.log(res2);
 
     });
   })
