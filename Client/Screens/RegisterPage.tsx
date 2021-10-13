@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Input, Text, Button} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {register, stateSelector} from '../redux/userSlice';
 
 // /user - post: create user
 // /user - get: get user by id (from JWT payload)
@@ -12,6 +14,22 @@ const RegisterPage = ({navigation}): JSX.Element => {
     email: '',
     password: '',
   });
+
+  const dispatch = useDispatch();
+
+  const registerUser = async () => {
+    console.log('Registering in-----------------------------------');
+    dispatch(
+      register({
+        api: {
+          url: 'user',
+          method: 'POST',
+          body: {...userState},
+        },
+      }),
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text h3 h3Style={styles.headerTitle}>
@@ -66,7 +84,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
       />
       <Button
         title="Register"
-        onPress={() => console.log('hello')}
+        onPress={() => registerUser()}
         buttonStyle={styles.btnStyle}
       />
       <TouchableOpacity onPress={() => navigation.navigate('signIn')}>
