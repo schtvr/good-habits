@@ -9,7 +9,8 @@ const router = express.Router();
 
 // USER ROUTES
 router.post('/user', user.createUser);
-router.get('/user/', verify , user.findUserById);
+router.get('/user', verify , user.findUserById);
+router.get('/users', verify , user.getAllUsers);
 router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
 router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
 router.get('/user/friendRequestSent', verify ,user.getFriendRequestSent);
