@@ -126,12 +126,11 @@ const getFriendsOnQuest = async (req: Request, res: Response) => {
 
     const friends = await user.getFriends();
     const friendIds: number[] = [];
+
     friends.forEach(friend => {
-      // @ts-ignore
       friendIds.push(friend.id);
     });
 
-    console.log(friendIds);
     const friendsOnQuest = usersOnQuest.filter(activeQuest => (
       friendIds.includes(activeQuest.userId)
     ));

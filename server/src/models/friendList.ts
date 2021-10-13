@@ -6,12 +6,16 @@ import {
 import sequelize from './index';
 
 interface IFriendList {
+  id: number
   FriendId: number,
   UserId: number,
 }
 
-class FriendList extends Model<IFriendList>
+interface IFriendCreationAttributes extends Optional<IFriendList, 'id'> {}
+
+class FriendList extends Model<IFriendList, IFriendCreationAttributes>
   implements IFriendList {
+  public id!: number;
   public FriendId!: number;
   public UserId!: number;
 
@@ -21,9 +25,14 @@ class FriendList extends Model<IFriendList>
 
 FriendList.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     FriendId: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
+      allowNull: false
     },
     UserId: {
       type: DataTypes.INTEGER,

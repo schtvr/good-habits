@@ -141,33 +141,28 @@ describe('Quest Controller', () => {
   
   test('get friends on quest', async () => {
     const users = await User.findAll();
-    await user.addFriends(users[1].id);
-    //await users[1].addFriends(users[0].id);
-    await user.addFriends(users[2].id);
-    //await users[2].addFriends(users[0].id);
+    try {
+      await user.addFriends(users[1].id);
+      await users[1].addFriends(user.id);
+      await user.addFriends(users[2].id);
+      await users[2].addFriends(user.id);
+      const quests = await Quest.findAll();
+      await quests[0].createActiveQuest({
+        userId: user.id
+      });
+      await quests[0].createActiveQuest({
+        userId: users[1].id
+      });
+      await quests[0].createActiveQuest({
+        userId: users[2].id
+      });
     
-    const quests = await Quest.findAll();
-    await quests[0].createActiveQuest({
-      userId: user.id
-    });
-    await quests[0].createActiveQuest({
-      userId: users[1].id
-    });
-    await quests[0].createActiveQuest({
-      userId: users[2].id
-    });
-    
-    //const isActive = await user.getActiveQuests();
-    //console.log(isActive);
-    const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
-      'Authorization',
-      `Bearer ${loginRes.body.data}`
-    );
-    console.log(res.body);
-    //const friends = await users[0].getFriends();
-    //console.log(friends);
-    //console.log(await users[1].getFriends());
-
-
+      const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
+        'Authorization',
+        `Bearer ${loginRes.body.data}`
+      );
+    } catch (err) {
+      console.log(err);
+    }
   });
 });
