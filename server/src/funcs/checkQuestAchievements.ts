@@ -27,7 +27,7 @@ const getCount = async (user: User, category: string) => {
   case 'Tasks':
     return await user.countTaskHistory();
   case 'Social':
-    return await user.countUsers();
+    return await user.countFriends();
   default:
     return 0;
   }
