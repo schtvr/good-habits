@@ -121,7 +121,19 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friendRequests = await user.getRequestees();
+    const friendRequests = await user.getRequestees({
+      attributes: {
+        include: ['id', 'userName'],
+        exclude: [
+          'password',
+          'email',
+          'exp',
+          'level',
+          'firstName',
+          'lastName',
+        ]
+      }
+    });
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friend requests loser',

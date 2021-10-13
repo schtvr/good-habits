@@ -118,7 +118,7 @@ describe('User controller', () => {
         'Authorization',
         `Bearer ${token2}`
       );
-      console.log(res2);
+      console.log(res2.body);
 
     });
   })
