@@ -32,20 +32,6 @@ class TaskHistory extends Model<ITaskHistory, ITaskHistoryCreationAttributes>
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
-  public async complete () {
-    this.completed = true;
-    this.completedDate = new Date();
-    try {
-      await TaskHistory.update(
-        { completed: this.completed, completedDate: this.completedDate },
-        { where:  { id: this.id }}
-      );
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
 }
 
 TaskHistory.init(

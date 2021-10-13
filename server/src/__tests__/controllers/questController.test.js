@@ -20,6 +20,7 @@ describe('Quest Controller', () => {
   let user;
   let quest;
   let loginRes;
+
   beforeAll(async () => {
     await dbInit();
     await populateDb();
@@ -42,6 +43,7 @@ describe('Quest Controller', () => {
       password: 'bigshitasdasdadster123'
     });
   });
+
   afterAll(async () => {
     await User.destroy({
       where: {}
@@ -51,6 +53,7 @@ describe('Quest Controller', () => {
     });
     await sequelize.drop();
   });
+
   test('Should be able to join a created quest', async () => { 
     const res = await request.post(`/quest/start/${quest.id}`).set(
       'Authorization',
@@ -59,6 +62,7 @@ describe('Quest Controller', () => {
     expect(res.body.status).toBe('Okay');
     expect(res.body.message).toBe('Quest started');
   });
+
   test('Should\'nt be able to joined a non-created quest', async () => {
     const res = await request.post('/quest/start/15151').set(
       'Authorization',
@@ -104,7 +108,9 @@ describe('Quest Controller', () => {
         id: user.id
       }
     });
-    expect(userCompleted.exp).toBe(10);
+
+    expect(userCompleted.exp).not.toBe(0);
+    expect(res.body.data.quests).toHaveLength(1);
       
     const activeQuests = await userCompleted.getActiveQuests();
     const completedQuests = await userCompleted.getCompletedQuests();

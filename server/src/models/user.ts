@@ -4,21 +4,23 @@ import {
   HasManyGetAssociationsMixin,
   HasManyAddAssociationMixin,
   HasManyHasAssociationMixin,
-  Association,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
-  BelongsToManyCreateAssociationMixin,
+  Association,
   BelongsToManyGetAssociationsMixin,
-  BelongsToManyCountAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
   BelongsToManyHasAssociationMixin,
-  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
   Optional,
+  BelongsToManyRemoveAssociationsMixin,
 } from 'sequelize';
 import Achievement from './achievement';
 import ActiveQuest from './activeQuest';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 import CompletedQuest from './completedQuest';
+import RequestList from './requestList';
 import FriendList from './friendList';
 
 export interface IUser {
@@ -65,11 +67,23 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public countCompletedQuests!: HasManyCountAssociationsMixin;
   public createCompletedQuest!: HasManyCreateAssociationMixin<CompletedQuest>;
 
-  public getUser!: BelongsToManyGetAssociationsMixin<FriendList>;
-  public addUser!: BelongsToManyAddAssociationsMixin<FriendList, number>;
-  public hasUser!: BelongsToManyHasAssociationMixin<FriendList, number>;
-  public countUser!: BelongsToManyCountAssociationsMixin;
-  public createUser!: BelongsToManyCreateAssociationMixin<FriendList>;
+  public getRequestees!: BelongsToManyGetAssociationsMixin<RequestList>;
+  public addRequestees!: BelongsToManyAddAssociationMixin<RequestList, number>;
+  public hasRequestee!: BelongsToManyHasAssociationMixin<RequestList, number>;
+  public countRequestees!: BelongsToManyCountAssociationsMixin;
+  public createRequestee!: BelongsToManyCreateAssociationMixin<RequestList>;
+  public removeRequestee!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
+
+  public getRequesters!: BelongsToManyGetAssociationsMixin<RequestList>;
+  public hasRequester!: BelongsToManyHasAssociationMixin<RequestList, number>;
+  public removeRequester!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
+
+  public getFriends!: BelongsToManyGetAssociationsMixin<FriendList>;
+  public addFriends!: BelongsToManyAddAssociationMixin<FriendList, number>;
+  public hasFriend!: BelongsToManyHasAssociationMixin<FriendList, number>;
+  public countFriends!: BelongsToManyCountAssociationsMixin;
+  public createFriend!: BelongsToManyCreateAssociationMixin<FriendList>;
+  public removeFriend!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
 
   public getTaskHistory!: HasManyGetAssociationsMixin<TaskHistory>;
   public addTaskHistory!: HasManyAddAssociationMixin<TaskHistory, number>;
@@ -82,6 +96,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
     activeQuests: Association<User, ActiveQuest>,
     taskHistory: Association<User, TaskHistory>,
     completedQuests: Association<User, CompletedQuest>,
+    requestList: Association<User, RequestList>,
     friendList: Association<User, FriendList>
   };
 }
@@ -156,7 +171,9 @@ User.hasMany(CompletedQuest, {
   as: 'completedQuests'
 });
 
-User.belongsToMany(User, { as: 'User', foreignKey: 'id', through: 'friendList' });
-User.belongsToMany(User, { as: 'Friend', foreignKey: 'friendId', through: 'friendList' });
+User.belongsToMany(User, { as: 'Friends',through: 'friendLists'});
+User.belongsToMany(User, { as: 'Requestees', sourceKey: 'id', through: 'friendRequests', foreignKey: 'requesterId', onDelete: 'CASCADE'});
+User.belongsToMany(User, { as: 'Requesters', sourceKey: 'id', through: 'friendRequests', foreignKey: 'requesteeId', onDelete: 'CASCADE'});
+
 
 export default User;

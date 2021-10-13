@@ -107,7 +107,7 @@ describe('Achievement controller', () => {
       `Bearer ${loginRes.body.data}`
     );
     expect(res.body.status).toBe('Okay');
-    expect(res.body.data).toBe(currUser.exp + 1000);
+    expect(res.body.data.gainedExp).toBe(1000);
     const updatedUser = await User.findOne({
       where: {
         id: user.id

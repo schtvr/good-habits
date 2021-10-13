@@ -1,9 +1,9 @@
 import { Request, Response, Express } from 'express';
 import Quest from '../models/quest';
 import ActiveQuest from '../models/activeQuest';
-import User from '../models/user';
 import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkQuestAchievements';
+import { createUpdate } from '../interfaces/Update';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -60,16 +60,16 @@ const completeQuest = async (req: Request, res: Response) => {
     if (!template) return sendRes(res, false, 422, 'Invalid quest Id');
     if (!await questToComplete[0].complete()) sendRes(res, false, 500, 'Server error completing quest');
     
-    user.exp += template.completionExp;
-    await User.update(
-      { exp: user.exp },
-      { where: {
-        id: user.id
-      }});
-    
-    await checkAchievements(user, 'Quests');
+    await user.update({
+      exp: user.exp += template.completionExp
+    });
 
-    return sendRes(res, true, 200, 'Quest completed', user.exp);
+    const update = createUpdate();
+    update.gainedExp += template.completionExp;
+    update.quests.push(template);
+    await checkAchievements(user, 'Quests', update);
+
+    return sendRes(res, true, 200, 'Quest completed', update);
   } catch (err) {
     return sendRes(res, false, 500, 'Server errored when completing quest.', err);
   }

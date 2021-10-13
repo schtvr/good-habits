@@ -9,15 +9,18 @@ import {
   HasManyCreateAssociationMixin,
   Optional,
 } from 'sequelize';
+import { IUpdate } from '../interfaces/Update';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 
 interface ITask {
   id: number,
   questId: number,
+  name: string,
   description: string,
-  expValue: number,
+  completionExp: number,
   index: number,
+  day: number,
 }
 
 interface ITaskCreationAttributes extends
@@ -27,9 +30,11 @@ class Task extends Model<ITask, ITaskCreationAttributes>
   implements ITask {
   public id!: number;
   public questId!: number;
+  public name!: string;
   public description!: string;
-  public expValue!: number;
+  public completionExp!: number;
   public index!: number;
+  public day!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -39,6 +44,15 @@ class Task extends Model<ITask, ITaskCreationAttributes>
   public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
   public countTaskHistory!: HasManyCountAssociationsMixin;
   public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
+  
+  public async complete (userId: number, done: boolean) {
+    const completedTask = await this.createTaskHistory({
+      userId,
+      questId: this.questId,
+      completed: done ? true : false
+    });
+    return completedTask;
+  }
 
   public static associations: {
     taskHistory: Association<Task, TaskHistory>
@@ -56,15 +70,23 @@ Task.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    name: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+    },
     description: {
       type: new DataTypes.STRING(1000),
       allowNull: false,
     },
-    expValue: {
+    completionExp: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     index: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    day: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
