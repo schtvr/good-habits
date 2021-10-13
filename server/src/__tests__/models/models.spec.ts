@@ -47,12 +47,15 @@ describe('Tests for the models', () => {
       description: 'poo on bob 100 times',
       category: 'poo category',
       completionExp: 10000,
+      taskCount: 1
     });
     task = await Task.create({
       questId: quest.id,
+      name: 'big poo time',
       description: 'poo on bob',
-      expValue: 10,
+      completionExp: 10,
       index: 1,
+      day: 0
     });
   });
 
@@ -125,8 +128,17 @@ describe('Tests for the models', () => {
         password: 'password',
       });
 
-      await thing1.addUser([thing2.id]);
-      expect(await thing1.countUser()).toBe(1);
+      await thing1.addRequestees(thing2.id);
+      expect(await thing1.countRequestees()).toBe(1);
+      expect(await thing2.hasRequester(thing1.id)).toBe(true);
+      expect(await thing1.hasRequestee(thing2.id)).toBe(true);
+      expect(await thing1.countFriends()).toBe(0);
+      await thing1.addFriends(thing2.id);
+      await thing1.removeRequestee([thing2.id]);
+      expect(await thing2.hasRequester(thing1.id)).toBe(false);
+      expect(await thing1.hasRequestee(thing2.id)).toBe(false);
+      expect(await thing1.countFriends()).toBe(1);
+      expect(await thing1.countRequestees()).toBe(0);
     });
   });
 
@@ -146,9 +158,11 @@ describe('Tests for the models', () => {
 
     test('able to create tasks', async () => {
       await quest.createTask({
+        name: 'pupper',
         description: 'make a new task',
-        expValue: 100,
+        completionExp: 100,
         index: 2,
+        day: 0
       });
       const questsTasks = await quest.getTasks();
       expect(questsTasks).toHaveLength(2);
@@ -167,6 +181,7 @@ describe('Tests for the models', () => {
         description: 'poo on bob 100 times',
         category: 'poopoo category',
         completionExp: 10000,
+        taskCount: 5
       });
       await newQuest.createActiveQuest({
         userId: user.id
@@ -256,14 +271,12 @@ describe('Tests for the models', () => {
     });
     
     test('should be able to mark tasks completed', async () => {
-      const taskHistory = await task.createTaskHistory({
-        userId: user.id,
-        questId: task.questId
-      });
-      
-      await taskHistory.complete();
-      expect(taskHistory.completed).toBe(true);
-      const dbTaskHistory = await TaskHistory.findOne({ where: { id: taskHistory.id }});
+      const completedTask = await task.complete(
+        user.id,
+        true
+      );
+      expect(completedTask.completed).toBe(true);
+      const dbTaskHistory = await TaskHistory.findOne({ where: { id: completedTask.id }});
       expect(dbTaskHistory?.completed).toBe(true);
     });
   });

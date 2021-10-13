@@ -10,7 +10,17 @@ const router = express.Router();
 // USER ROUTES
 router.post('/user', user.createUser);
 router.get('/user/', verify , user.findUserById);
-router.post('/user/friend/:userId', verify, user.addUserByUserName);
+router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
+router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
+router.get('/user/friendRequestSent', verify ,user.getFriendRequestSent);
+router.put('/user/:id/acceptFriendRequest', verify ,user.acceptFriendRequest);
+router.get('/user/friends', verify ,user.getFriends);
+router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
+router.put('/user/:id/unfriend', verify ,user.unfriend);
+
+
+
+
 
 //AUTH ROUTES
 router.post('/login', auth.login);
@@ -24,7 +34,8 @@ router.get('/quests', quests.getQuestTemplates);
 
 // TASK ROUTES
 router.get('/task/:id', verify, tasks.getTaskById);
-router.post('/task/setComplete', verify , tasks.completeTaskById);
+router.post('/task/:taskId', verify , tasks.completeTaskById);
+router.get('/task/quest/:questId', tasks.getQuestTasks);
 
 //ACHIEVEMENT ROUTES
 router.get('/achievement/templates', achievements.getAllAchievements);
