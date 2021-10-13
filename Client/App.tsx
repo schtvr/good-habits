@@ -51,7 +51,6 @@ const headerRight = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.header}>
-      {console.log(navigation)}
       <TouchableOpacity onPress={() => alert('Notifications!')}>
         <MaterialCommunityIcons
           style={styles.icons}

@@ -1,23 +1,9 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Switch,
-  Image,
-  ScrollView,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, FlatList, Switch} from 'react-native';
 import {IQuest} from '../interfaces/interfaces';
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Avatar,
-  Input,
-} from 'react-native-elements';
-import {Item} from 'react-native-paper/lib/typescript/components/List/List';
+import {Avatar, Input} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAllQuests, questSelector, questSlice} from '../redux/questSlice';
 
 const list = [
   {
@@ -31,58 +17,6 @@ const list = [
     subtitle: 'Vice Chairman',
   },
 ];
-
-const quests: IQuest = [
-  {
-    id: 1,
-    duration: 7,
-    name: 'posture check',
-    description: 'correct your posture for 1 week',
-    category: 'health',
-    completionExp: 50,
-  },
-  {
-    id: 2,
-    duration: 7,
-    name: 'posture check',
-    description: 'correct your posture for 1 week',
-    category: 'health',
-    completionExp: 50,
-  },
-  {
-    id: 3,
-    duration: 7,
-    name: 'posture check',
-    description: 'correct your posture for 1 week',
-    category: 'health',
-    completionExp: 50,
-  },
-  {
-    id: 4,
-    duration: 7,
-    name: 'posture check',
-    description: 'correct your posture for 1 week',
-    category: 'health',
-    completionExp: 50,
-  },
-  {
-    id: 5,
-    duration: 7,
-    name: 'posture check',
-    description: 'correct your posture for 1 week',
-    category: 'health',
-    completionExp: 50,
-  },
-  {
-    id: 6,
-    duration: 7,
-    name: 'posture check',
-    description: 'correct your posture for 1 week',
-    category: 'health',
-    completionExp: 50,
-  },
-];
-
 const keyExtractor = (item, index) => index.toString();
 
 const renderItem = ({item}) => (
@@ -95,7 +29,22 @@ const renderItem = ({item}) => (
 const SearchDetailsScreen = ({navigation}) => {
   const [searchFriends, setSearchFriends] = useState(true);
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
+  const dispatch = useDispatch();
+  const {quests} = useSelector(questSelector);
 
+  const getQuests = async () => {
+    dispatch(
+      getAllQuests({
+        api: {
+          url: 'quests',
+        },
+      }),
+    );
+  };
+
+  useEffect(() => {
+    getQuests();
+  }, []);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
