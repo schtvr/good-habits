@@ -13,10 +13,11 @@ import Achievement from './achievement';
 
 export interface IAchievementTemplate {
   id: number
+  name: string
   description: string
   img: string
-  category: string
-  criteria: string
+  category: string 
+  criteria: number
   completionExp: number
 }
 interface IAchievementTemplateCreationAttributes extends Optional<IAchievementTemplate, 'id'> {}
@@ -24,10 +25,11 @@ interface IAchievementTemplateCreationAttributes extends Optional<IAchievementTe
 class AchievementTemplate extends Model<IAchievementTemplate, IAchievementTemplateCreationAttributes>
   implements IAchievementTemplate {
   public id!: number;
+  public name!: string;
   public description!: string;
   public img!: string;
   public category!: string;
-  public criteria!: string;
+  public criteria!: number;
   public completionExp!: number
 
   public readonly createdAt!: Date;
@@ -50,6 +52,10 @@ AchievementTemplate.init(
       autoIncrement: true,
       primaryKey: true,
     },
+    name: {
+      type: new DataTypes.STRING(255),
+      allowNull: false,
+    },
     description: {
       type: new DataTypes.STRING(255),
       allowNull: false,
@@ -63,7 +69,7 @@ AchievementTemplate.init(
       allowNull: false,
     },
     criteria: {
-      type: new DataTypes.STRING(255),
+      type: new DataTypes.INTEGER,
       allowNull: false,
     },
     completionExp: {

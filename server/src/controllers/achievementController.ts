@@ -2,55 +2,35 @@ import { Request, Response } from 'express';
 import User from '../models/user';
 import AchievementTemplate from '../models/achievementTemplate';
 import Achievement from '../models/achievement';
+import sendRes from '../funcs/sendRes';
 
 
 const getUserAchievements = async (req: Request, res: Response) => {
   const { user } = req;
-  if (!user) return res.status(400).send({
-    status: 'Bad',
-    message: 'Not authenticated'
-  });
+  if (!user) return sendRes(res, false, 400, 'Not authenticated');
   try {
     const achievements = await user.getAchievements();
-    res.status(200).send({
-      status: 'Okay',
-      message: 'Achievements retrieved',
-      data: achievements
-    });
+    return sendRes(res, true, 200, 'Achievements retrieved', achievements);
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Error retrieving achievements'
-    });
+    sendRes(res, false, 500, 'Error retrieving achievements', err);
   }
 };
 
 const getAllAchievements = async (req: Request, res: Response) => {
   try {
     const allAchievements = await AchievementTemplate.findAll();
-    res.status(200).send({
-      status: 'Okay',
-      message: 'Achievement templates retreieved',
-      data: allAchievements
-    });
+    return sendRes(res, true, 200, 'Achievement templates retreieved', allAchievements);
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Error retrieving achievements'
-    });
+    return sendRes(res, false, 500, 'Error retrieving achievements', err);
   }
 };
+
 const grantAchievement = async (req: Request, res: Response) => {
   const { user } = req;
   const achievementId: string = req.params.id;
-  if (!user) return res.status(400).send({
-    status: 'Bad',
-    message: 'Not authenticated'
-  });
-  if (achievementId === undefined) return res.status(422).send({
-    status: 'Bad',
-    message: 'Missing form information'
-  });
+  if (!user) return sendRes(res, false, 400, 'Not authenticated'); 
+  if (achievementId === undefined) return sendRes(res, false, 422, 'Missing form information');
+
   try {
     const hasAchieve = await Achievement.findOne({
       where: {
@@ -88,16 +68,9 @@ const grantAchievement = async (req: Request, res: Response) => {
         id: user.id
       }}
     );
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'Achievement granted',
-      data: user.exp
-    });
+    return sendRes(res, true, 200, 'Achievement granted', user.exp);
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Error granting achievement'
-    });
+    return sendRes(res, false, 500, 'Error granting achievement', err);
   }
 };
 
