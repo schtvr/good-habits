@@ -61,13 +61,9 @@ const grantAchievement = async (req: Request, res: Response) => {
       message: 'Achievement not granted'
     });
 
-    user.exp += achieve.completionExp;
-    await User.update(
-      { exp: user.exp },
-      { where: {
-        id: user.id
-      }}
-    );
+    await user.update({
+      exp: user.exp += achieve.completionExp
+    });
     return sendRes(res, true, 200, 'Achievement granted', user.exp);
   } catch (err) {
     return sendRes(res, false, 500, 'Error granting achievement', err);

@@ -9,6 +9,7 @@ import {
   HasManyCreateAssociationMixin,
   Optional,
 } from 'sequelize';
+import { IUpdate } from '../interfaces/Update';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 
@@ -43,6 +44,13 @@ class Task extends Model<ITask, ITaskCreationAttributes>
   public hasTaskHistory!: HasManyHasAssociationMixin<TaskHistory, number>;
   public countTaskHistory!: HasManyCountAssociationsMixin;
   public createTaskHistory!: HasManyCreateAssociationMixin<TaskHistory>;
+  
+  public async complete (userId: number) {
+    await this.createTaskHistory({
+      userId,
+      questId: this.questId
+    });
+  }
 
   public static associations: {
     taskHistory: Association<Task, TaskHistory>

@@ -2,6 +2,7 @@ import Task from '../models/task';
 import { Request, Response } from 'express';
 import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkQuestAchievements';
+import { createUpdate } from '../interfaces/Update';
 
 const getTaskById = async (req: Request, res:Response) => {
   try {
@@ -19,14 +20,25 @@ const getTaskById = async (req: Request, res:Response) => {
 
 const completeTaskById = async (req: Request, res:Response) => {
   try {
-    if (!req.user) return sendRes(res, false, 403, 'Not authenticated');
+    const user = req.user;
+    if (!user) return sendRes(res, false, 403, 'Not authenticated');
     if (!req.params.taskId) return sendRes(res, false, 422, 'Missing taskId');
-    const foundTask = await req.user.getTaskHistory({ where: { id: req.params.taskId }});
+    const task = await Task.findOne({
+      where: {
+        id: req.params.taskId
+      }
+    });
+    if (!task) return sendRes(res, false, 403, 'Invalid task id');
+    
+    await task.complete(user.id);
+    const update = createUpdate();
+    update.gainedExp += task.completionExp;
+    update.tasks.push(task);
+    await checkAchievements(user, 'Tasks', update);
 
-    const result = await foundTask[0].complete();
-    await checkAchievements(req.user, 'Tasks');
-    if (result) return sendRes(res, true, 200, 'Task completed');
+    return sendRes(res, true, 200, 'Task completed', update);
   } catch (err) {
+    console.log(err);
     return sendRes(res, false, 500, 'Server error completing task', err);
   }
 };
