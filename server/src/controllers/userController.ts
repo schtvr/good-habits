@@ -42,11 +42,12 @@ const getAllUsers = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Unauthorized token');
   try {
-
-  } catch(err) {
+    const users = User.findAll(userAttributes);
+    return sendRes(res, false, 200, 'Enjoy your data lol', users);
+  } catch (err) {
     return sendRes(res, false, 500, 'internal server error', err);
   }
-}
+};
 
 const findUserById = async (req: Request, res: Response) => {
   const user = req.user;
