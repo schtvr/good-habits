@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import User from '../models/user';
 import AchievementTemplate from '../models/achievementTemplate';
 import Achievement from '../models/achievement';
 import sendRes from '../funcs/sendRes';
-
+import { createUpdate } from '../interfaces/Update';
 
 const getUserAchievements = async (req: Request, res: Response) => {
   const { user } = req;
@@ -39,32 +38,28 @@ const grantAchievement = async (req: Request, res: Response) => {
       }
     });
     
-    if (hasAchieve) return res.status(403).send({
-      status: 'Bad',
-      message: 'User already has this achievement'
-    });
+    if (hasAchieve) return sendRes(res, false, 403, 'User already has this achievement');
 
     const achieve = await AchievementTemplate.findOne({
       where: {
         id: achievementId
       }
     });
-    if (!achieve) return res.status(422).send({ 
-      status: 'Bad',
-      message: 'Invalid achievement id'
-    });
+    if (!achieve) return sendRes(res, false, 403, 'Invalid achievement id');
+   
     const granted = achieve.createAchievement({
       userId: user.id
     });
-    if (!granted) return res.send({
-      status: 'Bad',
-      message: 'Achievement not granted'
-    });
+    if (!granted) return sendRes(res, false, 400, 'Achievement not granted');
 
     await user.update({
       exp: user.exp += achieve.completionExp
     });
-    return sendRes(res, true, 200, 'Achievement granted', user.exp);
+    
+    const update = createUpdate();
+    update.gainedExp = achieve.completionExp;
+    update.achievements.push(achieve);
+    return sendRes(res, true, 200, 'Achievement granted', update);
   } catch (err) {
     return sendRes(res, false, 500, 'Error granting achievement', err);
   }

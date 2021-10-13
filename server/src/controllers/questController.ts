@@ -60,14 +60,16 @@ const completeQuest = async (req: Request, res: Response) => {
     if (!template) return sendRes(res, false, 422, 'Invalid quest Id');
     if (!await questToComplete[0].complete()) sendRes(res, false, 500, 'Server error completing quest');
     
-    const update = createUpdate();
     await user.update({
       exp: user.exp += template.completionExp
     });
+
+    const update = createUpdate();
     update.gainedExp += template.completionExp;
+    update.quests.push(template);
     await checkAchievements(user, 'Quests', update);
 
-    return sendRes(res, true, 200, 'Quest completed', user.exp);
+    return sendRes(res, true, 200, 'Quest completed', update);
   } catch (err) {
     return sendRes(res, false, 500, 'Server errored when completing quest.', err);
   }

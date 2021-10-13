@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import sendRes from '../funcs/sendRes';
+import stripPassword from '../funcs/stripPassword';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -23,7 +24,7 @@ const createUser = async (req: Request, res:Response) => {
           status: 'Okay',
           message: 'User created',
           token,
-          user: userWithoutPassword(user)
+          user: stripPassword(user)
         });
       } catch (err) {
         return sendRes(res, false, 400, 'Duplicate username or email');
@@ -45,7 +46,7 @@ const findUserById = async (req: Request, res: Response) => {
     });
 
     if (!userInfo) return res.status(404).send('No user found with that id');
-    return sendRes(res, true, 200, 'Here is the user lol', userWithoutPassword(user));
+    return sendRes(res, true, 200, 'Here is the user lol', stripPassword(user));
   } catch (err) {
     return sendRes(res, false, 500, 'Server error finding user', err);
   }
@@ -143,7 +144,19 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friendRequests = await user.getRequesters();
+    const friendRequests = await user.getRequesters({
+      attributes: {
+        include: ['id', 'userName'],
+        exclude: [
+          'password',
+          'email',
+          'exp',
+          'level',
+          'firstName',
+          'lastName',
+        ]
+      }
+    });
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friend requests loser',
@@ -288,16 +301,6 @@ const unfriend = async (req: Request, res: Response) => {
       data: err,
     }); 
   }
-};
-
-
-const userWithoutPassword = (user: User) => {
-  return {
-    userName: user.userName,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email
-  };
 };
 
 export default {
