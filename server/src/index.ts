@@ -1,13 +1,21 @@
 import express from 'express';
-// import routers
 import cfg from '../config';
 import dbInit from './models/init';
 import router from './router';
+import cors from 'cors';
+import populateDb from './funcs/populatedb';
 const app = express();
 
+const corsConfig = {
+  origin: 'http://localhost:3000/',
+};
+
+app.use(cors());
 app.use(express.json());
 app.use(router);
+
 app.listen(cfg.PORT, async () => {
   await dbInit();
+  await populateDb();
   console.log(`Server listening on port ${cfg.PORT}`);
 });

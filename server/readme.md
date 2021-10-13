@@ -46,10 +46,11 @@ AchievementTemplate
 ```
 {
   id: number
+  name: string
   description: string
   img: string
   category: string
-  criteria: string
+  criteria: number
   completionExp: number
 }
 ```
