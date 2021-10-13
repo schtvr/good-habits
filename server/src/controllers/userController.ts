@@ -53,11 +53,7 @@ const findUserById = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Unauthorized token');
   try {
-    const userInfo = await User.findOne({
-      where: {
-        id: user.id
-      }
-    });
+    const userInfo = await User.findOne(userAttributes);
 
     if (!userInfo) return res.status(404).send('No user found with that id');
     return sendRes(res, true, 200, 'Here is the user lol', stripPassword(user));
