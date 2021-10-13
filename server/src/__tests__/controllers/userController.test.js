@@ -101,13 +101,36 @@ describe('User controller', () => {
   });
 
   describe('Friends List functionality', () => {
-    test('Should be able to add as friend', async () => {
+    test('Should be able to send friend request', async () => {
+      const token = jwt.sign({ userId: user.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res.body.status).toBe('Okay');
+      expect(res.body.message).toBe('Friend request sent');
+    });
+    test('Should fail to send request if user doesn\'t exist', async () => {
+      const token = jwt.sign({ userId: user.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      const res = await request.put('/user/ijhdfsjhifdsuhdsfhuyguydfsujhikyerdsfiujofedsiukjh/friendRequest').set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res.body.status).toBe('Bad');
+      expect(res.body.message).toBe('You sent me a user that doesn\'t exist dumdum');
+    });
+    test('Should be able to cancel friend request that exists', async () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
       });
       const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
         expiresIn: '7d'
       });
+      
       const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
@@ -118,8 +141,103 @@ describe('User controller', () => {
         'Authorization',
         `Bearer ${token2}`
       );
+      expect(res2.body.status).toBe('Okay');
+      expect(res2.body.message).toBe('Enjoy your friend requests loser');
+      const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/cancelFriendRequest`).set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      expect(res3.body.status).toBe('Bad');
+      expect(res3.body.message).toBe('No friend request to that username');
+      const res4 = await request.get('/user/friends').set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      const res5 = await request.get('/user/friends').set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res4.body.data[0]?.userName).toBe(undefined);
+      expect(res5.body.data[0]?.userName).toBe(undefined);
+    });
+    test('Should be not be able to cancel friend request that doesn\'t exist', async () => {
+      const token = jwt.sign({ userId: user.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      
+      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res.body.status).toBe('Okay');
+      expect(res.body.message).toBe('Friend request sent');
+      const res2 = await request.get('/user/friendRequestReceived').set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      expect(res2.body.status).toBe('Okay');
+      expect(res2.body.message).toBe('Enjoy your friend requests loser');
+      const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/cancelFriendRequest`).set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      expect(res3.body.status).toBe('Bad');
+      expect(res3.body.message).toBe('No friend request to that username');
+      const res4 = await request.get('/user/friends').set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      const res5 = await request.get('/user/friends').set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res4.body.data[0]?.userName).toBe(undefined);
+      expect(res5.body.data[0]?.userName).toBe(undefined);
+    });
+    test('Should be able to add as friend', async () => {
+      const token = jwt.sign({ userId: user.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
+        expiresIn: '7d'
+      });
+      
+      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res.body.status).toBe('Okay');
+      expect(res.body.message).toBe('Friend request sent');
+      const res2 = await request.get('/user/friendRequestReceived').set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+<<<<<<< HEAD
       //console.log(res2.body);
 
+=======
+      expect(res2.body.status).toBe('Okay');
+      expect(res2.body.message).toBe('Enjoy your friend requests loser');
+      const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/acceptFriendRequest`).set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      expect(res3.body.status).toBe('Okay');
+      expect(res3.body.message).toBe('Friend request accepted');
+      const res4 = await request.get('/user/friends').set(
+        'Authorization',
+        `Bearer ${token2}`
+      );
+      const res5 = await request.get('/user/friends').set(
+        'Authorization',
+        `Bearer ${token}`
+      );
+      expect(res4.body.data[0]?.userName).toBe(dummyUser.userName);
+      expect(res5.body.data[0]?.userName).toBe(dummyUser2.userName);
+>>>>>>> 8d8541e54228b22b555675c5eb45aa3f19578503
     });
   });
 });
