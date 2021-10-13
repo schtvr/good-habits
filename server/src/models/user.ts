@@ -171,7 +171,7 @@ User.hasMany(CompletedQuest, {
   as: 'completedQuests'
 });
 
-User.belongsToMany(User, { as: 'Friends',sourceKey: 'id', foreignKey: 'friendId', through: 'friendLists'});
+User.belongsToMany(User, { as: 'Friends',through: 'friendLists'});
 User.belongsToMany(User, { as: 'Requestees', sourceKey: 'id', through: 'friendRequests', foreignKey: 'requesterId', onDelete: 'CASCADE'});
 User.belongsToMany(User, { as: 'Requesters', sourceKey: 'id', through: 'friendRequests', foreignKey: 'requesteeId', onDelete: 'CASCADE'});
 
