@@ -76,7 +76,7 @@ const findUserById = async (req: Request, res: Response) => {
 // router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
 // router.get('/user/friendRequestSent', verify ,user.getFriendRequestSent);
 // router.put('/user/:id/acceptFriendRequest', verify ,user.acceptFriendRequest);
-// router.get('/user/:id/friends', verify ,user.getFriends);
+// router.get('/user/friends', verify ,user.getFriends);
 // router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
 // router.put('/user/:id/unfriend', verify ,user.unfriend);
 
@@ -303,4 +303,11 @@ const userWithoutPassword = (user: User) => {
 export default {
   createUser,
   findUserById,
+  acceptFriendRequest,
+  cancelFriendRequest,
+  unfriend,
+  getFriendRequestReceived,
+  getFriendRequestSent,
+  putFriendRequest,
+  getFriends
 };

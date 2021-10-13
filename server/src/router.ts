@@ -10,14 +10,13 @@ const router = express.Router();
 // USER ROUTES
 router.post('/user', user.createUser);
 router.get('/user/', verify , user.findUserById);
-// router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
-// router.get('/user/:id/friendRequestReceived', verify ,user.getFriendRequestReceived);
-// router.get('/user/:id/friendRequestSent', verify ,user.getFriendRequestSent);
-// router.put('/user/:id/acceptFriendRequest', verify ,user.acceptFriendRequest);
-// router.get('/user/:id/friends', verify ,user.getFriends);
-// router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
-// router.put('/user/:id/unfriend', verify ,user.unfriend);
-
+router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
+router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
+router.get('/user/friendRequestSent', verify ,user.getFriendRequestSent);
+router.put('/user/:id/acceptFriendRequest', verify ,user.acceptFriendRequest);
+router.get('/user/friends', verify ,user.getFriends);
+router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
+router.put('/user/:id/unfriend', verify ,user.unfriend);
 
 
 
