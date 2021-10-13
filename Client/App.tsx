@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
@@ -22,8 +22,9 @@ import QuestDetailsScreen from './screens/QuestDetailsScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterPage from './screens/RegisterPage';
 
-import { stateSelector } from './redux/userSlice'
-import { useDispatch, useSelector } from 'react-redux';
+import {stateSelector} from './redux/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import SearchDetailsScreen from './screens/SearchDetailsScreen';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,16 +47,24 @@ const AuthStack = () => (
 );
 
 //Tabstack
-const headerRight = () => (
-  <View style={styles.header}>
-    <TouchableOpacity onPress={() => alert('Notifications!')}>
-      <MaterialCommunityIcons style={styles.icons} name="notifications-none" size={30} />
-    </TouchableOpacity>
-    <TouchableOpacity onPress={() => alert('Search!')}>
-      <MaterialCommunityIcons style={styles.icons} name="search" size={30} />
-    </TouchableOpacity>
-  </View>
-);
+const headerRight = () => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.header}>
+      {console.log(navigation)}
+      <TouchableOpacity onPress={() => alert('Notifications!')}>
+        <MaterialCommunityIcons
+          style={styles.icons}
+          name="notifications-none"
+          size={30}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+        <MaterialCommunityIcons style={styles.icons} name="search" size={30} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const TabStack = () => (
   <Tab.Navigator initialRouteName="Home">
@@ -115,13 +124,13 @@ const TabStack = () => (
 //Remove the ! or change isAuthenticated to true to see other screens!
 
 const App: () => Node = () => {
-  const { isAuthenticated } = useSelector(stateSelector);
+  const {isAuthenticated} = useSelector(stateSelector);
   console.log(isAuthenticated);
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {!isAuthenticated ? (
+          {isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
@@ -143,6 +152,7 @@ const App: () => Node = () => {
                 name="ProfileSettings"
                 component={ProfileSettings}
               />
+              <Stack.Screen name="Search" component={SearchDetailsScreen} />
             </>
           )}
         </Stack.Navigator>

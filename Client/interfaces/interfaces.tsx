@@ -33,8 +33,6 @@ export interface IQuest {
   description: string;
   category: string;
   completionExp: number;
-  task: ITask;
-  activeQuests: IActiveQuest[];
 }
 
 export interface IActiveQuest {
