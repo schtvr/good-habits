@@ -137,6 +137,25 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
 
 };
 const getFriendRequestSent = async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return res.status(403).send({
+    status: 'Bad',
+    message: 'Not authenticated',
+  });
+  try { 
+    const friendRequests = await user.getRequestees();
+    return res.status(200).send({
+      status: 'Okay',
+      message: 'Enjoy your friend requests loser',
+      data: friendRequests,
+    });
+  } catch (err) {
+    res.status(500).send({
+      status: 'Bad',
+      message: 'Internal Server Error',
+      data: err,
+    }); 
+  }
 };
 const acceptFriendRequest = async (req: Request, res: Response) => {
 };
