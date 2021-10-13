@@ -120,7 +120,7 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friendRequests = await user.getRequesters();
+    const friendRequests = await user.getRequestees();
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friend requests loser',
@@ -143,7 +143,7 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try { 
-    const friendRequests = await user.getRequestees();
+    const friendRequests = await user.getRequesters();
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friend requests loser',
