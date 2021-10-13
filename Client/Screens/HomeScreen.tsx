@@ -94,6 +94,7 @@ const HomeScreen = ({
   const getToken = async () => {
     const token = await AsyncStorage.getItem('token')
     setToken(token);
+    console.log(userToken)
   }
   getToken();
 
