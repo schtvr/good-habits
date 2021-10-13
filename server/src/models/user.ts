@@ -76,6 +76,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
 
   public getRequesters!: BelongsToManyGetAssociationsMixin<RequestList>;
   public hasRequester!: BelongsToManyHasAssociationMixin<RequestList, number>;
+  public removeRequester!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
 
   public getFriends!: BelongsToManyGetAssociationsMixin<FriendList>;
   public addFriends!: BelongsToManyAddAssociationMixin<FriendList, number>;

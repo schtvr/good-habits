@@ -195,9 +195,62 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
   }
 };
 const getFriends = async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return res.status(403).send({
+    status: 'Bad',
+    message: 'Not authenticated',
+  });
+  try { 
+    const friends = await user.getFriends();
+    return res.status(200).send({
+      status: 'Okay',
+      message: 'Enjoy your friends loser',
+      data: friends,
+    });
+  } catch (err) {
+    res.status(500).send({
+      status: 'Bad',
+      message: 'Internal Server Error',
+      data: err,
+    }); 
+  }
 };
 
 const cancelFriendRequest = async (req: Request, res: Response) => {
+  const user = req.user;
+  const userName = req.params.id;
+  if (!user || !userName) return res.status(403).send({
+    status: 'Bad',
+    message: 'Not authenticated',
+  });
+  try { 
+    const userToCancel = await User.findOne({
+      where: {
+        userName
+      }
+    });
+    if (!userToCancel) return res.status(404).send({
+      status: 'Bad',
+      message: 'That user does not exist'
+    });
+    const friendRequests = await user.hasRequester(userToCancel.id);
+
+    if (!friendRequests) return res.status(404).send({
+      status: 'Bad',
+      message: 'No friend request to that username'
+    });
+    await user.removeRequester([userToCancel.id]);
+    return res.status(200).send({
+      status: 'Okay',
+      message: 'Friend Request Canceled',
+    });
+  } catch (err) {
+    res.status(500).send({
+      status: 'Bad',
+      message: 'Internal Server Error',
+      data: err,
+    }); 
+  }
 };
 
 const unfriend = async (req: Request, res: Response) => {
