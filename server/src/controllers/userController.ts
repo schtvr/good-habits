@@ -72,6 +72,63 @@ const findUserById = async (req: Request, res: Response) => {
 
 
 
+// router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
+// router.get('/user/:id/friendRequestReceived', verify ,user.getFriendRequestReceived);
+// router.get('/user/:id/friendRequestSent', verify ,user.getFriendRequestSent);
+// router.put('/user/:id/acceptFriendRequest', verify ,user.acceptFriendRequest);
+// router.get('/user/:id/friends', verify ,user.getFriends);
+// router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
+// router.put('/user/:id/unfriend', verify ,user.unfriend);
+
+
+const putFriendRequest = async (req: Request, res: Response) => {
+  const userName = req.params.id;
+  const user = req.user;
+  if (!userName || !user) return res.status(403).send({
+    status: 'Bad',
+    message: 'Missing userId or not authenticated',
+  });
+  try { 
+    const userToFriend = await User.findOne({
+      where: {
+        userName
+      }
+    });
+    if (!userToFriend) return res.status(404).send({
+      status: 'Bad',
+      message: 'You sent me a user that doesn\'t exist dumdum',
+    });
+
+    userToFriend.addRequestees(user.id);
+    return res.status(200).send({
+      status: 'Okay',
+      message: 'Friend request sent'
+    });
+  } catch (err) {
+    res.status(500).send({
+      status: 'Bad',
+      message: 'Internal Server Error',
+      data: err,
+    });
+  }
+};
+
+const getFriendRequestReceived = async (req: Request, res: Response) => {
+};
+const getFriendRequestSent = async (req: Request, res: Response) => {
+};
+const acceptFriendRequest = async (req: Request, res: Response) => {
+};
+const getFriends = async (req: Request, res: Response) => {
+};
+
+const cancelFriendRequest = async (req: Request, res: Response) => {
+};
+
+const unfriend = async (req: Request, res: Response) => {
+};
+
+
 const userWithoutPassword = (user: User) => {
   return {
     userName: user.userName,
