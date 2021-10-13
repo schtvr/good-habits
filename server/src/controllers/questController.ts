@@ -2,7 +2,7 @@ import { Request, Response, Express } from 'express';
 import Quest from '../models/quest';
 import ActiveQuest from '../models/activeQuest';
 import sendRes from '../funcs/sendRes';
-import checkAchievements from '../funcs/checkQuestAchievements';
+import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 
 const startQuest = async (req: Request, res: Response) => {

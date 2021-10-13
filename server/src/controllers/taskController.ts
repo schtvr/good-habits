@@ -1,8 +1,9 @@
 import Task from '../models/task';
 import { Request, Response } from 'express';
 import sendRes from '../funcs/sendRes';
-import checkAchievements from '../funcs/checkQuestAchievements';
+import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
+import TaskHistory from '../models/taskHistory';
 
 const getTaskById = async (req: Request, res:Response) => {
   try {
@@ -30,6 +31,14 @@ const completeTaskById = async (req: Request, res:Response) => {
     });
     if (!task) return sendRes(res, false, 403, 'Invalid task id');
     
+    const completed = await TaskHistory.findOne({
+      where: {
+        userId: user.id,
+        taskId: req.params.taskId
+      }
+    });
+    if (completed) return sendRes(res, false, 400, 'You already completed this task!');
+    
     await task.complete(user.id, true);
     const update = createUpdate();
     update.gainedExp += task.completionExp;
@@ -38,7 +47,6 @@ const completeTaskById = async (req: Request, res:Response) => {
 
     return sendRes(res, true, 200, 'Task completed', update);
   } catch (err) {
-    console.log(err);
     return sendRes(res, false, 500, 'Server error completing task', err);
   }
 };

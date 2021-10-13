@@ -58,6 +58,7 @@ TaskHistory.init(
     completedDate: {
       type: DataTypes.DATE,
       allowNull: true,
+      defaultValue: new Date
     },
     completed: {
       type: DataTypes.BOOLEAN,
