@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 import sendRes from '../funcs/sendRes';
 import stripPassword from '../funcs/stripPassword';
 import userAttributes from '../util/userAttributes';
+import { createUpdate } from '../interfaces/Update';
+import checkAchievements from '../funcs/checkAchievements';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -36,15 +38,22 @@ const createUser = async (req: Request, res:Response) => {
   }
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return sendRes(res, false, 403, 'Unauthorized token');
+  try {
+    const users = User.findAll(userAttributes);
+    return sendRes(res, false, 200, 'Enjoy your data lol', users);
+  } catch (err) {
+    return sendRes(res, false, 500, 'internal server error', err);
+  }
+};
+
 const findUserById = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Unauthorized token');
   try {
-    const userInfo = await User.findOne({
-      where: {
-        id: user.id
-      }
-    });
+    const userInfo = await User.findOne(userAttributes);
 
     if (!userInfo) return res.status(404).send('No user found with that id');
     return sendRes(res, true, 200, 'Here is the user lol', stripPassword(user));
@@ -52,36 +61,6 @@ const findUserById = async (req: Request, res: Response) => {
     return sendRes(res, false, 500, 'Server error finding user', err);
   }
 };
-// const addUserByUserName = async (req: Request, res: Response) => {
-//   const userId = req.params.userId;
-//   const user = req.user;
-//   if (!userId || !user) return sendRes(res, false, 403, 'Did not send userId or Username, or not authenticated');
-//   try {
-//     const userToFollow = await User.findOne({
-//       where: {
-//         userName: userId
-//       }
-//     });
-//     if  (!userToFollow) return sendRes(res, false, 404, 'No user with that Id or Username');
-
-//     //Added because you can friend multiple people at once
-//     user.addUser([userToFollow.id]);
-//     return sendRes(res, true, 200, 'User has been added');
-//   } catch (err) {
-//     return sendRes(res, false, 500, 'Internal Server Error', err);
-//   }
-// };
-
-
-
-// router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
-// router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
-// router.get('/user/friendRequestSent', verify ,user.getFriendRequestSent);
-// router.put('/user/:id/acceptFriendRequest', verify ,user.acceptFriendRequest);
-// router.get('/user/friends', verify ,user.getFriends);
-// router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
-// router.put('/user/:id/unfriend', verify ,user.unfriend);
-
 
 const putFriendRequest = async (req: Request, res: Response) => {
   const userName = req.params.id;
@@ -159,6 +138,7 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
     }); 
   }
 };
+
 const acceptFriendRequest = async (req: Request, res: Response) => {
   const userName = req.params.id;
   const user = req.user;
@@ -184,10 +164,13 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     });
     await user.removeRequestee([userToFriend.id]);
     await user.addFriends(userToFriend.id);
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'Friend request accepted'
-    });
+    await userToFriend.addFriends(user.id);
+    
+    const update = createUpdate();
+    await checkAchievements(user, 'Social', update);
+    await checkAchievements(userToFriend, 'Social', createUpdate());
+
+    return sendRes(res, true, 200, 'Friend request accepted', update);
   } catch (err) {
     res.status(500).send({
       status: 'Bad',
@@ -301,5 +284,6 @@ export default {
   getFriendRequestReceived,
   getFriendRequestSent,
   putFriendRequest,
-  getFriends
+  getFriends,
+  getAllUsers
 };
