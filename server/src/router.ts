@@ -20,6 +20,7 @@ router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
 router.put('/user/:id/unfriend', verify ,user.unfriend);
 
 
+router.get('/friendsOnQuest/:questId', verify, quests.getFriendsOnQuest);
 
 
 

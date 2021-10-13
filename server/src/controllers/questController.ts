@@ -4,6 +4,7 @@ import ActiveQuest from '../models/activeQuest';
 import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
+import User from '../models/user';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -111,10 +112,40 @@ const getQuestTasks = async (req: Request, res: Response) => {
   }
 };
 
+const getFriendsOnQuest = async (req: Request, res: Response) => {
+  const user = req.user;
+  const questId = req.params.questId;
+  if (!user) return sendRes(res, false, 422, 'Not authenticated');
+  if (questId === undefined) return sendRes(res, false, 403, 'Please provide a quest Id');
+
+  try {
+    const template = await Quest.findByPk(questId);
+    if (!template) return sendRes(res, false, 403, 'No template found with that questId');
+
+    const usersOnQuest = await template.getActiveQuests();
+
+    const friends = await user.getFriends();
+    const friendIds: number[] = [];
+
+    friends.forEach(friend => {
+      friendIds.push(friend.id);
+    });
+
+    const friendsOnQuest = usersOnQuest.filter(activeQuest => (
+      friendIds.includes(activeQuest.userId)
+    ));
+    
+    return sendRes(res, true, 200, 'Friends on quest retrieved', friendsOnQuest);
+  } catch (err) {
+    return sendRes(res, false, 500, 'Server error getting friends on quest');
+  }
+};
+
 export default {
   startQuest,
   completeQuest,
   getUserActiveQuests,
   getQuestTemplates,
-  getQuestTasks
+  getQuestTasks,
+  getFriendsOnQuest
 };
