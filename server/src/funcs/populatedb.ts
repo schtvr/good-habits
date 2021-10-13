@@ -1,14 +1,13 @@
 import User from '../models/user';
 import Quest from '../models/quest';
 import AchievementTemplate from '../models/achievementTemplate';
+import bcrypt from 'bcrypt';
 
 const populateDb = async () => {
-  // DUMMY USERS
   try {
     await createUsers();
     await createQuests();
     await createAchievements();
-    
     
   } catch (err) {
     return;
@@ -22,21 +21,21 @@ const createUsers = async () => {
     firstName: 'timbo',
     lastName: 'slice',
     email: 'bigBoy@gmail.com',
-    password: 'password123'
+    password: bcrypt.hashSync('password123', 10) 
   });
   await User.create({
     userName: 'dummy',
     firstName: 'victor',
     lastName: 'dumdum',
     email: 'dummy@dummy.com',
-    password: 'password123'
+    password: bcrypt.hashSync('password123', 10) 
   });
   await User.create({
     userName: 'dogShit',
     firstName: 'dogShit',
     lastName: 'tunic',
     email: 'stinkybum@garbage.com',
-    password: 'password123'
+    password: bcrypt.hashSync('password123', 10)
   });
 };
 
