@@ -215,6 +215,7 @@ describe('User controller', () => {
         'Authorization',
         `Bearer ${token2}`
       );
+<<<<<<< HEAD
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
       const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/acceptFriendRequest`).set(
@@ -233,6 +234,10 @@ describe('User controller', () => {
       );
       expect(res4.body.data[0]?.userName).toBe(dummyUser.userName);
       expect(res5.body.data[0]?.userName).toBe(dummyUser2.userName);
+=======
+      //console.log(res2.body);
+
+>>>>>>> d3275c05a5c02f2a2c9e210f9d6c9b35ba38d2f8
     });
   });
 });

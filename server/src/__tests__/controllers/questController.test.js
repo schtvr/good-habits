@@ -108,7 +108,7 @@ describe('Quest Controller', () => {
         id: user.id
       }
     });
-    console.log(res.body);
+
     expect(userCompleted.exp).not.toBe(0);
     expect(res.body.data.quests).toHaveLength(1);
       
