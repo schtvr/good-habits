@@ -184,6 +184,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     });
     await user.removeRequestee([userToFriend.id]);
     await user.addFriends(userToFriend.id);
+    await userToFriend.addFriends(user.id);
     return res.status(200).send({
       status: 'Okay',
       message: 'Friend request accepted'
