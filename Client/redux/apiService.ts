@@ -2,7 +2,7 @@ import {LOCALURL} from 'react-native-dotenv';
 
 const apiService = store => next => action => {
   // console.log(action);
-  console.log('inside apiService', action.body);
+  console.log('inside apiService', action);
   if (!action?.payload?.api) return next(action);
   const api = action.payload.api;
   let type = action.type;
@@ -13,15 +13,17 @@ const apiService = store => next => action => {
     ...defaultHeaders,
     ...api.headers,
   };
-  // console.log('headers', headers);
+
   fetch(`${LOCALURL}/${api.url}`, {method, body, headers})
     .then(res => res.json())
     .then(data => {
       if (data.status === 'Bad') {
+        console.log(data);
         type = 'user/error';
         store.dispatch({type: type, data});
         return;
       }
+      console.log(data);
       store.dispatch({type: type, data});
     })
     .catch(error => {

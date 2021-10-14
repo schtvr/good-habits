@@ -10,21 +10,11 @@ import {
 import {IQuest} from '../interfaces/interfaces';
 import {Avatar, Input} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllQuests, questSelector, questSlice} from '../redux/questSlice';
+import {getAllQuests, questSelector} from '../redux/questSlice';
+import {getUsers, stateSelector} from '../redux/userSlice';
 import {useNavigation} from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const list = [
-  {
-    name: 'Amy Farha',
-
-    subtitle: 'Vice President',
-  },
-  {
-    name: 'Chris Jackson',
-
-    subtitle: 'Vice Chairman',
-  },
-];
 const keyExtractor = (item, index) => index.toString();
 
 const renderItem = ({item}) => {
@@ -41,6 +31,7 @@ const SearchDetailsScreen = ({navigation}) => {
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
   const dispatch = useDispatch();
   const {quests} = useSelector(questSelector);
+  const {usersList} = useSelector(stateSelector);
 
   const getQuests = async () => {
     dispatch(
@@ -52,9 +43,28 @@ const SearchDetailsScreen = ({navigation}) => {
     );
   };
 
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+
+  const getAllUsers = async () => {
+    dispatch(
+      getUsers({
+        api: {
+          url: 'users',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
+
   useEffect(() => {
-    getQuests();
+    // getQuests();
+    getAllUsers();
   }, []);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
@@ -89,9 +99,9 @@ const SearchDetailsScreen = ({navigation}) => {
       <Input label="search" />
       {searchFriends ? (
         <>
-          <Text style={styles.title}>All Freinds</Text>
+          <Text style={styles.title}>All Friends</Text>
           <FlatList
-            data={list}
+            data={usersList}
             numColumns={3}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

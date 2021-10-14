@@ -10,23 +10,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const QuestDetailsScreen = ({route}) => {
   const dispatch = useDispatch();
 
-  const [userToken, setToken] = useState('');
-
   let {tasks} = useSelector(questSelector);
-  const getToken = async () => {
-    return await AsyncStorage.getItem('token');
-  };
   const {id} = route.params;
-
+  
   useEffect(() => {
     const getTasks = async () => {
       await getTasksByid();
     };
     getTasks();
-    // console.log('TASKS', tasks);
   }, []);
-
-  console.log('TOKEN', userToken);
+  
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+  
   const getTasksByid = async () => {
     dispatch(
       getAllTasks({
