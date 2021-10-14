@@ -69,9 +69,7 @@ export const userSlice = createSlice({
       else state.error = 'server error';
     },
     getUser: (state, body) => {
-      console.log('GETUSER BODY', body);
       state.user = body.data.data;
-      console.log('USER STATE', state.user);
     },
   },
 });
