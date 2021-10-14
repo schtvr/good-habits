@@ -9,9 +9,11 @@ interface IState {
     exp: number;
     level: number;
   };
-  isAuthenticated: boolean,
-  error: string,
-  usersList: any[],
+  isAuthenticated: boolean;
+  error: string;
+  usersList: any[];
+  globalRankings: [];
+  friendRankings: [];
 }
 
 const initialState: IState = {
@@ -25,6 +27,8 @@ const initialState: IState = {
   isAuthenticated: false,
   error: '',
   usersList: [],
+  globalRankings: [],
+  friendRankings: [],
 };
 
 const setToken = async token => {
@@ -53,7 +57,7 @@ export const userSlice = createSlice({
       removeToken();
     },
     register: (state, body) => {
-      console.log('user/register', body)
+      console.log('user/register', body);
       state.user = {
         ...body.data.user,
       };
@@ -66,7 +70,6 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     getUsers: (state, body) => {
-      console.log('user/getUsers///////////////////', body.data.data);
       state.usersList = body.data.data;
     },
     error: (state, body) => {
@@ -77,10 +80,26 @@ export const userSlice = createSlice({
     getUser: (state, body) => {
       state.user = body.data.data;
     },
+    getAllRanking: (state, body) => {
+      console.log('BODY IN', body);
+      state.globalRankings = body.data.data;
+    },
+    getFriendRanking: (state, body) => {
+      state.friendRankings = body.data.data;
+    },
   },
 });
 
-export const {register, signIn, signOut, clearState, getUsers, getUser} = userSlice.actions;
+export const {
+  register,
+  signIn,
+  signOut,
+  clearState,
+  getUsers,
+  getUser,
+  getAllRanking,
+  getFriendRanking,
+} = userSlice.actions;
 export const authSelector = state => state.authInfo.isAuthenticated;
 export const userSelector = state => state.authInfo.user;
 export const stateSelector = state => state.authInfo;

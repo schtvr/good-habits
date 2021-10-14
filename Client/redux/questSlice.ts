@@ -28,6 +28,7 @@ export const questSlice = createSlice({
     },
     getActiveQuests: (state, body) => {
       state.activeQuests = body.data.data;
+      console.log('ACTIVEQUESTS', state.activeQuests);
     },
     getCompletedQuests: (state, body) => {
       state.completedQuests = body.data.data;

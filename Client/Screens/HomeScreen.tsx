@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from 'react';
 
-import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
@@ -42,16 +50,14 @@ const HomeScreen = ({
   userQuests,
 }: Props): JSX.Element => {
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
-  const [myFriends, setMyFriends] = useState([]);
+  const [myFriendsa, setMyFriends] = useState([]);
   const [userToken, setToken] = useState('');
 
   const dispatch = useDispatch();
 
   const {user} = useSelector(stateSelector);
   const {activeQuests} = useSelector(questSelector);
-  const {myFreinds} = useSelector(friendSelector);
-
-  console.log('MYFREINDS', myFreinds);
+  const {myFriends} = useSelector(friendSelector);
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -123,10 +129,19 @@ const HomeScreen = ({
           />
           <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
         </View>
-        <View style={styles.container}>
-          <Text style={styles.activeQuests}>Active Quests</Text>
-          {renderAccordians()}
-        </View>
+        {activeQuests ? (
+          <View style={styles.container}>
+            <Text style={styles.activeQuests}>Active Quests</Text>
+            {renderAccordians()}
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <Text style={styles.activeQuests}>No Active Quests</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+              <Text>Go to all quests</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <Text style={styles.activeFriends}>Active Friends</Text>
         <CarouselComponent data={friends} />
       </ScrollView>
