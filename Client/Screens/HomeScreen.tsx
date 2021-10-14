@@ -5,6 +5,9 @@ import {LinearProgress} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IQuest, IUser} from '../interfaces/interfaces';
+import {useDispatch} from 'react-redux';
+import {getUser} from '../redux/userSlice';
 
 const quests = [
   {
@@ -45,36 +48,8 @@ const friends = [
   },
 ];
 
-interface IUser {
-  id: number;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  password: string;
-  EXP: number;
-  level: number;
-  friends: IFriends[];
-}
-
-interface IFriends {
-  id: number;
-  name: string;
-  activeQuests: string;
-}
-
-interface IQuest {
-  id: number;
-  duration: number;
-  name: string;
-  description: string;
-  category: string;
-  missedCheckin: boolean;
-  completionEXP: number;
-}
-
 interface Props {
-  userFriends: IFriends[];
+  userFriends: [];
   userQuests: IQuest[];
   user: IUser;
   navigation: any;
@@ -87,15 +62,36 @@ const HomeScreen = ({
   user,
 }: Props): JSX.Element => {
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
-  const [myFriends, setMyFriends] = useState<IFriends[]>([]);
+  const [myFriends, setMyFriends] = useState([]);
   const [userToken, setToken] = useState('');
+
+  const dispatch = useDispatch();
 
   const getToken = async () => {
     const token = await AsyncStorage.getItem('token');
     setToken(token);
-    console.log(userToken);
+    console.log('TOKEN', userToken);
   };
-  getToken();
+  const getUserById = async () => {
+    dispatch(
+      getUser({
+        api: {
+          url: 'user',
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      }),
+    );
+  };
+
+  useEffect(() => {
+    const start = async () => {
+      await getToken();
+      await getUserById();
+    };
+    start();
+  }, [userToken]);
 
   return (
     <View style={styles.body}>
@@ -104,10 +100,6 @@ const HomeScreen = ({
           title="Achievements"
           onPress={() => navigation.navigate('Achievements')}
         />
-        {/* <Button
-          title="Quest Details Screen"
-          onPress={() => navigation.navigate('QuestDetailsScreen')}
-        /> */}
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
           <Text style={styles.level}>Lvl 1</Text>
