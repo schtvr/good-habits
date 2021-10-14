@@ -5,6 +5,7 @@ import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 import { Op } from 'sequelize';
+import User from '../models/user';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -24,9 +25,10 @@ const startQuest = async (req: Request, res: Response) => {
     });
     if (!questToStart) return sendRes(res, false, 422, 'Invalid quest Id');
     
-    const activeQuest = await questToStart.createActiveQuest({
-      userId: req.user.id
+    const activeQuest = await req.user.createActiveQuest({
+      questId: req.params.questId
     });
+    
     
     if (!activeQuest) sendRes(res, false, 500, 'Error creating quest');
     

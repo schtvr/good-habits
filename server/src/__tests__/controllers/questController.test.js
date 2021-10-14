@@ -162,12 +162,17 @@ describe('Quest Controller', () => {
       //  `Bearer ${loginRes.body.data}`
       //);
       
+      const active = await request.get('/quests/getActiveQuests').set(
+        'Authorization',
+        `Bearer ${loginRes.body.data}`
+      );
+      console.log(active.body);
       const res = await request.get('/tasks/daily').set(
         'Authorization',
         `Bearer ${loginRes.body.data}`
       );
       
-      console.log(res.body);
+      //console.log(res.body);
 
     } catch (err) {
       console.log(err);

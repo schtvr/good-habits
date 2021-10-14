@@ -95,12 +95,13 @@ const getDailyTasks = async (req: Request, res: Response) => {
 
   try {
     const activeQuests = await user.getActiveQuests();
+    //console.log(activeQuests);
     if (!activeQuests) return sendRes(res, false, 403, 'User has no active quests');
     
     const currDate = Date.now();
     for await (const quest of activeQuests) {
       const daysApart = getDaysApart(currDate, quest.startDate.getTime());
-      console.log(daysApart);
+      //console.log(daysApart);
       addTasks(quest.id, daysApart, dailyTasks);
     }
     
@@ -111,21 +112,21 @@ const getDailyTasks = async (req: Request, res: Response) => {
 };
 
 const getDaysApart = (currentDate: number, startDate: number) => {
-  return Math.round((currentDate - startDate) / (1000 * 60 * 60 * 24));
+  return Math.round(((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1);
 };
 
 const addTasks = async (questId: number, daysApart: number, dailyTasks: Task[]) => {
   const quest = await Quest.findByPk(questId, {
-    include: [
-      { model: Task,
-        as: 'tasks',
-        where: {
-          day: daysApart
-        }
-      }
-    ]
+    //include: [
+    //  { model: Task,
+    //    as: 'tasks',
+    //    where: {
+    //      day: daysApart
+    //    }
+    //  }
+    //]
   });
-  console.log(quest);
+  //console.log(quest);
 };
 
 export default {
