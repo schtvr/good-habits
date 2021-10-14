@@ -157,11 +157,18 @@ describe('Quest Controller', () => {
         userId: users[2].id
       });
     
-      const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
+      //const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
+      //  'Authorization',
+      //  `Bearer ${loginRes.body.data}`
+      //);
+      
+      const res = await request.get('/tasks/daily').set(
         'Authorization',
         `Bearer ${loginRes.body.data}`
       );
+      
       console.log(res.body);
+
     } catch (err) {
       console.log(err);
     }
