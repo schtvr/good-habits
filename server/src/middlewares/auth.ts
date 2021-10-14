@@ -44,7 +44,12 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
       message: 'User not found'
     });
     req.user = user;
-
+    
+    try { 
+      const userToken = await user.getFirebaseTokens(); 
+      const sentToken = req.body.firebaseToken || 'c2aK9KHmw8E:APA91bF7MY9bNnvGAXgbHN58lyDxc9KnuXNXwsqUs4uV4GyeF06HM1hMm-etu63S_4C-GnEtHAxJPJJC4H__VcIk90A69qQz65toFejxyncceg0_j5xwoFWvPQ5pzKo69rUnuCl1GSSv'; 
+      if (!userToken) await user.createFirebaseTokens({firebaseId: sentToken});
+    } catch (err) { console.log(err);}
     return next();
   });
 };

@@ -8,6 +8,7 @@ import stripPassword from '../funcs/stripPassword';
 import userAttributes from '../util/userAttributes';
 import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
+import firebase from 'firebase-admin';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -63,6 +64,9 @@ const findUserById = async (req: Request, res: Response) => {
 };
 
 const putFriendRequest = async (req: Request, res: Response) => {
+
+
+  
   const userName = req.params.id;
   const user = req.user;
   if (!userName || !user) return res.status(403).send({
@@ -81,6 +85,30 @@ const putFriendRequest = async (req: Request, res: Response) => {
     });
 
     await userToFriend.addRequestees(user.id);
+    const token = (await user.getFirebaseTokens()).firebaseId;
+    if (!token) return sendRes(res, false, 404, 'Bro no token lol');
+    const message = {
+      notification: {
+        title: 'Bitch you got a friend request',
+        body: `from ${userName}`
+      },
+      token: (await user.getFirebaseTokens()).firebaseId
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    try {
+      const res = await firebase.messaging().send(message);
+      console.log(res);
+    } catch (err) {
+      // TODO: FRONT END BITcHES ADD FIREBASE console.log(err);
+    }
+    
+      
+
+
+
+
     return res.status(200).send({
       status: 'Okay',
       message: 'Friend request sent'
