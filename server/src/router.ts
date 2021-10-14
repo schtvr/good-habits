@@ -5,6 +5,7 @@ import quests from './controllers/questController';
 import verify from './middlewares/auth';
 import tasks from './controllers/taskController';
 import achievements from './controllers/achievementController';
+import leaderboards from './controllers/leaderboardController';
 const router = express.Router();
 
 // USER ROUTES
@@ -19,9 +20,8 @@ router.get('/user/friends', verify ,user.getFriends);
 router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
 router.put('/user/:id/unfriend', verify ,user.unfriend);
 
-
-router.get('/friendsOnQuest/:questId', verify, quests.getFriendsOnQuest);
-
+router.get('/leaderboards', leaderboards.getAllRankings);
+router.get('/leaderboards/friends', verify, leaderboards.getFriendRankings);
 
 
 //AUTH ROUTES
@@ -33,6 +33,8 @@ router.post('/quest/start/:questId', verify, quests.startQuest);
 router.post('/quest/complete/:questId', verify, quests.completeQuest);
 router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
 router.get('/quests', quests.getQuestTemplates);
+router.get('/friendsOnQuest/:questId', verify, quests.getFriendsOnQuest);
+router.post('/quest/drop/:questId', verify, quests.dropQuest);
 
 // TASK ROUTES
 router.get('/task/:id', tasks.getTaskById);

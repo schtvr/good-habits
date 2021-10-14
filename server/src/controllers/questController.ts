@@ -4,7 +4,7 @@ import ActiveQuest from '../models/activeQuest';
 import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
-import User from '../models/user';
+import { Op } from 'sequelize';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -121,23 +121,38 @@ const getFriendsOnQuest = async (req: Request, res: Response) => {
   try {
     const template = await Quest.findByPk(questId);
     if (!template) return sendRes(res, false, 403, 'No template found with that questId');
-
-    const usersOnQuest = await template.getActiveQuests();
-
+    
     const friends = await user.getFriends();
     const friendIds: number[] = [];
-
     friends.forEach(friend => {
       friendIds.push(friend.id);
     });
 
-    const friendsOnQuest = usersOnQuest.filter(activeQuest => (
-      friendIds.includes(activeQuest.userId)
-    ));
+    const friendsOnQuest = await template.getActiveQuests({
+      where: {
+        userId: {
+          [Op.in]: friendIds
+        }
+      }
+    });
     
     return sendRes(res, true, 200, 'Friends on quest retrieved', friendsOnQuest);
   } catch (err) {
     return sendRes(res, false, 500, 'Server error getting friends on quest');
+  }
+};
+
+const dropQuest = async (req: Request, res: Response) => {
+  const user = req.user;
+  const questId = req.params.questId;
+  if (!user) return sendRes(res, false, 403, 'No valid user');
+  if (!questId) return sendRes(res, false, 403, 'Please provide a valid questId');
+  try {
+    const numQuestId = parseInt(questId);
+    if (typeof numQuestId !== 'number') return sendRes(res, false, 405, 'Send a number ya goon');
+    user.removeActiveQuest(parseInt(questId));
+  } catch (err) {
+    return sendRes(res, false, 500, 'Server error dropping quest');
   }
 };
 
@@ -147,5 +162,6 @@ export default {
   getUserActiveQuests,
   getQuestTemplates,
   getQuestTasks,
-  getFriendsOnQuest
+  getFriendsOnQuest,
+  dropQuest
 };
