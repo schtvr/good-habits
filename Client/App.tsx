@@ -65,60 +65,63 @@ const headerRight = () => {
   );
 };
 
-const TabStack = () => (
-  <Tab.Navigator initialRouteName="Home">
-    <Tab.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{
-        headerRight,
-        tabBarIcon: () => {
-          return <MaterialCommunityIcons name="home" size={26} />;
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{
-        headerRight,
-        tabBarIcon: () => {
-          return <MaterialCommunityIcons name="account-circle" size={26} />;
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Social"
-      component={SocialScreen}
-      options={{
-        headerRight,
-        tabBarIcon: () => {
-          return <MaterialCommunityIcons name="groups" size={26} />;
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Leaderboards"
-      component={LeaderBoardScreen}
-      options={{
-        headerRight,
-        tabBarIcon: () => {
-          return <MaterialCommunityIcons name="emoji-events" size={26} />;
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Settings"
-      component={SettingsScreen}
-      options={{
-        headerRight,
-        tabBarIcon: () => {
-          return <MaterialCommunityIcons name="settings" size={26} />;
-        },
-      }}
-    />
-  </Tab.Navigator>
-);
+const TabStack = () => {
+  return (
+    <Tab.Navigator initialRouteName="Home">
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Good Habits',
+          headerRight,
+          tabBarIcon: () => {
+            return <MaterialCommunityIcons name="home" size={26} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerRight,
+          tabBarIcon: () => {
+            return <MaterialCommunityIcons name="account-circle" size={26} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={SocialScreen}
+        options={{
+          headerRight,
+          tabBarIcon: () => {
+            return <MaterialCommunityIcons name="groups" size={26} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Leaderboards"
+        component={LeaderBoardScreen}
+        options={{
+          headerRight,
+          tabBarIcon: () => {
+            return <MaterialCommunityIcons name="emoji-events" size={26} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          headerRight,
+          tabBarIcon: () => {
+            return <MaterialCommunityIcons name="settings" size={26} />;
+          },
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 //Remove the ! or change isAuthenticated to true to see other screens!
 
