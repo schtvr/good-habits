@@ -9,27 +9,7 @@ import {IQuest, IUser} from '../interfaces/interfaces';
 import {useDispatch, useSelector} from 'react-redux';
 import userSlice, {getUser, stateSelector} from '../redux/userSlice';
 import {questSelector, getActiveQuests} from '../redux/questSlice';
-
-const quests = [
-  {
-    id: 1,
-    duration: 3500,
-    name: 'Improve posture',
-    description: 'Correct your posture for 1 week',
-    category: 'health',
-    missedCheckin: false,
-    completionEXP: 50,
-  },
-  {
-    id: 2,
-    duration: 79000000,
-    name: 'couch to 5k',
-    description: 'Run 5k within the time limit',
-    category: 'fitness',
-    missedCheckin: false,
-    completionEXP: 150,
-  },
-];
+import {friendSelector, getAllFriends} from '../redux/friendSlice';
 
 const friends = [
   {
@@ -69,9 +49,9 @@ const HomeScreen = ({
 
   const {user} = useSelector(stateSelector);
   const {activeQuests} = useSelector(questSelector);
+  const {myFreinds} = useSelector(friendSelector);
 
-  console.log('USER', user);
-  console.log('MYQUESTS', activeQuests);
+  console.log('MYFREINDS', myFreinds);
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -102,10 +82,25 @@ const HomeScreen = ({
       }),
     );
   };
+
+  const getUsersFriends = async () => {
+    dispatch(
+      getAllFriends({
+        api: {
+          url: 'user/friends',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
+
   useEffect(() => {
     const start = async () => {
       await getUserById();
       await getUsersActiveQuests();
+      await getUsersFriends();
     };
     start();
   }, []);
@@ -148,7 +143,7 @@ const renderAccordians = () => {
         key={item.id}
         title={item.name}
         data={item.description}
-        date={date.toDateString()}
+        date={item.duration}
         btnText="completed"
         btnText2="upload"
       />,
