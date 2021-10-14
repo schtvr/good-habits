@@ -1,40 +1,31 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
-import { user } from '../../screens/ProfileScreen';
+import {user} from '../../screens/ProfileScreen';
 
 const CuratedTrophies = () => {
-  const { curatedTrophies } = user;
+  const {curatedTrophies} = user;
 
   const trophyList = () => {
-    let imagePath = require("../../assets/icons/athlete-24x24-46391.png")
+    let imagePath = require('../../assets/icons/athlete-24x24-46391.png');
 
-    return curatedTrophies.map(({ icon, name, key }) => {
+    return curatedTrophies.map(({icon, name, key}) => {
       return (
         <View key={key} style={styles.trophy}>
-          <Image
-            style={styles.trophyImage}
-            source={imagePath}
-          />
+          <Image style={styles.trophyImage} source={imagePath} />
           <Text style={styles.trophyName}>{name}</Text>
         </View>
-      )
-  });
-  }
+      );
+    });
+  };
 
-
-
-  return (
-    <View style={styles.container}>
-      {trophyList()}
-    </View>
-  );
+  return <View style={styles.container}>{trophyList()}</View>;
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   trophy: {
     flexDirection: 'column',
