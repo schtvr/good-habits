@@ -5,19 +5,27 @@ import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
-import { getActiveQuests, getCompletedQuests, questSelector } from '../redux/questSlice';
+import { getActiveQuests, getCompletedQuests, questSelector , getAllQuests} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const { activeQuests } = useSelector(questSelector)
+  const { activeQuests, quests } = useSelector(questSelector)
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
-
+  const getQuests = async () => {
+    dispatch(
+      getAllQuests({
+        api: {
+          url: 'quests',
+        },
+      }),
+    );
+  };
   const populateQuests = async () => {
     dispatch(
       getActiveQuests({
@@ -32,7 +40,7 @@ const ProfileScreen = () => {
     dispatch(
       getCompletedQuests({
         api: {
-          url: 'quest/getActiveQuests',
+          url: 'quest/completed',
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
@@ -41,10 +49,22 @@ const ProfileScreen = () => {
     )
   };
 
+
+
+
   useEffect(() => {
+    getQuests();
     populateQuests();
-    console.log('activequests', activeQuests)
-  }, [])
+    const doShit = async () => {
+      console.log('Done with do shit', quests);
+      const activeQuestDetails = activeQuests.map((activeQuest) => {
+        return quests.filter((quest) => quest.id === activeQuest.questId);
+      });
+      console.log('ALl the quests', activeQuestDetails);
+    }
+    doShit();
+
+  }, [quests]);
 
   return (
     <View>
