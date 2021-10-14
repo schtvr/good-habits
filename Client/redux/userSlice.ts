@@ -9,7 +9,7 @@ interface IState {
     exp: number;
     level: number;
   };
-  isAuthenticated: boolean;
+  isAuthenticated: boolean,
   error: string,
   usersList: any[],
 }
@@ -27,7 +27,7 @@ const initialState: IState = {
   usersList: [],
 };
 
-const setToken = async (token) => {
+const setToken = async token => {
   await AsyncStorage.setItem('token', token);
 };
 
@@ -61,7 +61,7 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     signIn: (state, body) => {
-      console.log('user/login', body)
+      console.log('user/login', body);
       setToken(body.data.data);
       state.isAuthenticated = true;
     },
@@ -70,14 +70,19 @@ export const userSlice = createSlice({
       state.usersList = [...body.data];
     },
     error: (state, body) => {
-      console.log('user-error', body)
+      console.log('user-error', body);
       if (body.data) state.error = body.data.message;
       else state.error = 'server error';
-    }
+    },
+    getUser: (state, body) => {
+      console.log('GETUSER BODY', body);
+      state.user = body.data.data;
+      console.log('USER STATE', state.user);
+    },
   },
 });
 
-export const {register, signIn, signOut, clearState, getUsers} = userSlice.actions;
+export const {register, signIn, signOut, clearState, getUsers, getUser} = userSlice.actions;
 export const authSelector = state => state.authInfo.isAuthenticated;
 export const userSelector = state => state.authInfo.user;
 export const stateSelector = state => state.authInfo;

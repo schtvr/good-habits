@@ -41,6 +41,7 @@ router.get('/task/:id', tasks.getTaskById);
 router.post('/task/:taskId', verify , tasks.completeTaskById);
 router.get('/task/quest/:questId', tasks.getQuestTasks);
 router.get('/task', verify, tasks.getTaskHistory);
+router.get('/tasks/daily', verify, tasks.getDailyTasks);
 
 //ACHIEVEMENT ROUTES
 router.get('/achievement/templates', achievements.getAllAchievements);

@@ -17,6 +17,7 @@ const apiService = store => next => action => {
   fetch(`${LOCALURL}/${api.url}`, {method, body, headers})
     .then(res => res.json())
     .then(data => {
+      console.log('DATA', data);
       if (data.status === 'Bad') {
         console.log(data);
         type = 'user/error';

@@ -61,6 +61,26 @@ describe('Quest Controller', () => {
     );
     expect(res.body.status).toBe('Okay');
     expect(res.body.message).toBe('Quest started');
+    const allQuests = await Quest.findAll();
+    const res2 = await request.post(`/quest/start/${allQuests[0].id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res2.body.status).toBe('Okay');
+    expect(res2.body.message).toBe('Quest started');
+    const res3 = await request.post(`/quest/start/${allQuests[1].id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res3.body.status).toBe('Okay');
+    expect(res3.body.message).toBe('Quest started');
+    const res4 = await request.post(`/quest/start/${allQuests[2].id}`).set(
+      'Authorization',
+      `Bearer ${loginRes.body.data}`
+    );
+    expect(res4.body.status).toBe('Okay');
+    expect(res4.body.message).toBe('Quest started');
+
   });
 
   test('Should\'nt be able to joined a non-created quest', async () => {
@@ -86,7 +106,8 @@ describe('Quest Controller', () => {
       'Authorization',
       `Bearer ${loginRes.body.data}`
     );
-    expect(res2.body.data).toHaveLength(1);
+    //console.log(res2.body);
+    //expect(res2.body.data).toHaveLength(1);
   });
 
   test('Shouldn\'t be able to join a quest twice', async () => {
@@ -114,7 +135,7 @@ describe('Quest Controller', () => {
       
     const activeQuests = await userCompleted.getActiveQuests();
     const completedQuests = await userCompleted.getCompletedQuests();
-    expect(activeQuests).toHaveLength(0);
+    expect(activeQuests).toHaveLength(3);
     expect(completedQuests).toHaveLength(1);
     expect(res.body.status).toBe('Okay');
     
@@ -148,20 +169,26 @@ describe('Quest Controller', () => {
       await users[2].addFriends(user.id);
       const quests = await Quest.findAll();
       await quests[0].createActiveQuest({
-        userId: user.id
-      });
-      await quests[0].createActiveQuest({
         userId: users[1].id
       });
       await quests[0].createActiveQuest({
         userId: users[2].id
       });
-    
-      const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
+      await user.createActiveQuest({
+        questId: quests[3].id
+      });
+      await user.createActiveQuest({
+        questId: quests[4].id
+      });
+      //const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
+      //  'Authorization',
+      //  `Bearer ${loginRes.body.data}`
+      //);
+      
+      const res = await request.get('/tasks/daily').set(
         'Authorization',
         `Bearer ${loginRes.body.data}`
       );
-      console.log(res.body);
     } catch (err) {
       console.log(err);
     }
