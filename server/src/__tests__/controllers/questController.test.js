@@ -161,6 +161,7 @@ describe('Quest Controller', () => {
         'Authorization',
         `Bearer ${loginRes.body.data}`
       );
+      console.log(res.body);
     } catch (err) {
       console.log(err);
     }

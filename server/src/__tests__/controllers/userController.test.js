@@ -199,6 +199,7 @@ describe('User controller', () => {
       expect(res4.body.data[0]?.userName).toBe(undefined);
       expect(res5.body.data[0]?.userName).toBe(undefined);
     });
+
     test('Should be able to add as friend', async () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
@@ -213,18 +214,21 @@ describe('User controller', () => {
       );
       expect(res.body.status).toBe('Okay');
       expect(res.body.message).toBe('Friend request sent');
+
       const res2 = await request.get('/user/friendRequestReceived').set(
         'Authorization',
         `Bearer ${token2}`
       );
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
+
       const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/acceptFriendRequest`).set(
         'Authorization',
         `Bearer ${token2}`
       );
       expect(res3.body.status).toBe('Okay');
       expect(res3.body.message).toBe('Friend request accepted');
+
       const res4 = await request.get('/user/friends').set(
         'Authorization',
         `Bearer ${token2}`

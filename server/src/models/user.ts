@@ -6,6 +6,7 @@ import {
   HasManyHasAssociationMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
   Association,
   BelongsToManyGetAssociationsMixin,
   BelongsToManyAddAssociationMixin,
@@ -60,6 +61,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public hasActiveQuest!: HasManyHasAssociationMixin<ActiveQuest, number>;
   public countActiveQuests!: HasManyCountAssociationsMixin;
   public createActiveQuest!: HasManyCreateAssociationMixin<ActiveQuest>;
+  public removeActiveQuest!: HasManyRemoveAssociationMixin<ActiveQuest, number>;
   
   public getCompletedQuests!: HasManyGetAssociationsMixin<CompletedQuest>;
   public addCompletedQuest!: HasManyAddAssociationMixin<CompletedQuest, number>;
