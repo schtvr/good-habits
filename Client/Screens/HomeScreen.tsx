@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IQuest, IUser} from '../interfaces/interfaces';
 import {useDispatch, useSelector} from 'react-redux';
 import userSlice, {getUser, stateSelector} from '../redux/userSlice';
+import {questSelector, getActiveQuests} from '../redux/questSlice';
 
 const quests = [
   {
@@ -67,8 +68,10 @@ const HomeScreen = ({
   const dispatch = useDispatch();
 
   const {user} = useSelector(stateSelector);
+  const {activeQuests} = useSelector(questSelector);
 
   console.log('USER', user);
+  console.log('MYQUESTS', activeQuests);
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -87,9 +90,22 @@ const HomeScreen = ({
     );
   };
 
+  const getUsersActiveQuests = async () => {
+    dispatch(
+      getActiveQuests({
+        api: {
+          url: 'quest/getActiveQuests',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
   useEffect(() => {
     const start = async () => {
       await getUserById();
+      await getUsersActiveQuests();
     };
     start();
   }, []);
@@ -123,9 +139,10 @@ const HomeScreen = ({
   );
 };
 const renderAccordians = () => {
+  const {activeQuests} = useSelector(questSelector);
   const items = [];
-  for (let item of quests) {
-    const date = new Date(Date.now() + item.duration);
+  for (let item of activeQuests) {
+    const date = new Date(Date.now() + item.startDate);
     items.push(
       <Accordian
         key={item.id}
