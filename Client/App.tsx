@@ -124,7 +124,6 @@ const TabStack = () => (
 
 const App: () => Node = () => {
   const {isAuthenticated} = useSelector(stateSelector);
-  console.log(isAuthenticated);
   return (
     <SafeAreaProvider>
       <NavigationContainer>
