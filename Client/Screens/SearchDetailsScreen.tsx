@@ -21,17 +21,21 @@ const renderItem = ({item}) => {
   return (
     <View style={styles.listItems}>
       <Avatar size="large" source={require('../assets/avatar.png')} />
-      <Text>{item.name}</Text>
+      <Text>{item.userName}</Text>
     </View>
   );
 };
 
 const SearchDetailsScreen = ({navigation}) => {
-  const [searchFriends, setSearchFriends] = useState(true);
-  const toggleSwitch = () => setSearchFriends(previousState => !previousState);
   const dispatch = useDispatch();
-  const {quests} = useSelector(questSelector);
-  const {usersList} = useSelector(stateSelector);
+  let {quests} = useSelector(questSelector);
+  let {usersList} = useSelector(stateSelector);
+  
+  const [questArray, setQuestArray] = useState([...quests]);
+  const [usersArray, setUsersArray] = useState([...usersList]);
+  const [searchFriends, setSearchFriends] = useState(true);
+  const [searchVal, setSearchVal] = useState(''); 
+  const toggleSwitch = () => setSearchFriends(previousState => !previousState);
 
   const getQuests = async () => {
     dispatch(
@@ -61,9 +65,23 @@ const SearchDetailsScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    // getQuests();
+    getQuests();
     getAllUsers();
   }, []);
+
+  const handleSearch = (text) => {
+    setSearchVal(text);
+    const re = new RegExp(text, 'i');
+    if (searchFriends) {
+      setUsersArray(
+        usersList.filter((user) => re.test(user.userName))
+        );
+    } else {
+      setQuestArray(
+        quests.filter((quest) => re.test(quest.name))
+        );
+    }
+  };
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -96,12 +114,17 @@ const SearchDetailsScreen = ({navigation}) => {
 
   return (
     <View style={{marginTop: 20, flex: 1}}>
-      <Input label="search" />
+      <Input 
+        label="search" 
+        onChangeText={(text) => handleSearch(text)}
+        value={searchVal}
+      />
+      
       {searchFriends ? (
         <>
-          <Text style={styles.title}>All Friends</Text>
+          <Text style={styles.title}>All Users</Text>
           <FlatList
-            data={usersList}
+            data={usersArray}
             numColumns={3}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
@@ -112,7 +135,7 @@ const SearchDetailsScreen = ({navigation}) => {
           <Text style={styles.title}>All Quests</Text>
 
           <FlatList
-            data={quests}
+            data={questArray}
             numColumns={3}
             keyExtractor={keyExtractor}
             renderItem={({item}) => {

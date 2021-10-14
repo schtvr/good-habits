@@ -66,8 +66,8 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     getUsers: (state, body) => {
-      console.log('user/getUsers', body);
-      state.usersList = [...body.data];
+      console.log('user/getUsers///////////////////', body.data.data);
+      state.usersList = body.data.data;
     },
     error: (state, body) => {
       console.log('user-error', body);
