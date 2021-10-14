@@ -3,22 +3,22 @@ import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Card, ListItem, Button, Icon} from 'react-native-elements';
 
 const QuestListCard = props => {
-  const {questList} = props;
-  // console.log('questcard', questList);
+  const { cardTitle, questList } = props;
 
   return (
     <ScrollView>
       <Card>
-        <Text>Task List: </Text>
+        <Text>{cardTitle}: </Text>
         <Card.Divider />
 
-        {questList.map((quest, i) => {
-          return (
-            <View key={i} style={styles.activeQuestList}>
-              <Text style={styles.name}>{quest.name}</Text>
-              <Text>{quest.description}</Text>
-            </View>
-          );
+        { questList?.length < 1 ? null
+           : questList?.map((quest, i) => {
+            return (
+              <View key={i} style={styles.activeQuestList}>
+                <Text style={styles.name}>{quest.name}</Text>
+                <Text>{quest.description}</Text>
+              </View>
+            );
         })}
       </Card>
     </ScrollView>
@@ -33,11 +33,4 @@ const styles = StyleSheet.create({
 });
 
 export default QuestListCard;
-/*
 
-    <Image
-      style={styles.image}
-      resizeMode="cover"
-      source={{ uri: quest.avatar }}
-    />
-*/

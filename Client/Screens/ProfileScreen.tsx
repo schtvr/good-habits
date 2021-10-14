@@ -1,21 +1,61 @@
-import React from 'react';
-import {View, Text, StyleSheet, ProgressBarAndroidBase} from 'react-native';
+import React, { useEffect } from 'react';
+import {View, Text, StyleSheet } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
+import { getActiveQuests, getCompletedQuests, questSelector } from '../redux/questSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const ProfileScreen = () => {
+  const dispatch = useDispatch();
+  const { activeQuests } = useSelector(questSelector)
+
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+
+  const populateQuests = async () => {
+    dispatch(
+      getActiveQuests({
+        api: {
+          url: 'quest/getActiveQuests',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+    dispatch(
+      getCompletedQuests({
+        api: {
+          url: 'quest/getActiveQuests',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    )
+  };
+
+  useEffect(() => {
+    populateQuests();
+    console.log('activequests', activeQuests)
+  }, [])
+
   return (
     <View>
       <ProfileHeader />
       <CuratedTrophies />
       <CompletedStats />
       <QuestListCard
-        cardTitle="User's active quests"
-        questList={user.activeQuests}/>
+        cardTitle="Your active quests"
+        questList={activeQuests}/>
       <QuestListCard
-        cardTitle="User's previous quests"
+        cardTitle="Your previous quests"
         questList={user.questHistory}/>
     </View>
   );
@@ -26,8 +66,6 @@ interface IUser {
   profileUrl: string,
   completedQuests: number,
   curatedTrophies: any[],
-  activeQuests: any[],
-  questHistory: any[],
   level: number,
   EXP: number,
 }
@@ -52,26 +90,6 @@ export const user : IUser = {
     key: 3,
     icon: './client/assets/icons/rest-24x24-46425.png',
     name: 'Took A Nap',
-  },
-],
-  activeQuests: [{
-    name: 'Pick nose'
-  },
-  {
-    name: 'Pick friends'
-  },
-  {
-    name: 'Pick friends\' noses'
-  },
-],
-  questHistory: [{
-    name: 'touch tips'
-  },
-  {
-    name: 'tip the touches'
-  },
-  {
-    name: 'touch tip touches'
   },
 ],
   level: 3,
