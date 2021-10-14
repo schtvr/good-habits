@@ -6,8 +6,8 @@ import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IQuest, IUser} from '../interfaces/interfaces';
-import {useDispatch} from 'react-redux';
-import {getUser} from '../redux/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import userSlice, {getUser, stateSelector} from '../redux/userSlice';
 
 const quests = [
   {
@@ -59,7 +59,6 @@ const HomeScreen = ({
   navigation,
   userFriends,
   userQuests,
-  user,
 }: Props): JSX.Element => {
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
   const [myFriends, setMyFriends] = useState([]);
@@ -67,18 +66,21 @@ const HomeScreen = ({
 
   const dispatch = useDispatch();
 
+  const {user} = useSelector(stateSelector);
+
+  console.log('USER', user);
+
   const getToken = async () => {
-    const token = await AsyncStorage.getItem('token');
-    setToken(token);
-    console.log('TOKEN', userToken);
+    return await AsyncStorage.getItem('token');
   };
+
   const getUserById = async () => {
     dispatch(
       getUser({
         api: {
           url: 'user',
           headers: {
-            Authorization: `Bearer ${userToken}`,
+            Authorization: `Bearer ${await getToken()}`,
           },
         },
       }),
@@ -87,11 +89,10 @@ const HomeScreen = ({
 
   useEffect(() => {
     const start = async () => {
-      await getToken();
       await getUserById();
     };
     start();
-  }, [userToken]);
+  }, []);
 
   return (
     <View style={styles.body}>
@@ -102,14 +103,14 @@ const HomeScreen = ({
         />
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
-          <Text style={styles.level}>Lvl 1</Text>
+          <Text style={styles.level}>Lvl {user.level}</Text>
           <LinearProgress
             style={styles.progressBar}
             color="yellow"
-            value={0.5}
+            value={user.exp}
             variant={'determinate'}
           />
-          <Text style={styles.EXP}>50/100 EXP</Text>
+          <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
         </View>
         <View style={styles.container}>
           <Text style={styles.activeQuests}>Active Quests</Text>
