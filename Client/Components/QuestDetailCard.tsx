@@ -1,26 +1,77 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, Button} from 'react-native';
 import {Card} from 'react-native-elements';
 import {theme} from '../styles/themeProvider';
 import {msToDays} from '../utils';
+import {questSelector} from '../redux/questSlice';
+import {useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
+import {addQuest} from '../redux/questSlice';
 
-const QuestDetailCard = () => {
+const QuestDetailCard = props => {
+  const [userToken, setToken] = useState('');
+  const dispatch = useDispatch();
+
+  const {id} = props;
   const {color} = theme;
-  const isActive = false;
-  const buttonText = isActive
-    ? 'Remove from active quests'
-    : 'Add to active quests';
+  const [isActive, setIsActive] = useState(true);
+  const buttonText = isActive ? 'Add to active quests' : 'Added to quests';
 
-  const quest = {
-    duration: 1000 * 60 * 60 * 24 * 14,
-    name: 'Couch to 5K',
-    description:
-      'Get your lazy booty off of the sofa and kick it into high gear! This quest guides you through the process of building your endurance with a final goal of running a 5K.',
-    category: 'mental',
-    completionExp: '50',
+  let {quests, myQuests} = useSelector(questSelector);
+  quests = quests.filter(quest => quest.id === id)[0];
+  myQuests =
+    myQuests.length >= 1 ? myQuests.filter(quest => quest.questId === id) : [];
+  console.log('MYQUETS', myQuests);
+  const checkIsActive = () => {
+    if (myQuests.length > 0) {
+      setIsActive(false);
+    }
   };
-  const {duration, name, description, category, completionExp} = quest;
 
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    setToken(token);
+    return token;
+  };
+
+  const addToMyQuests = async () => {
+    setIsActive(false);
+    dispatch(
+      addQuest({
+        api: {
+          url: `quest/start/${id}`,
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      }),
+    );
+  };
+
+  const getActiveQuests = async () => {
+    dispatch(
+      addQuest({
+        api: {
+          url: `quest/getActiveQuests`,
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
+
+  useEffect(() => {
+    const getQuestsAndSetIsActive = async () => {
+      await getActiveQuests();
+      checkIsActive();
+    };
+    getQuestsAndSetIsActive();
+  }, [isActive]);
+
+  const {duration, name, description, category, completionExp} = quests;
   return (
     <Card>
       <View style={styles.container}>
@@ -35,17 +86,17 @@ const QuestDetailCard = () => {
             {name}
           </Text>
           <Text>
-            Duration: {msToDays(duration)} days | EXP: {completionExp}
+            Duration: {duration} days | EXP: {completionExp}
           </Text>
           <Card.Divider />
           <Text style={{marginBottom: 10}}>{description}</Text>
         </View>
       </View>
-
       <Button
         color={color[category]}
         title={buttonText}
-        onPress={() => console.log('add/remove pressed')}
+        onPress={() => addToMyQuests()}
+        disabled={!isActive}
       />
     </Card>
   );

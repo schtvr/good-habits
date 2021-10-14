@@ -1,35 +1,54 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import QuestDetailCard from '../components/QuestDetailCard';
 import QuestListCard from '../components/QuestListCard';
 import FriendListRow from '../components/FriendListRow';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAllTasks, questSelector, questSlice} from '../redux/questSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const QuestDetailsScreen = ({route}) => {
+  const dispatch = useDispatch();
 
-const QuestDetailsScreen = () => {
-  const mockTaskList = [{
-    name: 'touch tips'
-  },
-  {
-    name: 'tip the touches'
-  },
-  {
-    name: 'touch tip touches'
-  }];
+  const [userToken, setToken] = useState('');
+
+  let {tasks} = useSelector(questSelector);
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+  const {id} = route.params;
+
+  useEffect(() => {
+    const getTasks = async () => {
+      await getTasksByid();
+    };
+    getTasks();
+    // console.log('TASKS', tasks);
+  }, []);
+
+  console.log('TOKEN', userToken);
+  const getTasksByid = async () => {
+    dispatch(
+      getAllTasks({
+        api: {
+          url: `task/quest/${id}`,
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
 
   return (
     <View>
-      <QuestDetailCard />
+      <QuestDetailCard id={id} />
       <FriendListRow />
-      <QuestListCard
-        cardTitle='Tasks to complete quest:'
-        questList={mockTaskList}
-      />
-
+      <QuestListCard questList={tasks} />
     </View>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
-
-export default QuestDetailsScreen
+export default QuestDetailsScreen;

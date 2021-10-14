@@ -1,37 +1,36 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import React from 'react';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {Card, ListItem, Button, Icon} from 'react-native-elements';
 
-const QuestListCard = (props) => {
-  const { cardTitle, questList } = props
-  console.log('questcard', questList)
+const QuestListCard = props => {
+  const {questList} = props;
+  // console.log('questcard', questList);
 
   return (
-    <View>
+    <ScrollView>
       <Card>
-        <Text>{cardTitle} </Text>
-        <Card.Divider/>
+        <Text>Task List: </Text>
+        <Card.Divider />
 
-        { questList.map((quest, i) => {
+        {questList.map((quest, i) => {
           return (
             <View key={i} style={styles.activeQuestList}>
               <Text style={styles.name}>{quest.name}</Text>
+              <Text>{quest.description}</Text>
             </View>
-            );
+          );
         })}
       </Card>
-    </View>
-  )
-}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
-  activeQuestList: {
-
-  },
+  activeQuestList: {},
   name: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
-})
+});
 
 export default QuestListCard;
 /*

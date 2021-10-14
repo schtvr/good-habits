@@ -1,9 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList, Switch} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Switch,
+  TouchableOpacity,
+} from 'react-native';
 import {IQuest} from '../interfaces/interfaces';
 import {Avatar, Input} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllQuests, questSelector, questSlice} from '../redux/questSlice';
+import {useNavigation} from '@react-navigation/core';
 
 const list = [
   {
@@ -19,12 +27,14 @@ const list = [
 ];
 const keyExtractor = (item, index) => index.toString();
 
-const renderItem = ({item}) => (
-  <View style={styles.listItems}>
-    <Avatar size="large" source={require('../assets/avatar.png')} />
-    <Text>{item.name}</Text>
-  </View>
-);
+const renderItem = ({item}) => {
+  return (
+    <View style={styles.listItems}>
+      <Avatar size="large" source={require('../assets/avatar.png')} />
+      <Text>{item.name}</Text>
+    </View>
+  );
+};
 
 const SearchDetailsScreen = ({navigation}) => {
   const [searchFriends, setSearchFriends] = useState(true);
@@ -94,8 +104,23 @@ const SearchDetailsScreen = ({navigation}) => {
           <FlatList
             data={quests}
             numColumns={3}
-            renderItem={renderItem}
             keyExtractor={keyExtractor}
+            renderItem={({item}) => {
+              return (
+                <View style={styles.listItems}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('QuestDetailsScreen', {id: item.id})
+                    }>
+                    <Avatar
+                      size="large"
+                      source={require('../assets/avatar.png')}
+                    />
+                    <Text>{item.name}</Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
           />
         </>
       )}

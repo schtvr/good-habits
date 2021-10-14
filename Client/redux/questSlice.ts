@@ -1,13 +1,9 @@
 import {createSlice, createSelector} from '@reduxjs/toolkit';
 
 const initialState = {
-  id: 0,
-  duration: 0,
-  name: '',
-  description: '',
-  category: '',
-  completionExp: 0,
   quests: [],
+  myQuests: [],
+  tasks: [],
 };
 
 export const questSlice = createSlice({
@@ -20,12 +16,22 @@ export const questSlice = createSlice({
       state = initialState;
     },
     getAllQuests: (state, body) => {
+      console.log('BODY', body);
       state.quests = body.data.data;
+    },
+    getAllTasks: (state, body) => {
+      console.log('tasks///////////', body);
+      state.tasks = body.data.data;
+    },
+    addQuest: (state, body) => {
+      //   console.log('ADDQUEST---', body);
+      state.myQuests = body.data.data;
     },
   },
 });
 
-export const {getAllQuests, clearState} = questSlice.actions;
+export const {getAllQuests, clearState, getAllTasks, addQuest} =
+  questSlice.actions;
 export const questSelector = state => state.questInfo;
 
 export default questSlice.reducer;
