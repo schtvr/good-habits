@@ -79,9 +79,43 @@ const getUserActiveQuests = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 422, 'Not authenticated');
   try {
     const userQuests = await req.user.getActiveQuests();
-    return sendRes(res, true, 200, 'Retreived user\'s active quests', userQuests);
+    const questIds: number[] = [];
+    for (const quest of userQuests) {
+      questIds.push(quest.questId);
+    }
+    const questTemplates = await Quest.findAll({
+      where: {
+        id: {
+          [Op.in]: questIds
+        }
+      }
+    });
+    return sendRes(res, true, 200, 'Retreived user\'s active quests', questTemplates);
   } catch (err) {
     return sendRes(res, false, 500, 'Error retrieving user\'s quests', err);
+  }
+};
+
+
+const getCompletedQuests = async (req: Request, res: Response) => {
+  if (!req.user) return sendRes(res, false, 422, 'Not authenticated');
+  const user = req.user;
+  try {
+    const completedQuests = await user.getCompletedQuests();
+    const questIds: number[] = [];
+    for (const quest of completedQuests) {
+      questIds.push(quest.questId);
+    }
+    const questTemplates = await Quest.findAll({
+      where: {
+        id: {
+          [Op.in]: questIds
+        }
+      }
+    });
+    return sendRes(res, true, 200, 'Retrieved completed quests', questTemplates);
+  } catch (err) {
+    return sendRes(res, false, 500, 'Error retreiving completed quests', err);
   }
 };
 
@@ -162,5 +196,6 @@ export default {
   getQuestTemplates,
   getQuestTasks,
   getFriendsOnQuest,
+  getCompletedQuests,
   dropQuest
 };

@@ -53,7 +53,7 @@ const Accordian = ({
         <View style={styles.child}>
           <View style={{flexDirection: 'column'}}>
             <Text style={styles.content}>{data}</Text>
-            <Text style={styles.date}>Completion Date: {date}</Text>
+            <Text style={styles.date}>Completion time: {date} days</Text>
           </View>
 
           {btnText ? (

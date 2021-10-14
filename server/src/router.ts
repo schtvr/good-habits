@@ -35,6 +35,7 @@ router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
 router.get('/quests', quests.getQuestTemplates);
 router.get('/friendsOnQuest/:questId', verify, quests.getFriendsOnQuest);
 router.post('/quest/drop/:questId', verify, quests.dropQuest);
+router.get('/quest/completed', verify, quests.getCompletedQuests);
 
 // TASK ROUTES
 router.get('/task/:id', tasks.getTaskById);

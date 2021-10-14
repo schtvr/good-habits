@@ -43,7 +43,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   if (!user) return sendRes(res, false, 403, 'Unauthorized token');
   try {
     const users = await User.findAll(userAttributes);
-    return sendRes(res, false, 200, 'Enjoy your data lol', users);
+    return sendRes(res, true, 200, 'Enjoy your data lol', users);
   } catch (err) {
     return sendRes(res, false, 500, 'internal server error', err);
   }
