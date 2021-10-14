@@ -113,11 +113,8 @@ const SearchDetailsScreen = ({navigation}) => {
   });
   
   let renderList;
-  if (searchFriends) {
-    renderList = searchVal ? usersArray : usersList;
-  } else {
-    renderList = searchVal ? questArray : quests;
-  }
+  if (searchFriends) renderList = searchVal ? usersArray : usersList;
+  else renderList = searchVal ? questArray : quests;
   
   return (
     <View style={{marginTop: 20, flex: 1}}>
