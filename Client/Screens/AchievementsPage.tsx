@@ -11,6 +11,11 @@ import {
   Pressable,
   Text,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  achievementSelector,
+  getAllAchievements,
+} from '../redux/achievementSlice';
 
 interface IAchievement {
   id: number;
@@ -18,64 +23,57 @@ interface IAchievement {
   description: string;
   url: ImageSourcePropType;
 }
+// interface Props {
+//   achievements: IAchievement;
+// }
 
-const allAchievements: IAchievement[] = [
-  {
-    id: 1,
-    name: 'Active Adventurer',
-    description: 'Login consectivlty for 5 days in a row',
-    url: require('../assets/trophy.png'),
-  },
-  {
-    id: 2,
-    name: 'Begginer Steps',
-    description: 'Embark on enough quests to reach level 5',
-    url: require('../assets/trophy.png'),
-  },
-  {
-    id: 3,
-    name: 'Friendly',
-    description: 'Have 5 friends on your friends list',
-    url: require('../assets/trophy.png'),
-  },
-  {
-    id: 4,
-    name: 'Royalty',
-    description: 'Reach max level',
-    url: require('../assets/trophy.png'),
-  },
-  {
-    id: 5,
-    name: 'Adventurer',
-    description: 'Complete 5 quests',
-    url: require('../assets/trophy.png'),
-  },
-];
-
-interface Props {
-  achievements: IAchievement;
-}
-
-const AchievementsPage = ({achievements}: Props): JSX.Element => {
+const AchievementsPage = (): JSX.Element => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<null | number>(null);
   const [myAchievements, setMyAchievements] = useState<IAchievement[]>([]);
+  const dispatch = useDispatch();
+  const {achievements} = useSelector(achievementSelector);
 
   useEffect(() => {
-    setMyAchievements(allAchievements);
+    const start = async () => {
+      await getAchievements();
+    };
+    start();
   }, []);
+  console.log(achievements);
 
   const onOpenModal = (index: number) => {
     setSelectedItem(index);
     setModalVisible(!modalVisible);
   };
 
-  const renderItem: ListRenderItem<IAchievement> = ({item, index}) => {
+  const getAchievements = async () => {
+    dispatch(
+      getAllAchievements({
+        api: {
+          url: 'achievement/templates',
+        },
+      }),
+    );
+  };
+
+  const renderItem = ({item, index}) => {
+    const questImage = '../assets/quests.png';
+    const taskImage = '../assets/task.png';
+    const socialImage = '../assets/social.png';
+    const selectImage = () => {
+      if (item.category === 'Quests')
+        return <Image source={require(questImage)} />;
+      if (item.category === 'Tasks')
+        return <Image source={require(taskImage)} />;
+      if (item.category === 'Social')
+        return <Image source={require(socialImage)} />;
+    };
     return (
       <>
         <TouchableOpacity onPress={() => onOpenModal(index)}>
           <View style={styles.row}>
-            <Image source={item.url} />
+            {selectImage()}
             <View style={styles.content}>
               <Text style={styles.achievementTitle}>{item.name}</Text>
               <Text>{item.description}</Text>
@@ -88,7 +86,7 @@ const AchievementsPage = ({achievements}: Props): JSX.Element => {
 
   const Modals = (): JSX.Element => {
     if (selectedItem !== null) {
-      const item = myAchievements[selectedItem];
+      const item = achievements[selectedItem];
       return (
         <Modal
           animationType="slide"
@@ -112,7 +110,7 @@ const AchievementsPage = ({achievements}: Props): JSX.Element => {
       );
     }
   };
-  const keyExtractor = (item: IAchievement) => {
+  const keyExtractor = item => {
     return item.id.toString();
   };
 
@@ -120,10 +118,12 @@ const AchievementsPage = ({achievements}: Props): JSX.Element => {
     <>
       <View style={styles.header}>
         <Text style={styles.achievements}>All Achievements!</Text>
-        <Text style={styles.ownedAchievements}>Owned 2/100</Text>
+        <Text style={styles.ownedAchievements}>
+          Owned 0/{achievements.length}
+        </Text>
       </View>
       <FlatList
-        data={myAchievements}
+        data={achievements}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
       />

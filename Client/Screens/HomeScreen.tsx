@@ -4,7 +4,7 @@ import {Text, View, Button, StyleSheet, Image, ScrollView} from 'react-native';
 import {LinearProgress} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const quests = [
   {
@@ -86,16 +86,15 @@ const HomeScreen = ({
   userQuests,
   user,
 }: Props): JSX.Element => {
-
   const [myQuests, setMyQuests] = useState<IQuest[]>([]);
   const [myFriends, setMyFriends] = useState<IFriends[]>([]);
   const [userToken, setToken] = useState('');
 
   const getToken = async () => {
-    const token = await AsyncStorage.getItem('token')
+    const token = await AsyncStorage.getItem('token');
     setToken(token);
-    console.log(userToken)
-  }
+    console.log(userToken);
+  };
   getToken();
 
   return (
@@ -105,10 +104,10 @@ const HomeScreen = ({
           title="Achievements"
           onPress={() => navigation.navigate('Achievements')}
         />
-        <Button
+        {/* <Button
           title="Quest Details Screen"
           onPress={() => navigation.navigate('QuestDetailsScreen')}
-        />
+        /> */}
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
           <Text style={styles.level}>Lvl 1</Text>
