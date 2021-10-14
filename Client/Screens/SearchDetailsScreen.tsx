@@ -111,7 +111,11 @@ const SearchDetailsScreen = ({navigation}) => {
         ),
     });
   });
-
+  
+  let renderList;
+  if (searchFriends) renderList = searchVal ? usersArray : usersList;
+  else renderList = searchVal ? questArray : quests;
+  
   return (
     <View style={{marginTop: 20, flex: 1}}>
       <Input 
@@ -124,7 +128,7 @@ const SearchDetailsScreen = ({navigation}) => {
         <>
           <Text style={styles.title}>All Users</Text>
           <FlatList
-            data={usersArray}
+            data={renderList}
             numColumns={3}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
@@ -135,7 +139,7 @@ const SearchDetailsScreen = ({navigation}) => {
           <Text style={styles.title}>All Quests</Text>
 
           <FlatList
-            data={questArray}
+            data={renderList}
             numColumns={3}
             keyExtractor={keyExtractor}
             renderItem={({item}) => {
