@@ -64,7 +64,7 @@ const ProfileScreen = () => {
     }
     doShit();
 
-  }, [quests]);
+  }, []);
 
   return (
     <View>
@@ -76,7 +76,7 @@ const ProfileScreen = () => {
         questList={activeQuests}/>
       <QuestListCard
         cardTitle="Your previous quests"
-        questList={user.questHistory}/>
+        questList={activeQuests}/>
     </View>
   );
 };
