@@ -1,6 +1,5 @@
 import { Request, Response, Express } from 'express';
 import Quest from '../models/quest';
-import ActiveQuest from '../models/activeQuest';
 import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
@@ -11,21 +10,21 @@ const startQuest = async (req: Request, res: Response) => {
   if (!req.params.questId) return sendRes(res, false, 422, 'Missing Form information');
 
   try {
-    const uniqueness = await ActiveQuest.findOne({ 
-      where: {
-        userId: req.user.id, 
-        questId: req.params.questId }
-    });
-    if (uniqueness) return sendRes(res, false, 422, 'Duplicate quest');
-    
     const questToStart = await Quest.findOne({ 
       where: { 
         id: req.params.questId }
     });
     if (!questToStart) return sendRes(res, false, 422, 'Invalid quest Id');
+
+    const isOnQuest = await req.user.getActiveQuests({
+      where: {
+        questId: req.params.questId
+      }
+    });
+    if (isOnQuest.length !== 0) return sendRes(res, false, 403, 'Duplicate quest');
     
-    const activeQuest = await questToStart.createActiveQuest({
-      userId: req.user.id
+    const activeQuest = await req.user.createActiveQuest({
+      questId: req.params.questId
     });
     
     if (!activeQuest) sendRes(res, false, 500, 'Error creating quest');

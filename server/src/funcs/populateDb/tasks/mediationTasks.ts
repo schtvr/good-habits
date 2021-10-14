@@ -6,7 +6,7 @@ const tasks = [
     description: 'Time to start medidating! Take 15 minutes to sit alone and think about rivers',
     completionExp: 15,
     index: 1,
-    day: 0
+    day: 1
   },
   {
     name: 'Continue your spirtual journey',

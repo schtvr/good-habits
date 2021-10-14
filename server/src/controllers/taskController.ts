@@ -4,6 +4,8 @@ import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 import TaskHistory from '../models/taskHistory';
+import getDaysApart from '../funcs/getDailyTasks/getDaysApart';
+import addTasks from '../funcs/getDailyTasks/addTasks';
 
 const getTaskById = async (req: Request, res:Response) => {
   try {
@@ -79,9 +81,32 @@ const getTaskHistory = async (req: Request, res: Response) => {
   }
 };
 
+const getDailyTasks = async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return sendRes(res, false, 403, 'Not a valid user');
+
+  const dailyTasks: Task[] = [];
+
+  try {
+    const activeQuests = await user.getActiveQuests();
+    if (!activeQuests) return sendRes(res, false, 403, 'User has no active quests');
+    
+    const currDate = Date.now();
+    for await (const quest of activeQuests) {
+      const daysApart = getDaysApart(currDate, quest.startDate.getTime());
+      await addTasks(quest.questId, daysApart, dailyTasks);
+    }
+    
+    return sendRes(res, true, 200, 'Daily tasks retrieved', dailyTasks);
+  } catch (err) {
+    sendRes(res, false, 500, 'Server error getting daily tasks');
+  }
+};
+
 export default {
   getTaskById,
   completeTaskById,
   getQuestTasks,
-  getTaskHistory
+  getTaskHistory,
+  getDailyTasks
 };
