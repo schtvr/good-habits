@@ -4,7 +4,8 @@ import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 import TaskHistory from '../models/taskHistory';
-import Quest from '../models/quest';
+import getDaysApart from '../funcs/getDailyTasks/getDaysApart';
+import addTasks from '../funcs/getDailyTasks/addTasks';
 
 const getTaskById = async (req: Request, res:Response) => {
   try {
@@ -80,13 +81,6 @@ const getTaskHistory = async (req: Request, res: Response) => {
   }
 };
 
-
-
-// get user active quests
-// for each quest ->
-//    figure out how many days ago they started the quest
-//    retrieve all tasks for said quest with that day value
-
 const getDailyTasks = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Not a valid user');
@@ -95,38 +89,18 @@ const getDailyTasks = async (req: Request, res: Response) => {
 
   try {
     const activeQuests = await user.getActiveQuests();
-    //console.log(activeQuests);
     if (!activeQuests) return sendRes(res, false, 403, 'User has no active quests');
     
     const currDate = Date.now();
     for await (const quest of activeQuests) {
       const daysApart = getDaysApart(currDate, quest.startDate.getTime());
-      //console.log(daysApart);
-      addTasks(quest.id, daysApart, dailyTasks);
+      await addTasks(quest.questId, daysApart, dailyTasks);
     }
     
     return sendRes(res, true, 200, 'Daily tasks retrieved', dailyTasks);
   } catch (err) {
     sendRes(res, false, 500, 'Server error getting daily tasks');
   }
-};
-
-const getDaysApart = (currentDate: number, startDate: number) => {
-  return Math.round(((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1);
-};
-
-const addTasks = async (questId: number, daysApart: number, dailyTasks: Task[]) => {
-  const quest = await Quest.findByPk(questId, {
-    //include: [
-    //  { model: Task,
-    //    as: 'tasks',
-    //    where: {
-    //      day: daysApart
-    //    }
-    //  }
-    //]
-  });
-  //console.log(quest);
 };
 
 export default {
