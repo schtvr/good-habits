@@ -4,14 +4,14 @@ import sendRes from '../funcs/sendRes';
 import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 import { Op } from 'sequelize';
-
+import User from '../models/user';
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
   if (!req.params.questId) return sendRes(res, false, 422, 'Missing Form information');
 
   try {
-    const questToStart = await Quest.findOne({ 
-      where: { 
+    const questToStart = await Quest.findOne({
+      where: {
         id: req.params.questId }
     });
     if (!questToStart) return sendRes(res, false, 422, 'Invalid quest Id');
@@ -22,15 +22,15 @@ const startQuest = async (req: Request, res: Response) => {
       }
     });
     if (isOnQuest.length !== 0) return sendRes(res, false, 403, 'Duplicate quest');
-    
+
     const activeQuest = await req.user.createActiveQuest({
       questId: req.params.questId
     });
-    
+
     if (!activeQuest) sendRes(res, false, 500, 'Error creating quest');
-    
+
     return sendRes(res, true, 200, 'Quest started', activeQuest);
-    
+
   } catch (err) {
     return sendRes(res, false, 500, 'Error starting quest', err);
   }
@@ -39,19 +39,19 @@ const startQuest = async (req: Request, res: Response) => {
 const completeQuest = async (req: Request, res: Response) => {
   const { user } = req;
   if (!user) return sendRes(res, false, 400, 'Not authenticated');
-  
+
   if (!req.params.questId) return sendRes(res, false, 422, 'Missing form information');
-  
+
   try {
-    const questToComplete = await user.getActiveQuests({ 
-      where: { 
-        questId: req.params.questId 
+    const questToComplete = await user.getActiveQuests({
+      where: {
+        questId: req.params.questId
       }
     });
-    
-    if (!questToComplete || questToComplete.length === 0) 
+
+    if (!questToComplete || questToComplete.length === 0)
       return sendRes(res, false, 422, 'Invalid quest Id');
-    
+
     const template = await Quest.findOne({
       where: {
         id: questToComplete[0].questId
@@ -59,7 +59,7 @@ const completeQuest = async (req: Request, res: Response) => {
     });
     if (!template) return sendRes(res, false, 422, 'Invalid quest Id');
     if (!await questToComplete[0].complete()) sendRes(res, false, 500, 'Server error completing quest');
-    
+
     await user.update({
       exp: user.exp += template.completionExp
     });
@@ -134,7 +134,7 @@ const getQuestTasks = async (req: Request, res: Response) => {
   try {
     const template = await Quest.findOne({
       where: {
-        id: questId 
+        id: questId
       }
     });
     if (!template) return sendRes(res, false, 500, 'Invalid questId: quest template does not exist') ;
@@ -154,7 +154,7 @@ const getFriendsOnQuest = async (req: Request, res: Response) => {
   try {
     const template = await Quest.findByPk(questId);
     if (!template) return sendRes(res, false, 403, 'No template found with that questId');
-    
+
     const friends = await user.getFriends();
     const friendIds: number[] = [];
     friends.forEach(friend => {
@@ -168,7 +168,7 @@ const getFriendsOnQuest = async (req: Request, res: Response) => {
         }
       }
     });
-    
+
     return sendRes(res, true, 200, 'Friends on quest retrieved', friendsOnQuest);
   } catch (err) {
     return sendRes(res, false, 500, 'Server error getting friends on quest');
@@ -189,6 +189,45 @@ const dropQuest = async (req: Request, res: Response) => {
   }
 };
 
+const findCompletedQuestsById = async (req: Request, res: Response) => {
+  const user = req.user;
+  const userId = req.params.userId;
+  if (!user || !userId) return sendRes(res, false, 403, 'Please provide a valid userId/user');
+  try{
+    const userToFind = User.findOne({
+      where: {
+        id: userId
+      }
+    })
+    if (!userToFind) return sendRes(res, false, 404, 'Couldn\'t find a user with that id');
+    const completedQuests = await user.getCompletedQuests();
+    return sendRes(res, true, 200, 'Enjoy your completed quests!', completedQuests);
+  }catch(err) {
+    return sendRes(res, false, 500, 'Enjoy your error', err);
+  }
+}
+
+const findActiveQuestsById = async (req: Request, res: Response) => {
+  const user = req.user;
+  const userId = req.params.userId;
+  if (!user || !userId) return sendRes(res, false, 403, 'Please provide a valid userId/user');
+  try{
+    const userToFind = User.findOne({
+      where: {
+        id: userId
+      }
+    })
+    if (!userToFind) return sendRes(res, false, 404, 'Couldn\'t find a user with that id');
+    const activeQuests = await user.getActiveQuests();
+    return sendRes(res, true, 200, 'Enjoy your active quests!', activeQuests);
+  }catch(err) {
+    return sendRes(res, false, 500, 'Enjoy your error', err);
+  }
+}
+
+
+
+
 export default {
   startQuest,
   completeQuest,
@@ -197,5 +236,7 @@ export default {
   getQuestTasks,
   getFriendsOnQuest,
   getCompletedQuests,
-  dropQuest
+  dropQuest,
+  findActiveQuestsById,
+  findCompletedQuestsById
 };

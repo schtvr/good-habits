@@ -25,6 +25,7 @@ import RegisterPage from './screens/RegisterPage';
 import {stateSelector} from './redux/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import SearchDetailsScreen from './screens/SearchDetailsScreen';
+import OtherProfileScreen from './screens/OtherProfilesScreen';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -145,6 +146,7 @@ const App: () => Node = () => {
                 component={TabStack}
               />
               <Stack.Screen name="Achievements" component={AchievementsPage} />
+              <Stack.Screen name="OtherUser" component={OtherProfileScreen} />
               <Stack.Screen
                 name="QuestDetailsScreen"
                 component={QuestDetailsScreen}

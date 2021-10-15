@@ -9,6 +9,12 @@ interface IState {
     exp: number;
     level: number;
   };
+  otherUser: {
+    userName: string;
+    id: number;
+    exp: number;
+    level: number;
+  }
   isAuthenticated: boolean;
   error: string;
   usersList: any[];
@@ -20,6 +26,12 @@ const initialState: IState = {
   user: {
     userName: '',
     email: '',
+    id: 0,
+    exp: 0,
+    level: 0,
+  },
+  otherUser: {
+    userName: '',
     id: 0,
     exp: 0,
     level: 0,
@@ -81,6 +93,9 @@ export const userSlice = createSlice({
     getFriendRanking: (state, body) => {
       state.friendRankings = body.data.data;
     },
+    getOtherUser: (state, body) => {
+      state.otherUser = body.data.data;
+    },
   },
 });
 
@@ -89,6 +104,7 @@ export const {
   signIn,
   signOut,
   clearState,
+  getOtherUser,
   getUsers,
   getUser,
   getAllRanking,

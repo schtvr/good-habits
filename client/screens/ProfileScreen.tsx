@@ -5,7 +5,7 @@ import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
-import { getActiveQuests, getCompletedQuests, questSelector , getAllQuests} from '../redux/questSlice';
+import { getActiveQuests, getCompletedQuests, questSelector } from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
