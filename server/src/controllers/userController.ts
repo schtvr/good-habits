@@ -8,6 +8,7 @@ import stripPassword from '../funcs/stripPassword';
 import userAttributes from '../util/userAttributes';
 import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
+import firebase from 'firebase-admin';
 import ActiveQuest from '../models/activeQuest';
 
 // CHECK FOR PASSWORD LENGTH
@@ -26,6 +27,16 @@ const createUser = async (req: Request, res:Response) => {
       try {
         const user = await User.create({ ...body, password: hash });
         const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '7d' });
+        try {
+          const gottenToken = await user.getFirebaseTokens();
+          if (!gottenToken) {
+            if (req.body.firebaseId) await user.createFirebaseTokens({firebaseId: req.body.firebaseId});
+            
+          } 
+        } catch (err) {
+          console.log(err);
+        }
+        
         res.send({
           status: 'Okay',
           message: 'User created',
@@ -109,6 +120,33 @@ const putFriendRequest = async (req: Request, res: Response) => {
     if (userToFriend.id === user.id) return sendRes(res, false, 403, 'You sent a friend request to yourself. why?');
     
     await userToFriend.addRequestees(user.id);
+    // try {
+    const token = await userToFriend.getFirebaseTokens() || undefined;
+    if (!token) return res.status(200).send({
+      status: 'Okay',
+      message: 'Friend request sent'
+    });
+    
+    const message = {
+      notification: {
+        title: 'You got a friend request loser',
+        body: `from ${user.userName}`
+      },
+      token: token.firebaseId
+    };
+    try {
+      firebase.messaging().send(message)
+        .then((response) => {
+        // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+
     return res.status(200).send({
       status: 'Okay',
       message: 'Friend request sent'

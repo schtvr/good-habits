@@ -44,7 +44,8 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
       message: 'User not found'
     });
     req.user = user;
-
+    
+    
     return next();
   });
 };

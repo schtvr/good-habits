@@ -15,6 +15,8 @@ import {
   BelongsToManyCreateAssociationMixin,
   Optional,
   BelongsToManyRemoveAssociationsMixin,
+  HasOneCreateAssociationMixin,
+  HasOneGetAssociationMixin
 } from 'sequelize';
 import Achievement from './achievement';
 import ActiveQuest from './activeQuest';
@@ -23,6 +25,7 @@ import TaskHistory from './taskHistory';
 import CompletedQuest from './completedQuest';
 import RequestList from './requestList';
 import FriendList from './friendList';
+import FirebaseToken from './firebaseToken';
 
 export interface IUser {
   id: number
@@ -80,6 +83,10 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public hasRequester!: BelongsToManyHasAssociationMixin<RequestList, number>;
   public removeRequester!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
 
+
+  public createFirebaseTokens!: HasOneCreateAssociationMixin<FirebaseToken>;
+  public getFirebaseTokens!: HasOneGetAssociationMixin<FirebaseToken>;
+
   public getFriends!: BelongsToManyGetAssociationsMixin<User>;
   public addFriends!: BelongsToManyAddAssociationMixin<User, number>;
   public hasFriend!: BelongsToManyHasAssociationMixin<User, number>;
@@ -99,7 +106,8 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
     taskHistory: Association<User, TaskHistory>,
     completedQuests: Association<User, CompletedQuest>,
     requestList: Association<User, RequestList>,
-    friendList: Association<User, FriendList>
+    friendList: Association<User, FriendList>,
+    firebaseToken: Association<User, FirebaseToken>
   };
 }
 
@@ -171,6 +179,11 @@ User.hasMany(CompletedQuest, {
   sourceKey: 'id',
   foreignKey: 'userId',
   as: 'completedQuests'
+});
+User.hasOne(FirebaseToken,{
+  sourceKey: 'id',
+  foreignKey: 'userId',
+  as: 'firebaseTokens'
 });
 
 User.belongsToMany(User, { as: 'Friends',through: 'friendLists'});

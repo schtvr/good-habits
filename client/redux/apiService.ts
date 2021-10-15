@@ -1,4 +1,4 @@
-import {LOCALURL} from 'react-native-dotenv';
+const LOCALURL ='http://192.168.1.70:3001';
 
 console.log(LOCALURL);
 const apiService = store => next => action => {
@@ -8,7 +8,9 @@ const apiService = store => next => action => {
   const api = action.payload.api;
   let type = action.type;
   const method = api.method || 'GET';
+  console.log( api.body);
   const body = api.body ? JSON.stringify(api.body) : undefined;
+  
   const defaultHeaders = {'Content-Type': 'application/json'};
   const headers = {
     ...defaultHeaders,

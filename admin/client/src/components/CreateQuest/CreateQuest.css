@@ -1,0 +1,11 @@
+
+input {
+  width:100%;
+  text-align: center;
+}
+label {
+  padding: 20px 20px;
+}
+ul{
+  list-style: none;
+}
