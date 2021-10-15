@@ -6,7 +6,8 @@ import CircularProgressBar from './progressCircle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const ProfileHeader = () => {
+const ProfileHeader = props => {
+  const { userName } = props
   const { user } = useSelector(stateSelector);
   const profileUrl = 'https://i.imgur.com/1dhHIkV.png';
 
@@ -18,7 +19,7 @@ const ProfileHeader = () => {
           source={{ uri: profileUrl }}
         />
         <Text style={styles.userName}>
-          { user.userName }
+          { userName }
         </Text>
       </View>
 

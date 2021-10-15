@@ -12,7 +12,9 @@ import { getOtherUser, stateSelector } from '../redux/userSlice';
 const OtherProfileScreen = () => {
   const dispatch = useDispatch();
   const { otherUser } = useSelector(stateSelector);
+  const { userName, level } = otherUser;
   const { otherUserQuests } = useSelector(questSelector);
+  const { completedQuests, activeQuests } = otherUserQuests;
   const otherUserId = 3;
 
   const getToken = async () => {
@@ -55,20 +57,23 @@ const OtherProfileScreen = () => {
     populateOtherUser();
   }, [])
 
-  console.log('OTHERUSER', otherUser)
-  console.log('OTHER USER QUESTS', otherUserQuests)
+  console.log('OTHER USER QUESTS', activeQuests)
 
   return (
     <View>
-      <ProfileHeader />
+      <ProfileHeader
+        userName={userName}/>
       <CuratedTrophies />
-      <CompletedStats />
-      {/* <QuestListCard
+      <CompletedStats
+        level={level}
+        howManyCompletedQuestsYouGotLilBoy={completedQuests.length}
+      />
+      <QuestListCard
         cardTitle={`${userName}'s active quests`}
         questList={activeQuests}/>
       <QuestListCard
         cardTitle={`${userName}'s previous quests`}
-        questList={completedQuests}/> */}
+        questList={completedQuests}/>
     </View>
   );
 }

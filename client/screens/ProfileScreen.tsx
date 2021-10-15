@@ -7,12 +7,14 @@ import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
 import { getActiveQuests, getCompletedQuests, questSelector } from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { stateSelector } from '../redux/userSlice';
 
 
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { activeQuests, completedQuests } = useSelector(questSelector)
+  const { userName, level } = useSelector(stateSelector)
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -46,9 +48,12 @@ const ProfileScreen = () => {
 
   return (
     <View>
-      <ProfileHeader />
+      <ProfileHeader
+        userName={userName}/>
       <CuratedTrophies />
-      <CompletedStats />
+      <CompletedStats
+        level={level}
+        howManyCompletedQuestsYouGotLilBoy={completedQuests.length}/>
       <QuestListCard
         cardTitle="Your active quests"
         questList={activeQuests}/>
