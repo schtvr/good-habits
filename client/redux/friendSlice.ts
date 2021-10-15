@@ -22,7 +22,7 @@ export const friendSlice = createSlice({
       // state.myFriends = body.data.data;
     },
     getFriendRequest: (state, body) => {
-      console.log('RECIEVED', body.data.data)
+      console.log('RECIEVED', body.data.data);
       if (body.data.data[0]) {
         state.friendRequests.push(
           body.data.data[0].friendRequests,
@@ -34,12 +34,20 @@ export const friendSlice = createSlice({
       console.log('ACCEPT', body);
       state.myFriends = body.data.data;
     },
+    rejectFriendRequest: (state, body) => {
+      console.log('ACCEPT', body);
+      // state.myFriends = body.data.data;
+    },
   },
 });
 
-
-export const {getAllFriends, getFriendRequest, acceptFriendRequest, addFriend} =
-  friendSlice.actions;
+export const {
+  getAllFriends,
+  rejectFriendRequest,
+  getFriendRequest,
+  acceptFriendRequest,
+  addFriend,
+} = friendSlice.actions;
 export const friendSelector = state => state.friendInfo;
 
 export default friendSlice.reducer;

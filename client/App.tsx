@@ -7,14 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {
-  Badge,
-  Icon,
-  withBadge,
-  Overlay,
-  Button,
-  Input,
-} from 'react-native-elements';
+import {Badge, Overlay, Button} from 'react-native-elements';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SocialScreen from './screens/SocialScreen';
@@ -35,9 +28,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import SearchDetailsScreen from './screens/SearchDetailsScreen';
 
 import {
-  getFriendRequest,
   friendSelector,
   acceptFriendRequest,
+  rejectFriendRequest,
 } from './redux/friendSlice';
 
 import OtherProfileScreen from './screens/OtherProfilesScreen';
@@ -70,7 +63,7 @@ const headerRight = () => {
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
-  console.log('FRIEND REQUESTS', friendRequests)
+  console.log('FRIEND REQUESTS', friendRequests);
   let id;
   if (friendRequests[0]) {
     id = friendRequests[0].requesteeId;
@@ -93,9 +86,19 @@ const headerRight = () => {
     );
   };
 
-  // useEffect(() => {
-  //   acceptMyFriendRequest();
-  // });
+  const rejectMyFriendRequest = async () => {
+    dispatch(
+      rejectFriendRequest({
+        api: {
+          method: 'PUT',
+          url: `user/${id}/cancelFriendRequest`,
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
 
   return (
     <View style={styles.header}>
@@ -119,7 +122,7 @@ const headerRight = () => {
         isVisible={visible}
         onBackdropPress={toggleOverlay}
         overlayStyle={{height: 200, width: 300}}>
-        <Text style={styles.content}>Change username</Text>
+        <Text style={styles.content}>Friend Request!</Text>
         <View
           style={{
             alignItems: 'center',
@@ -140,6 +143,7 @@ const headerRight = () => {
           />
           <Button
             title="Reject"
+            onPress={rejectMyFriendRequest}
             buttonStyle={{
               width: 100,
               borderRadius: 10,
