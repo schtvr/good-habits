@@ -98,7 +98,7 @@ export const userLogOut = async (dispatch: Function) => {
       }
     }),
   );
-  dispatch(clearAchievements);
-  dispatch(clearQuests);
-  dispatch(clearFriends);
+  dispatch(clearAchievements());
+  dispatch(clearQuests());
+  dispatch(clearFriends());
 };

@@ -13,6 +13,7 @@ export const friendSlice = createSlice({
   reducers: {
     clearFriends: state => {
       state = initialState;
+      console.log('fiend state', state);
     },
     getAllFriends: (state, body) => {
       state.myFriends = body.data.data;

@@ -38,6 +38,7 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
     const res = activeTasks.filter((task) => (
       task.questId === id
     ));
+    console.log('accordian', completedTasks)
     if (res.length !== 0) setTaskToDo(true);
     setTaskList(res);
     for (const taskL of taskList) {

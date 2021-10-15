@@ -57,7 +57,7 @@ export const userSlice = createSlice({
       state.user = initialState.user;
       const removeToken = async () => {
         state.isAuthenticated = false;
-        await AsyncStorage.removeItem('token', body.data.token);
+        await AsyncStorage.removeItem('token');
       };
       removeToken();
     },

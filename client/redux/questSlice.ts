@@ -21,6 +21,8 @@ export const questSlice = createSlice({
   reducers: {
     clearQuests: state => {
       state = initialState;
+      console.log('quest state', state);
+
     },
     getAllQuests: (state, body) => {
       state.quests = body.data.data;
