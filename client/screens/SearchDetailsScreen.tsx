@@ -36,7 +36,7 @@ const SearchDetailsScreen = ({navigation}) => {
 
   const renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity onPress={() => onOpenModal(index)}>
+      <TouchableOpacity onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
         <View style={styles.listItems}>
           <Avatar size="large" source={require('../assets/avatar.png')} />
           <Text>{item.userName}</Text>

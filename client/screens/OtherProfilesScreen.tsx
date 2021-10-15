@@ -9,19 +9,21 @@ import { questSelector, getAllQuests, getOtherUserActiveQuests, getOtherUserComp
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getOtherUser, stateSelector } from '../redux/userSlice';
 
-const OtherProfileScreen = () => {
+const OtherProfileScreen = ({route}) => {
   const dispatch = useDispatch();
   const { otherUser } = useSelector(stateSelector);
   const { userName, level } = otherUser;
   const { otherUserQuests, quests } = useSelector(questSelector);
   const { completedQuests, activeQuests } = otherUserQuests;
-  const otherUserId = 3;
+  const {id} = route.params;
+  console.log(id)
   let scopedCompletedQuests = []
   let scopedActiveQuests = []
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
+
   const populateOtherUser = async () => {
     dispatch(
       getAllQuests({
@@ -33,7 +35,7 @@ const OtherProfileScreen = () => {
     dispatch(
       getOtherUser({
         api: {
-          url: 'user/'+otherUserId,
+          url: 'user/'+id,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
@@ -43,7 +45,7 @@ const OtherProfileScreen = () => {
     dispatch(
       getOtherUserActiveQuests({
         api: {
-          url: 'quest/' + otherUserId + '/active',
+          url: 'quest/' + id + '/active',
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           }
@@ -53,7 +55,7 @@ const OtherProfileScreen = () => {
     dispatch(
       getOtherUserCompletedQuests({
         api: {
-          url: 'quest/' + otherUserId + '/completed',
+          url: 'quest/' + id + '/completed',
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           }
