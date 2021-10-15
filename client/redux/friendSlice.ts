@@ -22,6 +22,7 @@ export const friendSlice = createSlice({
       // state.myFriends = body.data.data;
     },
     getFriendRequest: (state, body) => {
+      console.log('RECIEVED', body.data.data)
       if (body.data.data[0]) {
         state.friendRequests.push(
           body.data.data[0].friendRequests,
@@ -35,14 +36,7 @@ export const friendSlice = createSlice({
     },
   },
 });
-{
-  /* <BadgedIcon
-          style={styles.icons}
-          type="material"
-          name="notifications-none"
-          size={30}
-        /> */
-}
+
 
 export const {getAllFriends, getFriendRequest, acceptFriendRequest, addFriend} =
   friendSlice.actions;

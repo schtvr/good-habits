@@ -2,7 +2,7 @@ import {LOCALURL} from 'react-native-dotenv';
 
 console.log(LOCALURL);
 const apiService = store => next => action => {
-  console.log(action);
+  // console.log(action);
   if (!action?.payload?.api) return next(action);
   const api = action.payload.api;
   let type = action.type;

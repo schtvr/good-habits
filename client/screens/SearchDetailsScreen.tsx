@@ -6,9 +6,6 @@ import {
   FlatList,
   Switch,
   TouchableOpacity,
-  Modal,
-  Pressable,
-  Button,
 } from 'react-native';
 import {IQuest} from '../interfaces/interfaces';
 import {Avatar, Input} from 'react-native-elements';
@@ -22,16 +19,12 @@ const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
   let {quests} = useSelector(questSelector);
   let {usersList} = useSelector(stateSelector);
-  let {myFriends} = useSelector(friendSelector);
 
   const [questArray, setQuestArray] = useState([...quests]);
   const [usersArray, setUsersArray] = useState([...usersList]);
   const [searchFriends, setSearchFriends] = useState(false);
   const [searchVal, setSearchVal] = useState('');
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<null | number>(null);
-
   const keyExtractor = (index: number) => index.toString();
 
   const renderItem = ({item, index}) => {
@@ -43,39 +36,6 @@ const SearchDetailsScreen = ({navigation}) => {
         </View>
       </TouchableOpacity>
     );
-  };
-
-  const onOpenModal = (index: number) => {
-    setSelectedItem(index);
-    setModalVisible(!modalVisible);
-  };
-
-  const Modals = (): JSX.Element => {
-    if (selectedItem !== null) {
-      const item = usersList[selectedItem];
-      return (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{item.userName}</Text>
-              <Text>{item.id}</Text>
-              <Pressable onPress={() => addAFriend(item.id)}>
-                <Text>Add Friend</Text>
-              </Pressable>
-              <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.closeButton}>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      );
-    }
   };
 
   const getQuests = async () => {
@@ -104,19 +64,7 @@ const SearchDetailsScreen = ({navigation}) => {
       }),
     );
   };
-  const addAFriend = async id => {
-    dispatch(
-      addFriend({
-        api: {
-          method: 'PUT',
-          url: `user/${id}/friendRequest`,
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
+
 
   useEffect(() => {
     getQuests();
@@ -183,7 +131,6 @@ const SearchDetailsScreen = ({navigation}) => {
             renderItem={renderItem}
             keyExtractor={keyExtractor}
           />
-          {modalVisible ? <Modals /> : null}
         </>
       ) : (
         <>

@@ -70,6 +70,7 @@ const headerRight = () => {
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
+  console.log('FRIEND REQUESTS', friendRequests)
   let id;
   if (friendRequests[0]) {
     id = friendRequests[0].requesteeId;
@@ -83,7 +84,7 @@ const headerRight = () => {
       acceptFriendRequest({
         api: {
           method: 'PUT',
-          url: `user/${id}/acceptFriendRequest`,
+          url: `user/acceptFriendRequest/${id}`,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
