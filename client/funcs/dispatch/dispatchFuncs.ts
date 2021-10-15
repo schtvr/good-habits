@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
-import { getFriendRequest, getAllFriends } from '../../redux/friendSlice';
-import { getUser } from '../../redux/userSlice';
-import { getActiveTasks, getActiveQuests } from '../../redux/questSlice';
-import { getTaskHistory } from '../../redux/achievementSlice';
+import { getFriendRequest, getAllFriends, clearFriends } from '../../redux/friendSlice';
+import { getUser, signOut } from '../../redux/userSlice';
+import { getActiveTasks, getActiveQuests, clearQuests } from '../../redux/questSlice';
+import { getTaskHistory, clearAchievements } from '../../redux/achievementSlice';
 
 export const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -85,4 +84,21 @@ export const getUserTaskHistory = async (dispatch: Function) => {
       }
     }),
   );
+};
+
+export const userLogOut = async (dispatch: Function) => {
+  dispatch(
+    signOut({
+      api: {
+        method: 'POST',
+        url: 'logout',
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        }
+      }
+    }),
+  );
+  dispatch(clearAchievements);
+  dispatch(clearQuests);
+  dispatch(clearFriends);
 };

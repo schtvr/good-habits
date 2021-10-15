@@ -12,8 +12,10 @@ export const achievementSlice = createSlice({
     ...initialState,
   },
   reducers: {
-    clearState: state => {
-      state = initialState;
+    clearAchievements: state => {
+      state = { 
+        ...initialState 
+      };
     },
     getAllAchievements: (state, body) => {
       state.achievements = body.data.data;
@@ -29,7 +31,7 @@ export const achievementSlice = createSlice({
   },
 });
 
-export const {getAllAchievements, clearState, sortCompletedTask, getTaskHistory} = achievementSlice.actions;
+export const {getAllAchievements, clearAchievements, sortCompletedTask, getTaskHistory} = achievementSlice.actions;
 export const achievementSelector = state => state.achievementInfo;
 
 export default achievementSlice.reducer;

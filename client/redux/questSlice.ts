@@ -19,7 +19,7 @@ export const questSlice = createSlice({
     ...initialState,
   },
   reducers: {
-    clearState: state => {
+    clearQuests: state => {
       state = initialState;
     },
     getAllQuests: (state, body) => {
@@ -38,7 +38,6 @@ export const questSlice = createSlice({
       state.completedQuests = body.data.data;
     },
     getActiveTasks: (state, body) => {
-      console.log('Inside ACTIVE TASKS--------------------'), body;
       state.activeTasks = body.data.data;
     },
     getOtherUserCompletedQuests: (state, body) => {
@@ -53,7 +52,7 @@ export const questSlice = createSlice({
 export const {
   getAllQuests,
   getActiveQuests,
-  clearState,
+  clearQuests,
   getAllTasks,
   addQuest,
   getCompletedQuests,

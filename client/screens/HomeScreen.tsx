@@ -27,6 +27,7 @@ import { getUserById,
   getDailyTasks, 
   getMyFriendRequests,
   getUserTaskHistory } from '../funcs/dispatch/dispatchFuncs'
+import { achievementSelector } from '../redux/achievementSlice';
 
 interface Props {
   userFriends: [];
@@ -40,8 +41,10 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const {user} = useSelector(stateSelector);
   const {myFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
+  const { completedTasks } = useSelector(achievementSelector);
 
   useEffect(() => {
+    console.log('COMPLETED TASKS HERE:', completedTasks);
     const start = async () => {
       await getUserById(dispatch);
       await getUsersActiveQuests(dispatch);

@@ -7,7 +7,6 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
-  FlatList,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
