@@ -8,6 +8,7 @@ import ProfileHeader from '../components/profile/profileHeader';
 import { questSelector, getAllQuests, getOtherUserActiveQuests, getOtherUserCompletedQuests} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getOtherUser, stateSelector } from '../redux/userSlice';
+import  {addFriend, friendSelector} from '../redux/friendSlice'
 
 const OtherProfileScreen = ({route}) => {
   const dispatch = useDispatch();
@@ -15,13 +16,29 @@ const OtherProfileScreen = ({route}) => {
   const { userName, level } = otherUser;
   const { otherUserQuests, quests } = useSelector(questSelector);
   const { completedQuests, activeQuests } = otherUserQuests;
-  const {id} = route.params;
-  console.log(id)
+  const {myFriends} = useSelector(friendSelector);
+
+  const { id } = route.params;
   let scopedCompletedQuests = []
   let scopedActiveQuests = []
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
+  };
+
+  const addAFriend = async ()  => {
+    console.log('ID', id)
+    dispatch(
+      addFriend({
+        api: {
+          method: 'PUT',
+          url: `user/${id}/friendRequest`,
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
   };
 
   const populateOtherUser = async () => {
@@ -65,7 +82,6 @@ const OtherProfileScreen = ({route}) => {
   }
 
   const populateQuestDetails = (questList) => {
-    console.log('1st pass', questList)
     return questList.map((passedQuest) => {
       return quests.filter(quest => quest.id === passedQuest.questId)
     })
@@ -74,11 +90,8 @@ const OtherProfileScreen = ({route}) => {
   useEffect(() => {
     populateOtherUser();
     scopedCompletedQuests = populateQuestDetails(completedQuests);
-    console.log(scopedCompletedQuests)
     scopedActiveQuests = populateQuestDetails(activeQuests);
   }, [])
-
-  console.log('QUESTS', activeQuests)
 
   return (
     <View>
@@ -91,8 +104,8 @@ const OtherProfileScreen = ({route}) => {
       />
       <View style={{paddingTop: 10}} />
       <Button
-        title="add friend"
-        onPress={() => console.log('add me bb')}/>
+        title="Send friend request"
+        onPress={addAFriend}/>
       <QuestListCard
         cardTitle={`${userName}'s active quests`}
         questList={scopedActiveQuests}/>
