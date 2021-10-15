@@ -178,14 +178,15 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
         as: 'activeQuests' 
       },
       attributes: {
-        include: ['userName'],
-        exclude: ['id', 'firstName', 'lastName', 'email', 'password']
+        include: ['id', 'userName'],
+        exclude: ['firstName', 'lastName', 'email', 'password']
       }
     });
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
     });
+    console.log(userToFriend);
 
     const checkFriendRequests = await user.hasRequestee(userToFriend.id);
     if (!checkFriendRequests) return res.status(404).send({
@@ -199,9 +200,11 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     const update = createUpdate();
     await checkAchievements(user, 'Social', update);
     await checkAchievements(userToFriend, 'Social', createUpdate());
+    update.friend.push(userToFriend);
 
     return sendRes(res, true, 200, 'Friend request accepted', update);
   } catch (err) {
+    console.log(err);
     res.status(500).send({
       status: 'Bad',
       message: 'Internal Server Error',
