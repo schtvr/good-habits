@@ -5,8 +5,8 @@ import { stateSelector } from '../../redux/userSlice';
 import CircularProgressBar from './progressCircle';
 
 
-const CompletedStats = () => {
-  const { user } = useSelector(stateSelector);
+const CompletedStats = (props) => {
+  const { level, howManyCompletedQuestsYouGotLilBoy } = props;
 
 
   return (
@@ -22,10 +22,10 @@ const CompletedStats = () => {
         duration={1200}
       >
       <Text style={styles.pfp}>
-        {user.level}
+        {level}
       </Text>
       </CircularProgressBar>
-      <Text> |  69 completed quests </Text>
+      <Text> |  {howManyCompletedQuestsYouGotLilBoy} completed quests </Text>
     </View>
   );
 };

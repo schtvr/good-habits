@@ -10,7 +10,8 @@ const router = express.Router();
 
 // USER ROUTES
 router.post('/user', user.createUser);
-router.get('/user', verify , user.findUserById);
+router.get('/user', verify , user.getYourInfo);
+router.get('/user/:userId', verify , user.findUserById);
 router.get('/users', verify , user.getAllUsers);
 router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
 router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
@@ -34,6 +35,8 @@ router.post('/quest/complete/:questId', verify, quests.completeQuest);
 router.get('/quest/getActiveQuests', verify, quests.getUserActiveQuests);
 router.get('/quests', quests.getQuestTemplates);
 router.get('/friendsOnQuest/:questId', verify, quests.getFriendsOnQuest);
+router.get('/quest/:userId/completed', verify , quests.findCompletedQuestsById);
+router.get('/quest/:userId/active', verify , quests.findActiveQuestsById);
 router.post('/quest/drop/:questId', verify, quests.dropQuest);
 router.get('/quest/completed', verify, quests.getCompletedQuests);
 

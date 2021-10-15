@@ -6,6 +6,10 @@ const initialState = {
   tasks: [],
   activeQuests: [],
   completedQuests: [],
+  otherUserQuests: {
+    completedQuests: [],
+    activeQuests: [],
+  }
 };
 
 export const questSlice = createSlice({
@@ -32,6 +36,12 @@ export const questSlice = createSlice({
     getCompletedQuests: (state, body) => {
       state.completedQuests = body.data.data;
     },
+    getOtherUserCompletedQuests: (state, body) => {
+      state.otherUserQuests.completedQuests = body.data.data;
+    },
+    getOtherUserActiveQuests: (state, body) => {
+      state.otherUserQuests.activeQuests = body.data.data;
+    },
   },
 });
 
@@ -42,6 +52,8 @@ export const {
   getAllTasks,
   addQuest,
   getCompletedQuests,
+  getOtherUserActiveQuests,
+  getOtherUserCompletedQuests,
 } = questSlice.actions;
 export const questSelector = state => state.questInfo;
 
