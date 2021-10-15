@@ -84,7 +84,7 @@ const headerRight = () => {
       acceptFriendRequest({
         api: {
           method: 'PUT',
-          url: `user/${id}/acceptFriendRequest`,
+          url: `user/acceptFriendRequest/${id}`,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },

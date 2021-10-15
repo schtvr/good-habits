@@ -14,7 +14,7 @@ describe('User controller', () => {
   const app = express();
   app.use(express.json());
   app.use(router);
-  
+
   const request = supertest(app);
   const dummyUser = {
     firstName: 'Bob',
@@ -30,26 +30,26 @@ describe('User controller', () => {
     password: bcrypt.hashSync('shitcringepassword', 10),
     email: 'HAHAHAHAH@fuckbob.com'
   };
-  
+
   let user;
   let otherUser;
-  
+
   beforeAll(async () => {
     await dbInit();
     await populateDb();
     user = await User.create(dummyUser);
     otherUser = await User.create(dummyUser2);
   });
-  
+
   afterAll(async () => {
     await User.destroy({
       where: {}
     });
     await sequelize.drop();
   });
-  
+
   describe('Create user', () => {
-  
+
     test('create user', async () => {
       const res = await request.post('/user').send({
         firstName: 'Steve',
@@ -65,14 +65,14 @@ describe('User controller', () => {
       expect(body.user.userName).toBe('SteveIsOld');
       expect(body.user.password).toBe(undefined);
     });
-  
+
     test('reject duplicate email and username', async () => {
       const res = await request.post('/user')
         .send(dummyUser);
       expect(res.body.status).toBe('Bad');
       expect(res.body.message).toBe('Duplicate username or email');
     });
-  
+
     test('rejects forms with missing fields', async () => {
       const res = await request.post('/user')
         .send({
@@ -119,7 +119,7 @@ describe('User controller', () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      const res = await request.put('/user/ijhdfsjhifdsuhdsfhuyguydfsujhikyerdsfiujofedsiukjh/friendRequest').set(
+      const res = await request.put('/user/1337/friendRequest').set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -134,7 +134,7 @@ describe('User controller', () => {
       const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      
+
       const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
@@ -172,7 +172,7 @@ describe('User controller', () => {
       const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      
+
       const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
@@ -210,7 +210,7 @@ describe('User controller', () => {
       const token2 = jwt.sign({ userId: otherUser.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      
+
       const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
