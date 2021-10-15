@@ -24,10 +24,12 @@ RequestList.init(
     requesterId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      unique: 'userSentRequest',
       allowNull: false,
     },
     requesteeId: {
       type: DataTypes.INTEGER,
+      unique: 'userSentRequest',
       allowNull: false,
     },
 
