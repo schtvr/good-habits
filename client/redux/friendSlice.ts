@@ -12,8 +12,8 @@ export const friendSlice = createSlice({
   },
   reducers: {
     clearFriends: state => {
-      state = initialState;
-      console.log('fiend state', state);
+      state.myFriends = [];
+      state.friendRequests = [];
     },
     getAllFriends: (state, body) => {
       state.myFriends = body.data.data;

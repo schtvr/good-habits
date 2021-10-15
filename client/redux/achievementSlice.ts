@@ -13,8 +13,9 @@ export const achievementSlice = createSlice({
   },
   reducers: {
     clearAchievements: state => {
-      state = initialState; 
-      console.log('achievement state', state);
+      state.achievements = [];
+      state.userAchievements = [];
+      state.completedTasks = [];
     },
     getAllAchievements: (state, body) => {
       state.achievements = body.data.data;
