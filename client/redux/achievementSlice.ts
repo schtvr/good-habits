@@ -21,11 +21,15 @@ export const achievementSlice = createSlice({
     sortCompletedTask: (state, body) =>{
       state.userAchievements = [...state.userAchievements, ...body.data.data.achievements];
       state.completedTasks = [...state.completedTasks, ...body.data.data.tasks];
+    },
+    getTaskHistory: (state, body) => {
+      console.log(body);
+      state.completedTasks = [...state.completedTasks, ...body.data.data]
     }
   },
 });
 
-export const {getAllAchievements, clearState, sortCompletedTask} = achievementSlice.actions;
+export const {getAllAchievements, clearState, sortCompletedTask, getTaskHistory} = achievementSlice.actions;
 export const achievementSelector = state => state.achievementInfo;
 
 export default achievementSlice.reducer;
