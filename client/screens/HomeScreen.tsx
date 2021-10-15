@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IQuest, IUser} from '../interfaces/interfaces';
 import {useDispatch, useSelector} from 'react-redux';
 import userSlice, {getUser, stateSelector} from '../redux/userSlice';
-import {questSelector, getActiveQuests} from '../redux/questSlice';
+import {questSelector, getActiveQuests, getActiveTasks} from '../redux/questSlice';
 import {
   friendSelector,
   getAllFriends,
@@ -52,9 +52,9 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
 
   const {user} = useSelector(stateSelector);
-  const {activeQuests, myQuests} = useSelector(questSelector);
   const {myFriends} = useSelector(friendSelector);
-  console.log('MYFRIENDS', myFriends);
+  const {activeQuests, myQuests} = useSelector(questSelector);
+
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
@@ -84,6 +84,20 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       }),
     );
   };
+
+  const getDailyTasks = async () => {
+    console.log('RETREIVING DAILY TASKS');
+    dispatch(
+      getActiveTasks({
+        api: {
+          url: 'tasks/daily',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          }
+        }
+      })
+    )
+  }
 
   const getUsersActiveQuests = async () => {
     dispatch(
@@ -116,6 +130,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       await getUserById();
       await getUsersActiveQuests();
       await getUsersFriends();
+      await getDailyTasks();
       await getMyFriendRequests();
     };
     start();
@@ -128,10 +143,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
         <Accordian
           key={item.id}
           title={item.name}
-          data={item.description}
-          date={item.duration}
-          btnText="completed"
-          btnText2="upload"
+          id={item.id}
         />,
       );
     }
