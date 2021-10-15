@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {signIn, stateSelector} from '../redux/userSlice';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Input, Text, Button} from 'react-native-elements';
-
+import messaging from '@react-native-firebase/messaging';
 const LoginScreen = ({navigation}): JSX.Element => {
   const [userState, setUserState] = useState({
     emailOrUserName: '',
@@ -13,14 +13,15 @@ const LoginScreen = ({navigation}): JSX.Element => {
   const state = useSelector(stateSelector);
 
   const dispatch = useDispatch();
-
   const signInUser = async () => {
+    const userId = await messaging().getToken();
+    console.log('DAGVYDSAGYDSAYA HUYG',userId);
     dispatch(
       signIn({
         api: {
           method: 'POST',
           url: 'login',
-          body: {...userState},
+          body: {...userState, firebaseId: userId},
         },
       }),
     );

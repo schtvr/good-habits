@@ -8,6 +8,7 @@ interface IState {
     id: number;
     exp: number;
     level: number;
+    firebaseId: string;
   };
   otherUser: {
     userName: string;
@@ -29,6 +30,7 @@ const initialState: IState = {
     id: 0,
     exp: 0,
     level: 0,
+    firebaseId: ''
   },
   otherUser: {
     userName: '',

@@ -20,11 +20,25 @@ const login = async (req: Request, res: Response) => {
   });
 
   if (!user) return sendRes(res, false, 403, 'Invalid username/email or password');
-  bcrypt.compare(password, user.password, (err, isValid) => {
+  bcrypt.compare(password, user.password, async (err, isValid) => {
     if (err) return sendRes(res, false, 500, 'Not good very bad', err);
     if (!isValid) return sendRes(res, false, 403, 'Invalid username/email or password');
 
     const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '1800s' });
+    
+    try {
+      const gottenToken = await user.getFirebaseTokens();
+      if (!gottenToken) {
+        if (!req.body.firebaseId) return res.status(404).send({
+          status: 'Bad',
+          message: 'You need to send the firebaseId in body'
+        });
+        await user.createFirebaseTokens({firebaseId: req.body.firebaseId});
+      } 
+    } catch (err) {
+      console.log(err);
+    }
+    
     return sendRes(res, true, 200, 'Enjoy your JWT', token);
   });
 };

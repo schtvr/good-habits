@@ -24,6 +24,19 @@ const createUser = async (req: Request, res:Response) => {
       try {
         const user = await User.create({ ...body, password: hash });
         const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '7d' });
+        try {
+          const gottenToken = await user.getFirebaseTokens();
+          if (!gottenToken) {
+            if (!req.body.firebaseId) return res.status(404).send({
+              status: 'Bad',
+              message: 'You need to send the firebaseId in body'
+            });
+            await user.createFirebaseTokens({firebaseId: req.body.firebaseId});
+          } 
+        } catch (err) {
+          console.log(err);
+        }
+        
         res.send({
           status: 'Okay',
           message: 'User created',
@@ -108,7 +121,7 @@ const putFriendRequest = async (req: Request, res: Response) => {
     await userToFriend.addRequestees(user.id);
     // try {
     const token = await userToFriend.getFirebaseTokens() || 'lol';
-      
+    console.log(token);
     if (!token) return sendRes(res, false, 404, 'This person doesnt have a token dum dum');
     
     const message = {
