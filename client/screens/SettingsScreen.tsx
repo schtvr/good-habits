@@ -1,4 +1,3 @@
-import {LOCALURL} from 'react-native-dotenv';
 import React, {useState} from 'react';
 import {
   View,
@@ -9,8 +8,9 @@ import {
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
-import {signOut} from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { userLogOut } from '../funcs/dispatch/dispatchFuncs'
+
 
 const SettingsScreen = ({navigation}) => {
   const [userToken, setToken] = useState('');
@@ -25,17 +25,8 @@ const SettingsScreen = ({navigation}) => {
   const [isChecked, setIsChecked] = useState(false);
   const dispatch = useDispatch();
   const logoutUser = async () => {
-    dispatch(
-      signOut({
-        api: {
-          url: 'logout',
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        },
-      }),
-    );
+    await userLogOut(dispatch);
+    console.log('logged out')
   };
   return (
     <ScrollView>

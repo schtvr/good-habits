@@ -11,8 +11,9 @@ export const friendSlice = createSlice({
     ...initialState,
   },
   reducers: {
-    clearState: state => {
-      state = initialState;
+    clearFriends: state => {
+      state.myFriends = [];
+      state.friendRequests = [];
     },
     getAllFriends: (state, body) => {
       state.myFriends = body.data.data;
@@ -46,6 +47,7 @@ export const {
   getFriendRequest,
   acceptFriendRequest,
   addFriend,
+  clearFriends,
 } = friendSlice.actions;
 export const friendSelector = state => state.friendInfo;
 

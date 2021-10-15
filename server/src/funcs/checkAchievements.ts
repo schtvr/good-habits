@@ -12,7 +12,11 @@ const checkAchievements = async (user: User, category: string, update: IUpdate) 
     const completed = await getCount(user, category);
     for await (const template of templates) {
       if (completed == template.criteria) {
-        await grantAchievement(template, user, update);
+        try {
+          await grantAchievement(template, user, update);
+        } catch (err) {
+          return;
+        }
       }
     }
   } catch (err) {

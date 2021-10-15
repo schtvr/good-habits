@@ -8,6 +8,7 @@ import stripPassword from '../funcs/stripPassword';
 import userAttributes from '../util/userAttributes';
 import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
+import ActiveQuest from '../models/activeQuest';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -171,7 +172,16 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
   });
 
   try { 
-    const userToFriend = await User.findByPk(friendId);
+    const userToFriend = await User.findByPk(friendId, {
+      include: {
+        model: ActiveQuest,
+        as: 'activeQuests' 
+      },
+      attributes: {
+        include: ['id', 'userName'],
+        exclude: ['firstName', 'lastName', 'email', 'password']
+      }
+    });
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
@@ -189,6 +199,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     const update = createUpdate();
     await checkAchievements(user, 'Social', update);
     await checkAchievements(userToFriend, 'Social', createUpdate());
+    update.friend.push(userToFriend);
 
     return sendRes(res, true, 200, 'Friend request accepted', update);
   } catch (err) {
