@@ -72,7 +72,8 @@ const putFriendRequest = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
     });
-
+    if (userToFriend.id === user.id) return sendRes(res, false, 403, 'You sent a friend request to yourself. why?');
+    
     await userToFriend.addRequestees(user.id);
     return res.status(200).send({
       status: 'Okay',
