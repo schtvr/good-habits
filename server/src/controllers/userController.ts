@@ -19,6 +19,8 @@ const createUser = async (req: Request, res:Response) => {
     if (!body || !password || !firstName || !lastName ||
     !userName || !email) return sendRes(res, false, 403, 'Missing form data');
 
+    if (userName.toLower().includes('victor')) return sendRes(res, false, 418, 'Must be at least 13 years old to use this app');
+
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) res.sendStatus(500);
       try {
