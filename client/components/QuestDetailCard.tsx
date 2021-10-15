@@ -7,7 +7,7 @@ import {questSelector} from '../redux/questSlice';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
-import {addQuest} from '../redux/questSlice';
+import {addQuest, getActiveQuests} from '../redux/questSlice';
 
 const QuestDetailCard = props => {
   const [userToken, setToken] = useState('');
@@ -21,8 +21,7 @@ const QuestDetailCard = props => {
   let {quests, myQuests} = useSelector(questSelector);
   quests = quests.filter(quest => quest.id === id)[0];
   myQuests =
-    myQuests.length >= 1 ? myQuests.filter(quest => quest.questId === id) : [];
-  console.log('MYQUETS', myQuests);
+    myQuests.length > 0 ? myQuests.filter(quest => quest.id === id) : [];
   const checkIsActive = () => {
     if (myQuests.length > 0) {
       setIsActive(false);
@@ -30,9 +29,7 @@ const QuestDetailCard = props => {
   };
 
   const getToken = async () => {
-    const token = await AsyncStorage.getItem('token');
-    setToken(token);
-    return token;
+    return await AsyncStorage.getItem('token');
   };
 
   const addToMyQuests = async () => {
@@ -43,16 +40,16 @@ const QuestDetailCard = props => {
           url: `quest/start/${id}`,
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${userToken}`,
+            Authorization: `Bearer ${await getToken()}`,
           },
         },
       }),
     );
   };
 
-  const getActiveQuests = async () => {
+  const getUsersActiveQuests = async () => {
     dispatch(
-      addQuest({
+      getActiveQuests({
         api: {
           url: `quest/getActiveQuests`,
           headers: {
@@ -65,7 +62,7 @@ const QuestDetailCard = props => {
 
   useEffect(() => {
     const getQuestsAndSetIsActive = async () => {
-      await getActiveQuests();
+      await getUsersActiveQuests();
       checkIsActive();
     };
     getQuestsAndSetIsActive();
@@ -95,7 +92,7 @@ const QuestDetailCard = props => {
       <Button
         color={color[category]}
         title={buttonText}
-        onPress={() => addToMyQuests()}
+        onPress={addToMyQuests}
         disabled={!isActive}
       />
     </Card>

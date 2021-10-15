@@ -18,12 +18,10 @@ const apiService = store => next => action => {
     .then(res => res.json())
     .then(data => {
       if (data.status === 'Bad') {
-        console.log(data);
         type = 'user/error';
         store.dispatch({type: type, data});
         return;
       }
-      console.log(data);
       store.dispatch({type: type, data});
     })
     .catch(error => {

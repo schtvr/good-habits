@@ -30,11 +30,11 @@ const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
   let {quests} = useSelector(questSelector);
   let {usersList} = useSelector(stateSelector);
-  
+
   const [questArray, setQuestArray] = useState([...quests]);
   const [usersArray, setUsersArray] = useState([...usersList]);
-  const [searchFriends, setSearchFriends] = useState(true);
-  const [searchVal, setSearchVal] = useState(''); 
+  const [searchFriends, setSearchFriends] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
 
   const getQuests = async () => {
@@ -69,17 +69,13 @@ const SearchDetailsScreen = ({navigation}) => {
     getAllUsers();
   }, []);
 
-  const handleSearch = (text) => {
+  const handleSearch = text => {
     setSearchVal(text);
     const re = new RegExp(text, 'i');
     if (searchFriends) {
-      setUsersArray(
-        usersList.filter((user) => re.test(user.userName))
-        );
+      setUsersArray(usersList.filter(user => re.test(user.userName)));
     } else {
-      setQuestArray(
-        quests.filter((quest) => re.test(quest.name))
-        );
+      setQuestArray(quests.filter(quest => re.test(quest.name)));
     }
   };
 
@@ -111,19 +107,19 @@ const SearchDetailsScreen = ({navigation}) => {
         ),
     });
   });
-  
+
   let renderList;
   if (searchFriends) renderList = searchVal ? usersArray : usersList;
   else renderList = searchVal ? questArray : quests;
-  
+
   return (
     <View style={{marginTop: 20, flex: 1}}>
-      <Input 
-        label="search" 
-        onChangeText={(text) => handleSearch(text)}
+      <Input
+        label="search"
+        onChangeText={text => handleSearch(text)}
         value={searchVal}
       />
-      
+
       {searchFriends ? (
         <>
           <Text style={styles.title}>All Users</Text>

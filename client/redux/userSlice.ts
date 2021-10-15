@@ -43,13 +43,11 @@ export const userSlice = createSlice({
   reducers: {
     clearState: state => {
       console.log('clearState:');
-      console.log('state', state);
       state.user = initialState.user;
       state.isAuthenticated = false;
     },
     signOut: (state, body) => {
       state.user = initialState.user;
-      console.log('BOODDY', body);
       const removeToken = async () => {
         state.isAuthenticated = false;
         await AsyncStorage.removeItem('token', body.data.token);
@@ -57,7 +55,6 @@ export const userSlice = createSlice({
       removeToken();
     },
     register: (state, body) => {
-      console.log('user/register', body);
       state.user = {
         ...body.data.user,
       };
@@ -65,7 +62,6 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     signIn: (state, body) => {
-      console.log('user/login', body);
       setToken(body.data.data);
       state.isAuthenticated = true;
     },
