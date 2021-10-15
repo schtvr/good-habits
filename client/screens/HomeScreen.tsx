@@ -145,6 +145,10 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           title="Achievements"
           onPress={() => navigation.navigate('Achievements')}
         />
+        <Button
+          title="Other Profile"
+          onPress={() => navigation.navigate('OtherUser')}
+        />
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
           <Text style={styles.level}>Lvl {user.level}</Text>
@@ -156,7 +160,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           />
           <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
         </View>
-        {activeQuests.length ? (
+        { activeQuests.length ? (
           <View style={styles.container}>
             <Text style={styles.activeQuests}>Active Quests</Text>
             {renderAccordians()}
