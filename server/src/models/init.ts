@@ -10,8 +10,20 @@ import CompletedQuest from './completedQuest';
 import RequestList from './requestList';
 import FriendList from './friendList';
 import FirebaseToken from './firebaseToken';
+import firebase from 'firebase-admin';
+// Best practice: Get the credential file and db url from environment varible
+const serviceAccount = require('../../good-habits-79e11-firebase-adminsdk-ivczh-43fd051544.json');
+const dbUrl = 'https://good-habits-79e11-default-rtdb.firebaseio.com/'; 
 
 const dbInit = async () => {
+  try {
+    firebase.initializeApp({
+      credential: firebase.credential.cert(serviceAccount),
+      databaseURL: dbUrl,
+    });
+  } catch (err) {
+    console.log('Failed to start firebase lol: ', err);
+  }
   await User.sync();
   await Quest.sync();
   await AchievementTemplate.sync();
