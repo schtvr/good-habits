@@ -40,12 +40,12 @@ const completeTaskById = async (req: Request, res:Response) => {
         taskId: req.params.taskId
       }
     });
-    if (completed) return sendRes(res, false, 400, 'You already completed this task!');
+    if (completed) return sendRes(res, false, 400, 'You already completed this task (dummy)!');
     
-    await task.complete(user.id, true);
+    const completedTask = await task.complete(user.id, true);
     const update = createUpdate();
     update.gainedExp += task.completionExp;
-    update.tasks.push(task);
+    update.tasks.push(completedTask);
     await checkAchievements(user, 'Tasks', update);
 
     return sendRes(res, true, 200, 'Task completed', update);

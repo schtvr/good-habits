@@ -1,10 +1,10 @@
-import Task from '../models/task';
+import TaskHistory from '../models/taskHistory';
 import AchievementTemplate from '../models/achievementTemplate';
 import Quest from '../models/quest';
 
 export interface IUpdate {
   achievements: AchievementTemplate[]
-  tasks: Task[]
+  tasks: TaskHistory[]
   quests: Quest[]
   gainedExp: number
 }
