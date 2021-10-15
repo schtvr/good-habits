@@ -225,7 +225,7 @@ describe('User controller', () => {
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
 
-      const res3 = await request.put(`/user/${res2.body['data'][0].id}/acceptFriendRequest`).set(
+      const res3 = await request.put(`/user/acceptFriendRequest/${res2.body['data'][0].id}`).set(
         'Authorization',
         `Bearer ${token2}`
       );

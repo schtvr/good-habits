@@ -65,7 +65,7 @@ const findUserById = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
-  try{
+  try {
     const user = await User.findOne({
       where: {
         id: req.params.userId
@@ -82,10 +82,11 @@ const findUserById = async (req: Request, res: Response) => {
     });
 
     return sendRes(res, true, 200, 'Here is the user lol', user);
-  } catch(err) {
+  } catch (err) {
     return sendRes(res, false, 500, 'Not suprised this errored', err);
   }
-}
+};
+
 const putFriendRequest = async (req: Request, res: Response) => {
   const friendId = req.params.id;
   const user = req.user;
@@ -137,9 +138,8 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
       data: err,
     });
   }
-
-
 };
+
 const getFriendRequestSent = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return res.status(403).send({
