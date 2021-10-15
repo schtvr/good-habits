@@ -12,20 +12,21 @@ import {
 import {LinearProgress} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IQuest, IUser} from '../interfaces/interfaces';
-import {useDispatch, useSelector} from 'react-redux';
-import {getUser, stateSelector} from '../redux/userSlice';
+import {useSelector, useDispatch} from 'react-redux';
+import {stateSelector} from '../redux/userSlice';
 import {
   questSelector,
-  getActiveQuests,
-  getActiveTasks,
 } from '../redux/questSlice';
 import {
   friendSelector,
-  getAllFriends,
-  getFriendRequest,
 } from '../redux/friendSlice';
+import { getUserById, 
+  getUsersActiveQuests, 
+  getUsersFriends, 
+  getDailyTasks, 
+  getMyFriendRequests,
+  getUserTaskHistory } from '../funcs/dispatch/dispatchFuncs'
 
 interface Props {
   userFriends: [];
@@ -36,88 +37,18 @@ interface Props {
 
 const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
-
   const {user} = useSelector(stateSelector);
   const {myFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
 
-  const getToken = async () => {
-    return await AsyncStorage.getItem('token');
-  };
-
-  const getMyFriendRequests = async () => {
-    dispatch(
-      getFriendRequest({
-        api: {
-          url: 'user/friendRequestReceived',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
-  const getUserById = async () => {
-    dispatch(
-      getUser({
-        api: {
-          url: 'user',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
-  const getDailyTasks = async () => {
-    console.log('RETREIVING DAILY TASKS');
-    dispatch(
-      getActiveTasks({
-        api: {
-          url: 'tasks/daily',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
-  const getUsersActiveQuests = async () => {
-    dispatch(
-      getActiveQuests({
-        api: {
-          url: 'quest/getActiveQuests',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
-  const getUsersFriends = async () => {
-    dispatch(
-      getAllFriends({
-        api: {
-          url: 'user/friends',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
   useEffect(() => {
     const start = async () => {
-      await getUserById();
-      await getUsersActiveQuests();
-      await getUsersFriends();
-      await getDailyTasks();
-      await getMyFriendRequests();
+      await getUserById(dispatch);
+      await getUsersActiveQuests(dispatch);
+      await getUsersFriends(dispatch);
+      await getDailyTasks(dispatch);
+      await getMyFriendRequests(dispatch);
+      await getUserTaskHistory(dispatch);
     };
     start();
   }, [myQuests]);
