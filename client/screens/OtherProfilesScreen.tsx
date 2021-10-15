@@ -5,7 +5,7 @@ import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
-import { questSelector, getOtherUserActiveQuests, getOtherUserCompletedQuests} from '../redux/questSlice';
+import { questSelector, getAllQuests, getOtherUserActiveQuests, getOtherUserCompletedQuests} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getOtherUser, stateSelector } from '../redux/userSlice';
 
@@ -13,14 +13,23 @@ const OtherProfileScreen = () => {
   const dispatch = useDispatch();
   const { otherUser } = useSelector(stateSelector);
   const { userName, level } = otherUser;
-  const { otherUserQuests } = useSelector(questSelector);
+  const { otherUserQuests, quests } = useSelector(questSelector);
   const { completedQuests, activeQuests } = otherUserQuests;
   const otherUserId = 3;
+  let scopedCompletedQuests = []
+  let scopedActiveQuests = []
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
   const populateOtherUser = async () => {
+    dispatch(
+      getAllQuests({
+        api: {
+          url: 'quests',
+        },
+      }),
+    );
     dispatch(
       getOtherUser({
         api: {
@@ -53,11 +62,19 @@ const OtherProfileScreen = () => {
     )
   }
 
+  const populateQuestDetails = (questList) => {
+    return questList.map((passedQuest) => {
+      return quests.filter(quest => quest.id === passedQuest.questId)
+    })
+  }
+
   useEffect(() => {
     populateOtherUser();
+    scopedCompletedQuests = populateQuestDetails(completedQuests);
+    scopedActiveQuests = populateQuestDetails(activeQuests);
   }, [])
 
-  console.log('OTHER USER QUESTS', activeQuests)
+  console.log('QUESTS', scopedActiveQuests)
 
   return (
     <View>
@@ -70,10 +87,10 @@ const OtherProfileScreen = () => {
       />
       <QuestListCard
         cardTitle={`${userName}'s active quests`}
-        questList={activeQuests}/>
+        questList={scopedActiveQuests}/>
       <QuestListCard
         cardTitle={`${userName}'s previous quests`}
-        questList={completedQuests}/>
+        questList={scopedCompletedQuests}/>
     </View>
   );
 }
