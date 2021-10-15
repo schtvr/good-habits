@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { signIn, stateSelector } from '../redux/userSlice'
+import {useDispatch, useSelector} from 'react-redux';
+import {signIn, stateSelector} from '../redux/userSlice';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Input, Text, Button} from 'react-native-elements';
 
@@ -15,17 +15,17 @@ const LoginScreen = ({navigation}): JSX.Element => {
   const dispatch = useDispatch();
 
   const signInUser = async () => {
-    console.log(userState);
-    console.log('logging in in', state)
-    dispatch(signIn({
-      api: {
-        method: 'POST',
-        url: 'login',
-        body: {...userState},
-      }
-    }))
+    dispatch(
+      signIn({
+        api: {
+          method: 'POST',
+          url: 'login',
+          body: {...userState},
+        },
+      }),
+    );
     setLoginError(state.error);
-  } 
+  };
 
   return (
     <View style={styles.container}>
