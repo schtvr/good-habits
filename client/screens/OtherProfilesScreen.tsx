@@ -63,6 +63,7 @@ const OtherProfileScreen = () => {
   }
 
   const populateQuestDetails = (questList) => {
+    console.log('1st pass', questList)
     return questList.map((passedQuest) => {
       return quests.filter(quest => quest.id === passedQuest.questId)
     })
@@ -71,10 +72,11 @@ const OtherProfileScreen = () => {
   useEffect(() => {
     populateOtherUser();
     scopedCompletedQuests = populateQuestDetails(completedQuests);
+    console.log(scopedCompletedQuests)
     scopedActiveQuests = populateQuestDetails(activeQuests);
   }, [])
 
-  console.log('QUESTS', scopedActiveQuests)
+  console.log('QUESTS', activeQuests)
 
   return (
     <View>

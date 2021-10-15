@@ -14,7 +14,7 @@ import { stateSelector } from '../redux/userSlice';
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { activeQuests, completedQuests } = useSelector(questSelector)
-  const { userName, level } = useSelector(stateSelector)
+  const {user} = useSelector(stateSelector)
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -45,14 +45,14 @@ const ProfileScreen = () => {
   useEffect(() => {
     populateQuests();
   }, []);
-
+  console.log(user)
   return (
     <View>
       <ProfileHeader
-        userName={userName}/>
+        userName={user.userName}/>
       <CuratedTrophies />
       <CompletedStats
-        level={level}
+        level={user.level}
         howManyCompletedQuestsYouGotLilBoy={completedQuests.length}/>
       <QuestListCard
         cardTitle="Your active quests"
