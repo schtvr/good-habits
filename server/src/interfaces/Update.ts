@@ -6,6 +6,7 @@ export interface IUpdate {
   achievements: AchievementTemplate[]
   tasks: TaskHistory[]
   quests: Quest[]
+  friend: any[]
   gainedExp: number
 }
 
@@ -14,6 +15,7 @@ export const createUpdate = (): IUpdate => {
     achievements: [],
     tasks: [],
     quests: [],
+    friend: [],
     gainedExp: 0
   };
 };

@@ -55,15 +55,11 @@ export const userSlice = createSlice({
     ...initialState,
   },
   reducers: {
-    clearState: state => {
-      state.user = initialState.user;
-      state.isAuthenticated = false;
-    },
     signOut: (state, body) => {
       state.user = initialState.user;
       const removeToken = async () => {
         state.isAuthenticated = false;
-        await AsyncStorage.removeItem('token', body.data.token);
+        await AsyncStorage.removeItem('token');
       };
       removeToken();
     },
@@ -75,6 +71,7 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     signIn: (state, body) => {
+      console.log(state);
       setToken(body.data.data);
       state.isAuthenticated = true;
     },
@@ -105,7 +102,6 @@ export const {
   register,
   signIn,
   signOut,
-  clearState,
   getOtherUser,
   getUsers,
   getUser,

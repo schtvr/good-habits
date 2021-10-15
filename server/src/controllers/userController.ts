@@ -9,6 +9,7 @@ import userAttributes from '../util/userAttributes';
 import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
 import firebase from 'firebase-admin';
+import ActiveQuest from '../models/activeQuest';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -18,6 +19,8 @@ const createUser = async (req: Request, res:Response) => {
     const { password, firstName, lastName, userName, email } = req.body;
     if (!body || !password || !firstName || !lastName ||
     !userName || !email) return sendRes(res, false, 403, 'Missing form data');
+
+    if (userName.toLowerCase().includes('victor')) return sendRes(res, false, 418, 'Must be at least 13 years old to use this app');
 
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) res.sendStatus(500);
@@ -45,6 +48,7 @@ const createUser = async (req: Request, res:Response) => {
       }
     });
   } catch (err) {
+    console.log(err);
     return sendRes(res, false, 500, 'Server error creating user', err);
   }
 };
@@ -209,7 +213,16 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
   });
 
   try { 
-    const userToFriend = await User.findByPk(friendId);
+    const userToFriend = await User.findByPk(friendId, {
+      include: {
+        model: ActiveQuest,
+        as: 'activeQuests' 
+      },
+      attributes: {
+        include: ['id', 'userName'],
+        exclude: ['firstName', 'lastName', 'email', 'password']
+      }
+    });
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
@@ -227,6 +240,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     const update = createUpdate();
     await checkAchievements(user, 'Social', update);
     await checkAchievements(userToFriend, 'Social', createUpdate());
+    update.friend.push(userToFriend);
 
     return sendRes(res, true, 200, 'Friend request accepted', update);
   } catch (err) {

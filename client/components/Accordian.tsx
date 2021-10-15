@@ -7,7 +7,6 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
-  FlatList,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
@@ -112,34 +111,6 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
     </View>
   );
 };
-//{taskList.map(task => (
-//              <View key={task.id} style={{flexDirection: 'column'}}>
-//                <Text style={styles.content}>{task.name}</Text>
-//              </View>
-//            ))}
-
-
-//<View style={styles.child}>
-//  <View style={{flexDirection: 'column'}}>
-//    <Text style={styles.content}>{data}</Text>
-//  </View>
-//
-//  {btnText ? (
-//    <View style={styles.friendButtons}>
-//      <Button
-//        title={btnText}
-//        buttonStyle={styles.btn}
-//        onPress={() => console.log('hi')}
-//      />
-//      <Button
-//        title={btnText2}
-//        // type="outline"
-//        buttonStyle={styles.btn}
-//        onPress={() => console.log('hi')}
-//      />
-//    </View>
-//  ) : null}
-//</View>
 
 const styles = StyleSheet.create({
   row: {
