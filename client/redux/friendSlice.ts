@@ -18,8 +18,7 @@ export const friendSlice = createSlice({
       state.myFriends = body.data.data;
     },
     addFriend: (state, body) => {
-      console.log(body);
-      // state.myFriends = body.data.data;
+      console.log('ADDED', body);
     },
     getFriendRequest: (state, body) => {
       console.log('RECIEVED', body.data.data);

@@ -9,24 +9,10 @@ import {
 } from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const friends = [
-  {
-    id: 1,
-    userName: 'Sean',
-    level: 5,
-  },
-  {id: 2, userName: 'Steve', level: 6},
-  {
-    id: 3,
-    userName: 'Juan',
-    level: 7,
-  },
-];
-
 const LeaderBoardScreen = () => {
   const [isGlobal, setIsGlobal] = useState(true);
   const toggleSwitch = () => setIsGlobal(previousState => !previousState);
-  const {globalRankings} = useSelector(stateSelector);
+  const {globalRankings, friendRankings} = useSelector(stateSelector);
   const dispatch = useDispatch();
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -44,9 +30,22 @@ const LeaderBoardScreen = () => {
       }),
     );
   };
+  const getFriendRankings = async () => {
+    dispatch(
+      getFriendRanking({
+        api: {
+          url: 'leaderboards/friends',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
 
   useEffect(() => {
     getGlobalRankings();
+    getFriendRankings();
   }, []);
 
   const makeList = players => {
@@ -55,7 +54,7 @@ const LeaderBoardScreen = () => {
 
   const playerList = isGlobal
     ? makeList([...globalRankings])
-    : makeList([...friends]);
+    : makeList([...friendRankings]);
 
   return (
     <View style={styles.body}>
