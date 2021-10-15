@@ -4,12 +4,13 @@ import dbInit from './models/init';
 import router from './router';
 import cors from 'cors';
 import populateDb from './funcs/populateDb/populatedb';
+import firebaseInit from './util/firebase';
 const app = express();
 
 const corsConfig = {
   origin: 'http://localhost:3000/',
 };
-
+firebaseInit();
 app.use(cors());
 app.use(express.json());
 app.use(router);

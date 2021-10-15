@@ -44,7 +44,14 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
       message: 'User not found'
     });
     req.user = user;
-
+    try {
+      const gottenToken = await user.getFirebaseTokens();
+      if (!gottenToken) await user.createFirebaseTokens({firebaseId: 'hudsahguydsaghuydsa'});
+      req.firebaseToken = await user.getFirebaseTokens();
+    } catch (err) {
+      console.log(err);
+    }
+    
     return next();
   });
 };

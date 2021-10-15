@@ -9,6 +9,7 @@ import Blacklist from './blacklist';
 import CompletedQuest from './completedQuest';
 import RequestList from './requestList';
 import FriendList from './friendList';
+import FirebaseToken from './firebaseToken';
 
 const dbInit = async () => {
   await User.sync();
@@ -22,6 +23,7 @@ const dbInit = async () => {
   await CompletedQuest.sync();
   await RequestList.sync();
   await FriendList.sync();
+  await FirebaseToken.sync();
 };
 
 export default dbInit;
