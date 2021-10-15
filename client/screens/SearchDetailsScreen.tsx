@@ -7,13 +7,11 @@ import {
   Switch,
   TouchableOpacity,
 } from 'react-native';
-import {IQuest} from '../interfaces/interfaces';
 import {Avatar, Input} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllQuests, questSelector} from '../redux/questSlice';
 import {getUsers, stateSelector} from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {addFriend, friendSelector} from '../redux/friendSlice';
 
 const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -25,7 +23,6 @@ const SearchDetailsScreen = ({navigation}) => {
   const [searchFriends, setSearchFriends] = useState(false);
   const [searchVal, setSearchVal] = useState('');
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
-  const keyExtractor = (index: number) => index.toString();
 
   const renderItem = ({item, index}) => {
     return (
@@ -129,7 +126,7 @@ const SearchDetailsScreen = ({navigation}) => {
             data={renderList}
             numColumns={3}
             renderItem={renderItem}
-            keyExtractor={keyExtractor}
+            keyExtractor={(item) => item.id}
           />
         </>
       ) : (
@@ -139,7 +136,7 @@ const SearchDetailsScreen = ({navigation}) => {
           <FlatList
             data={renderList}
             numColumns={3}
-            keyExtractor={keyExtractor}
+            keyExtractor={(item) => item.id}
             renderItem={({item}) => {
               return (
                 <View style={styles.listItems}>
