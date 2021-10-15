@@ -21,7 +21,7 @@ export const friendSlice = createSlice({
       console.log('ADDED', body);
     },
     getFriendRequest: (state, body) => {
-      console.log('RECIEVED', body.data.data);
+      console.log('RECIEVED', body);
       if (body.data.data[0]) {
         state.friendRequests.push(
           body.data.data[0].friendRequests,
@@ -31,7 +31,7 @@ export const friendSlice = createSlice({
     },
     acceptFriendRequest: (state, body) => {
       console.log('ACCEPT', body);
-      state.myFriends = body.data.data;
+      state.myFriends.push(body.data.data);
     },
     rejectFriendRequest: (state, body) => {
       console.log('ACCEPT', body);
