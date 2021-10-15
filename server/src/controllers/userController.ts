@@ -27,11 +27,8 @@ const createUser = async (req: Request, res:Response) => {
         try {
           const gottenToken = await user.getFirebaseTokens();
           if (!gottenToken) {
-            if (!req.body.firebaseId) return res.status(404).send({
-              status: 'Bad',
-              message: 'You need to send the firebaseId in body'
-            });
-            await user.createFirebaseTokens({firebaseId: req.body.firebaseId});
+            if (req.body.firebaseId) await user.createFirebaseTokens({firebaseId: req.body.firebaseId});
+            
           } 
         } catch (err) {
           console.log(err);
@@ -120,9 +117,11 @@ const putFriendRequest = async (req: Request, res: Response) => {
     
     await userToFriend.addRequestees(user.id);
     // try {
-    const token = await userToFriend.getFirebaseTokens() || 'lol';
-    console.log(token);
-    if (!token) return sendRes(res, false, 404, 'This person doesnt have a token dum dum');
+    const token = await userToFriend.getFirebaseTokens() || undefined;
+    if (!token) return res.status(200).send({
+      status: 'Okay',
+      message: 'Friend request sent'
+    });
     
     const message = {
       notification: {

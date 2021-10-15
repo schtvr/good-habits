@@ -28,11 +28,7 @@ const login = async (req: Request, res: Response) => {
     
     try {
       const gottenToken = await user.getFirebaseTokens();
-      if (!gottenToken) {
-        if (!req.body.firebaseId) return res.status(404).send({
-          status: 'Bad',
-          message: 'You need to send the firebaseId in body'
-        });
+      if (!gottenToken && req.body.firebaseId) {
         await user.createFirebaseTokens({firebaseId: req.body.firebaseId});
       } 
     } catch (err) {
