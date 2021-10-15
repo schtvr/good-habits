@@ -26,7 +26,6 @@ const SettingsScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const logoutUser = async () => {
     await userLogOut(dispatch);
-    console.log('logged out')
   };
   return (
     <ScrollView>
