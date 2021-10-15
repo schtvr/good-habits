@@ -54,7 +54,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
     return (
       <View style={styles.carousel}>
         <View>
-          <Text style={styles.friendName}>{item.name}</Text>
+          <Text style={styles.friendName}>{item.userName}</Text>
           <TouchableOpacity onPress={() => console.log('hello')}>
             <Image
               style={styles.avatar}
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     color: '#979dac',
     fontSize: 18,
     fontWeight: 'bold',
+    marginLeft: 10,
   },
   carousel: {
     borderWidth: 1,

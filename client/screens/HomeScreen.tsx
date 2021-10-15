@@ -17,7 +17,11 @@ import {IQuest, IUser} from '../interfaces/interfaces';
 import {useDispatch, useSelector} from 'react-redux';
 import userSlice, {getUser, stateSelector} from '../redux/userSlice';
 import {questSelector, getActiveQuests} from '../redux/questSlice';
-import {friendSelector, getAllFriends} from '../redux/friendSlice';
+import {
+  friendSelector,
+  getAllFriends,
+  getFriendRequest,
+} from '../redux/friendSlice';
 
 const friends = [
   {
@@ -50,9 +54,22 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const {user} = useSelector(stateSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
   const {myFriends} = useSelector(friendSelector);
-
+  console.log('MYFRIENDS', myFriends);
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
+  };
+
+  const getMyFriendRequests = async () => {
+    dispatch(
+      getFriendRequest({
+        api: {
+          url: 'user/friendRequestReceived',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
   };
 
   const getUserById = async () => {
@@ -99,6 +116,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       await getUserById();
       await getUsersActiveQuests();
       await getUsersFriends();
+      await getMyFriendRequests();
     };
     start();
   }, [myQuests]);
@@ -156,7 +174,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           </View>
         )}
         <Text style={styles.activeFriends}>Active Friends</Text>
-        <CarouselComponent data={friends} />
+        <CarouselComponent data={myFriends} />
       </ScrollView>
     </View>
   );
