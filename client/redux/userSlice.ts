@@ -78,6 +78,7 @@ export const userSlice = createSlice({
       else state.error = 'server error';
     },
     getUser: (state, body) => {
+      console.log('KAKAKAKAKAK', body.data.data)
       state.user = body.data.data;
     },
     getAllRanking: (state, body) => {

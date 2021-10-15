@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {View, Text, Image, StyleSheet} from 'react-native';
-import { user } from '../../screens/ProfileScreen';
+import { stateSelector } from '../../redux/userSlice';
 import CircularProgressBar from './progressCircle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const ProfileHeader = () => {
-
+  const { user } = useSelector(stateSelector);
+  const profileUrl = 'https://i.imgur.com/1dhHIkV.png';
 
   return (
     <View style={styles.container}>
       <View style={styles.pfp}>
         <Image
           style={styles.image}
-          source={{
-            uri: user.profileUrl
-          }}
+          source={{ uri: profileUrl }}
         />
         <Text style={styles.userName}>
           { user.userName }

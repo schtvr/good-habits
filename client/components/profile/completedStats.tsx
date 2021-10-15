@@ -1,10 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {View, Text, StyleSheet} from 'react-native';
-import { user } from '../../screens/ProfileScreen';
+import { stateSelector } from '../../redux/userSlice';
 import CircularProgressBar from './progressCircle';
 
 
 const CompletedStats = () => {
+  const { user } = useSelector(stateSelector);
+
 
   return (
     <View style={styles.pfp}>
