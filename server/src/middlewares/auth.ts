@@ -47,7 +47,6 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const gottenToken = await user.getFirebaseTokens();
       if (!gottenToken) await user.createFirebaseTokens({firebaseId: 'hudsahguydsaghuydsa'});
-      req.firebaseToken = await user.getFirebaseTokens();
     } catch (err) {
       console.log(err);
     }

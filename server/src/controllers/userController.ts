@@ -8,6 +8,7 @@ import stripPassword from '../funcs/stripPassword';
 import userAttributes from '../util/userAttributes';
 import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
+import firebase from 'firebase-admin';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -105,6 +106,31 @@ const putFriendRequest = async (req: Request, res: Response) => {
     if (userToFriend.id === user.id) return sendRes(res, false, 403, 'You sent a friend request to yourself. why?');
     
     await userToFriend.addRequestees(user.id);
+    // try {
+    const token = await userToFriend.getFirebaseTokens() || 'lol';
+      
+    if (!token) return sendRes(res, false, 404, 'This person doesnt have a token dum dum');
+    
+    const message = {
+      notification: {
+        title: 'You got a friend request loser',
+        body: `from ${user.userName}`
+      },
+      token: token.firebaseId
+    };
+    try {
+      firebase.messaging().send(message)
+        .then((response) => {
+        // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+
     return res.status(200).send({
       status: 'Okay',
       message: 'Friend request sent'
