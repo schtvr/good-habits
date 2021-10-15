@@ -17,7 +17,11 @@ import {IQuest, IUser} from '../interfaces/interfaces';
 import {useDispatch, useSelector} from 'react-redux';
 import userSlice, {getUser, stateSelector} from '../redux/userSlice';
 import {questSelector, getActiveQuests, getActiveTasks} from '../redux/questSlice';
-import {friendSelector, getAllFriends} from '../redux/friendSlice';
+import {
+  friendSelector,
+  getAllFriends,
+  getFriendRequest,
+} from '../redux/friendSlice';
 
 const friends = [
   {
@@ -54,6 +58,20 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
+
+  const getMyFriendRequests = async () => {
+    dispatch(
+      getFriendRequest({
+        api: {
+          url: 'user/friendRequestReceived',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
+
   const getUserById = async () => {
     dispatch(
       getUser({
@@ -113,6 +131,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       await getUsersActiveQuests();
       await getUsersFriends();
       await getDailyTasks();
+      await getMyFriendRequests();
     };
     start();
   }, [myQuests]);
@@ -138,6 +157,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           title="Achievements"
           onPress={() => navigation.navigate('Achievements')}
         />
+
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
           <Text style={styles.level}>Lvl {user.level}</Text>
@@ -149,7 +169,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           />
           <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
         </View>
-        {activeQuests.length ? (
+        { activeQuests.length ? (
           <View style={styles.container}>
             <Text style={styles.activeQuests}>Active Quests</Text>
             {renderAccordians()}
@@ -163,7 +183,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           </View>
         )}
         <Text style={styles.activeFriends}>Active Friends</Text>
-        <CarouselComponent data={friends} />
+        <CarouselComponent data={myFriends} />
       </ScrollView>
     </View>
   );

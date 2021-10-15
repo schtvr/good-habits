@@ -1,12 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-
+import {
+  Badge,
+  Icon,
+  withBadge,
+  Overlay,
+  Button,
+  Input,
+} from 'react-native-elements';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SocialScreen from './screens/SocialScreen';
@@ -25,6 +33,14 @@ import RegisterPage from './screens/RegisterPage';
 import {stateSelector} from './redux/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import SearchDetailsScreen from './screens/SearchDetailsScreen';
+
+import {
+  getFriendRequest,
+  friendSelector,
+  acceptFriendRequest,
+} from './redux/friendSlice';
+
+import OtherProfileScreen from './screens/OtherProfilesScreen';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,18 +65,96 @@ const AuthStack = () => (
 //Tabstack
 const headerRight = () => {
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+  const {friendRequests} = useSelector(friendSelector);
+  console.log('FRIEND REQUESTS', friendRequests)
+  let id;
+  if (friendRequests[0]) {
+    id = friendRequests[0].requesteeId;
+  }
+  const dispatch = useDispatch();
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+  const acceptMyFriendRequest = async () => {
+    dispatch(
+      acceptFriendRequest({
+        api: {
+          method: 'PUT',
+          url: `user/acceptFriendRequest/${id}`,
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
+
+  // useEffect(() => {
+  //   acceptMyFriendRequest();
+  // });
+
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => alert('Notifications!')}>
+      <Badge
+        badgeStyle={{position: 'absolute', right: -50}}
+        value={friendRequests.length / 2}
+        status="error"
+      />
+      <TouchableOpacity onPress={toggleOverlay}>
         <MaterialCommunityIcons
           style={styles.icons}
           name="notifications-none"
           size={30}
         />
       </TouchableOpacity>
+
       <TouchableOpacity onPress={() => navigation.navigate('Search')}>
         <MaterialCommunityIcons style={styles.icons} name="search" size={30} />
       </TouchableOpacity>
+      <Overlay
+        isVisible={visible}
+        onBackdropPress={toggleOverlay}
+        overlayStyle={{height: 200, width: 300}}>
+        <Text style={styles.content}>Change username</Text>
+        <View
+          style={{
+            alignItems: 'center',
+            borderColor: 'black',
+            borderWidth: 1,
+            flex: 1,
+            justifyContent: 'flex-end',
+          }}>
+          <Text>{friendRequests[1]}</Text>
+          <Button
+            title="Accept"
+            onPress={acceptMyFriendRequest}
+            buttonStyle={{
+              width: 100,
+              borderRadius: 10,
+              backgroundColor: '#383be0',
+            }}
+          />
+          <Button
+            title="Reject"
+            buttonStyle={{
+              width: 100,
+              borderRadius: 10,
+              backgroundColor: '#383be0',
+            }}
+          />
+          <Button
+            title="cancel"
+            type="clear"
+            buttonStyle={{width: 100, borderRadius: 10}}
+            titleStyle={{color: '#383be0'}}
+            onPress={toggleOverlay}
+          />
+        </View>
+      </Overlay>
     </View>
   );
 };
@@ -127,6 +221,7 @@ const TabStack = () => {
 
 const App: () => Node = () => {
   const {isAuthenticated} = useSelector(stateSelector);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
@@ -145,6 +240,7 @@ const App: () => Node = () => {
                 component={TabStack}
               />
               <Stack.Screen name="Achievements" component={AchievementsPage} />
+              <Stack.Screen name="OtherUser" component={OtherProfileScreen} />
               <Stack.Screen
                 name="QuestDetailsScreen"
                 component={QuestDetailsScreen}
@@ -169,6 +265,9 @@ const styles = StyleSheet.create({
   },
   icons: {
     margin: 10,
+  },
+  content: {
+    fontSize: 16,
   },
 });
 

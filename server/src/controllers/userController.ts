@@ -49,13 +49,41 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-const findUserById = async (req: Request, res: Response) => {
+const getYourInfo = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Unauthorized token');
   try {
     return sendRes(res, true, 200, 'Here is the user lol', stripPassword(user));
   } catch (err) {
     return sendRes(res, false, 500, 'Server error finding user', err);
+  }
+};
+
+const findUserById = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  if (!userId) return res.status(403).send({
+    status: 'Bad',
+    message: 'Missing userId or not authenticated',
+  });
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.userId
+      },
+      attributes : {
+        include: ['id', 'userName', 'level', 'exp'],
+        exclude: [
+          'password',
+          'email',
+          'firstName',
+          'lastName',
+        ]
+      }
+    });
+
+    return sendRes(res, true, 200, 'Here is the user lol', user);
+  } catch (err) {
+    return sendRes(res, false, 500, 'Not suprised this errored', err);
   }
 };
 
@@ -66,8 +94,10 @@ const putFriendRequest = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
+
   try { 
     const userToFriend = await User.findByPk(friendId);
+
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
@@ -84,7 +114,7 @@ const putFriendRequest = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
 };
 
@@ -94,7 +124,7 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Not authenticated',
   });
-  try { 
+  try {
     const friendRequests = await user.getRequestees(userAttributes);
     return res.status(200).send({
       status: 'Okay',
@@ -106,18 +136,17 @@ const getFriendRequestReceived = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
-
-
 };
+
 const getFriendRequestSent = async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) return res.status(403).send({
     status: 'Bad',
     message: 'Not authenticated',
   });
-  try { 
+  try {
     const friendRequests = await user.getRequesters(userAttributes);
     return res.status(200).send({
       status: 'Okay',
@@ -129,7 +158,7 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
 };
 
@@ -140,6 +169,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
+
   try { 
     const userToFriend = await User.findByPk(friendId);
     if (!userToFriend) return res.status(404).send({
@@ -155,7 +185,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     await user.removeRequestee([userToFriend.id]);
     await user.addFriends(userToFriend.id);
     await userToFriend.addFriends(user.id);
-    
+
     const update = createUpdate();
     await checkAchievements(user, 'Social', update);
     await checkAchievements(userToFriend, 'Social', createUpdate());
@@ -166,7 +196,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
 };
 const getFriends = async (req: Request, res: Response) => {
@@ -175,7 +205,7 @@ const getFriends = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Not authenticated',
   });
-  try { 
+  try {
     const friends = await user.getFriends(userAttributes);
     return res.status(200).send({
       status: 'Okay',
@@ -187,7 +217,7 @@ const getFriends = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
 };
 
@@ -200,6 +230,7 @@ const cancelFriendRequest = async (req: Request, res: Response) => {
   });
   try { 
     const userToCancel = await User.findByPk(friendId);
+
     if (!userToCancel) return res.status(404).send({
       status: 'Bad',
       message: 'That user does not exist'
@@ -220,7 +251,7 @@ const cancelFriendRequest = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
 };
 
@@ -231,8 +262,10 @@ const unfriend = async (req: Request, res: Response) => {
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
+
   try { 
     const userToUnFriend = await User.findByPk(friendId);
+
     if (!userToUnFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
@@ -253,7 +286,7 @@ const unfriend = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Internal Server Error',
       data: err,
-    }); 
+    });
   }
 };
 
@@ -267,5 +300,6 @@ export default {
   getFriendRequestSent,
   putFriendRequest,
   getFriends,
-  getAllUsers
+  getAllUsers,
+  getYourInfo
 };
