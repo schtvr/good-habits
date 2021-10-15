@@ -33,7 +33,11 @@ import RegisterPage from './screens/RegisterPage';
 import {stateSelector} from './redux/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import SearchDetailsScreen from './screens/SearchDetailsScreen';
-import {getFriendRequest, friendSelector} from './redux/friendSlice';
+import {
+  getFriendRequest,
+  friendSelector,
+  acceptFriendRequest,
+} from './redux/friendSlice';
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -62,13 +66,37 @@ const headerRight = () => {
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
-  console.log('friend requests', friendRequests);
-  const BadgedIcon = withBadge(1)(Icon);
+  let id;
+  if (friendRequests[0]) {
+    id = friendRequests[0].requesteeId;
+  }
+  const dispatch = useDispatch();
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+  const acceptMyFriendRequest = async () => {
+    dispatch(
+      acceptFriendRequest({
+        api: {
+          method: 'PUT',
+          url: `user/${id}/acceptFriendRequest`,
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        },
+      }),
+    );
+  };
+
+  // useEffect(() => {
+  //   acceptMyFriendRequest();
+  // });
+
   return (
     <View style={styles.header}>
       <Badge
         badgeStyle={{position: 'absolute', right: -50}}
-        value={friendRequests.length}
+        value={friendRequests.length / 2}
         status="error"
       />
       <TouchableOpacity onPress={toggleOverlay}>
@@ -95,9 +123,18 @@ const headerRight = () => {
             flex: 1,
             justifyContent: 'flex-end',
           }}>
-          <Text>{friendRequests.userName}</Text>
+          <Text>{friendRequests[1]}</Text>
           <Button
-            title="Save"
+            title="Accept"
+            onPress={acceptMyFriendRequest}
+            buttonStyle={{
+              width: 100,
+              borderRadius: 10,
+              backgroundColor: '#383be0',
+            }}
+          />
+          <Button
+            title="Reject"
             buttonStyle={{
               width: 100,
               borderRadius: 10,
@@ -178,32 +215,13 @@ const TabStack = () => {
 //Remove the ! or change isAuthenticated to true to see other screens!
 
 const App: () => Node = () => {
-  const dispatch = useDispatch();
-  const getToken = async () => {
-    return await AsyncStorage.getItem('token');
-  };
-  const getMyFriendRequests = async () => {
-    dispatch(
-      getFriendRequest({
-        api: {
-          url: 'user/friendRequestReceived',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
   const {isAuthenticated} = useSelector(stateSelector);
-  useEffect(() => {
-    getMyFriendRequests();
-  }, []);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {isAuthenticated ? (
+          {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
