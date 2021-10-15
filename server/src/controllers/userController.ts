@@ -60,18 +60,14 @@ const findUserById = async (req: Request, res: Response) => {
 };
 
 const putFriendRequest = async (req: Request, res: Response) => {
-  const userName = req.params.id;
+  const friendId = req.params.id;
   const user = req.user;
-  if (!userName || !user) return res.status(403).send({
+  if (!friendId || !user) return res.status(403).send({
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
   try { 
-    const userToFriend = await User.findOne({
-      where: {
-        userName
-      }
-    });
+    const userToFriend = await User.findByPk(friendId);
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
@@ -137,18 +133,14 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
 };
 
 const acceptFriendRequest = async (req: Request, res: Response) => {
-  const userName = req.params.id;
+  const friendId = req.params.id;
   const user = req.user;
-  if (!userName || !user) return res.status(403).send({
+  if (!friendId || !user) return res.status(403).send({
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
   try { 
-    const userToFriend = await User.findOne({
-      where: {
-        userName
-      }
-    });
+    const userToFriend = await User.findByPk(friendId);
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
@@ -200,17 +192,13 @@ const getFriends = async (req: Request, res: Response) => {
 
 const cancelFriendRequest = async (req: Request, res: Response) => {
   const user = req.user;
-  const userName = req.params.id;
-  if (!user || !userName) return res.status(403).send({
+  const friendId = req.params.id;
+  if (!user || !friendId) return res.status(403).send({
     status: 'Bad',
     message: 'Not authenticated',
   });
   try { 
-    const userToCancel = await User.findOne({
-      where: {
-        userName
-      }
-    });
+    const userToCancel = await User.findByPk(friendId);
     if (!userToCancel) return res.status(404).send({
       status: 'Bad',
       message: 'That user does not exist'
@@ -236,18 +224,14 @@ const cancelFriendRequest = async (req: Request, res: Response) => {
 };
 
 const unfriend = async (req: Request, res: Response) => {
-  const userName = req.params.id;
+  const friendId = req.params.id;
   const user = req.user;
-  if (!userName || !user) return res.status(403).send({
+  if (!friendId || !user) return res.status(403).send({
     status: 'Bad',
     message: 'Missing userId or not authenticated',
   });
   try { 
-    const userToUnFriend = await User.findOne({
-      where: {
-        userName
-      }
-    });
+    const userToUnFriend = await User.findByPk(friendId);
     if (!userToUnFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',

@@ -107,13 +107,14 @@ describe('User controller', () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
       );
       expect(res.body.status).toBe('Okay');
       expect(res.body.message).toBe('Friend request sent');
     });
+
     test('Should fail to send request if user doesn\'t exist', async () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
@@ -125,6 +126,7 @@ describe('User controller', () => {
       expect(res.body.status).toBe('Bad');
       expect(res.body.message).toBe('You sent me a user that doesn\'t exist dumdum');
     });
+
     test('Should be able to cancel friend request that exists', async () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
@@ -133,7 +135,7 @@ describe('User controller', () => {
         expiresIn: '7d'
       });
       
-      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -145,7 +147,7 @@ describe('User controller', () => {
       );
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
-      const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/cancelFriendRequest`).set(
+      const res3 = await request.put(`/user/${res2.body['data'][0].id}/cancelFriendRequest`).set(
         'Authorization',
         `Bearer ${token2}`
       );
@@ -162,6 +164,7 @@ describe('User controller', () => {
       expect(res4.body.data[0]?.userName).toBe(undefined);
       expect(res5.body.data[0]?.userName).toBe(undefined);
     });
+
     test('Should be not be able to cancel friend request that doesn\'t exist', async () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
@@ -170,7 +173,7 @@ describe('User controller', () => {
         expiresIn: '7d'
       });
       
-      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -182,7 +185,7 @@ describe('User controller', () => {
       );
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
-      const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/cancelFriendRequest`).set(
+      const res3 = await request.put(`/user/${res2.body['data'][0].id}/cancelFriendRequest`).set(
         'Authorization',
         `Bearer ${token2}`
       );
@@ -208,7 +211,7 @@ describe('User controller', () => {
         expiresIn: '7d'
       });
       
-      const res = await request.put(`/user/${dummyUser2.userName}/friendRequest`).set(
+      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -222,7 +225,7 @@ describe('User controller', () => {
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
 
-      const res3 = await request.put(`/user/${res2.body['data'][0]['userName']}/acceptFriendRequest`).set(
+      const res3 = await request.put(`/user/${res2.body['data'][0].id}/acceptFriendRequest`).set(
         'Authorization',
         `Bearer ${token2}`
       );
