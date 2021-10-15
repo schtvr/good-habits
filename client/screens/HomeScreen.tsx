@@ -15,31 +15,17 @@ import Accordian from '../components/Accordian';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IQuest, IUser} from '../interfaces/interfaces';
 import {useDispatch, useSelector} from 'react-redux';
-import userSlice, {getUser, stateSelector} from '../redux/userSlice';
-import {questSelector, getActiveQuests, getActiveTasks} from '../redux/questSlice';
+import {getUser, stateSelector} from '../redux/userSlice';
+import {
+  questSelector,
+  getActiveQuests,
+  getActiveTasks,
+} from '../redux/questSlice';
 import {
   friendSelector,
   getAllFriends,
   getFriendRequest,
 } from '../redux/friendSlice';
-
-const friends = [
-  {
-    id: 1,
-    name: 'Sean',
-    activeQuests: ['Improve posture'],
-  },
-  {
-    id: 2,
-    name: 'Steve',
-    activeQuests: ['Couch to 5k'],
-  },
-  {
-    id: 3,
-    name: 'Juan',
-    activeQuests: ['Couch to 5k'],
-  },
-];
 
 interface Props {
   userFriends: [];
@@ -93,11 +79,11 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           url: 'tasks/daily',
           headers: {
             Authorization: `Bearer ${await getToken()}`,
-          }
-        }
-      })
-    )
-  }
+          },
+        },
+      }),
+    );
+  };
 
   const getUsersActiveQuests = async () => {
     dispatch(
@@ -139,13 +125,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const renderAccordians = () => {
     const items = [];
     for (let item of activeQuests) {
-      items.push(
-        <Accordian
-          key={item.id}
-          title={item.name}
-          id={item.id}
-        />,
-      );
+      items.push(<Accordian key={item.id} title={item.name} id={item.id} />);
     }
     return items;
   };
@@ -169,7 +149,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           />
           <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
         </View>
-        { activeQuests.length ? (
+        {activeQuests.length ? (
           <View style={styles.container}>
             <Text style={styles.activeQuests}>Active Quests</Text>
             {renderAccordians()}

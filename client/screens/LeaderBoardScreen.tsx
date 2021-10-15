@@ -77,18 +77,16 @@ const LeaderBoardScreen = () => {
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Position</DataTable.Title>
-            <DataTable.Title>Id</DataTable.Title>
             <DataTable.Title>User</DataTable.Title>
-            <DataTable.Title numeric>Lvl</DataTable.Title>
+            <DataTable.Title numeric>Exp</DataTable.Title>
           </DataTable.Header>
 
           {playerList.map((player, index) => {
             return (
               <DataTable.Row key={player.id}>
                 <DataTable.Cell>{index + 1}</DataTable.Cell>
-                <DataTable.Cell>{player.id}</DataTable.Cell>
                 <DataTable.Cell>{player.userName}</DataTable.Cell>
-                <DataTable.Cell numeric>{player.level}</DataTable.Cell>
+                <DataTable.Cell numeric>{player.exp}</DataTable.Cell>
               </DataTable.Row>
             );
           })}

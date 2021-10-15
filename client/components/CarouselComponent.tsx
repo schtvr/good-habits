@@ -31,7 +31,6 @@ interface IProps {
 const CarouselComponent = ({data}: IProps): JSX.Element => {
   const [active, setActive] = useState<number>(0);
   const ref = useRef(null);
-
   const pagination = (): JSX.Element => {
     return (
       <Pagination
@@ -51,6 +50,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
   };
 
   const renderItem: ListRenderItem<IFriends> = ({item}) => {
+    console.log('ITEM', item);
     return (
       <View style={styles.carousel}>
         <View>
@@ -79,7 +79,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
         itemWidth={300}
         onSnapToItem={(index: number) => setActive(index)}
       />
-      <View>{pagination()}</View>
+      {data.length ? <View>{pagination()}</View> : null}
     </SafeAreaView>
   );
 };
