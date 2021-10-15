@@ -40,7 +40,6 @@ const AchievementsPage = (): JSX.Element => {
     };
     start();
   }, []);
-  console.log(achievements);
 
   const onOpenModal = (index: number) => {
     setSelectedItem(index);

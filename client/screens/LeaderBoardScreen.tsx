@@ -28,7 +28,6 @@ const LeaderBoardScreen = () => {
   const toggleSwitch = () => setIsGlobal(previousState => !previousState);
   const {globalRankings} = useSelector(stateSelector);
   const dispatch = useDispatch();
-  console.log('GLOBAL PLAYERS', globalRankings);
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };

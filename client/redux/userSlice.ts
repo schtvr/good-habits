@@ -42,7 +42,6 @@ export const userSlice = createSlice({
   },
   reducers: {
     clearState: state => {
-      console.log('clearState:');
       state.user = initialState.user;
       state.isAuthenticated = false;
     },
@@ -69,16 +68,14 @@ export const userSlice = createSlice({
       state.usersList = body.data.data;
     },
     error: (state, body) => {
-      console.log('user-error', body);
+      console.log('user-error', body.data);
       if (body.data) state.error = body.data.message;
       else state.error = 'server error';
     },
     getUser: (state, body) => {
-      console.log('KAKAKAKAKAK', body.data.data)
       state.user = body.data.data;
     },
     getAllRanking: (state, body) => {
-      console.log('BODY IN', body);
       state.globalRankings = body.data.data;
     },
     getFriendRanking: (state, body) => {
