@@ -5,14 +5,16 @@ import {Card, ListItem, Button, Icon} from 'react-native-elements';
 const QuestListCard = props => {
   const { cardTitle, questList } = props;
 
+
   return (
     <ScrollView>
       <Card>
         <Text>{cardTitle}: </Text>
         <Card.Divider />
 
-        { questList?.length < 1 ? null
-           : questList?.map((quest, i) => {
+        { questList?.length < 1
+          ? <Text>Nothing to display... yet!</Text>
+          : questList?.map((quest, i) => {
             return (
               <View key={i} style={styles.activeQuestList}>
                 <Text style={styles.name}>{quest.name}</Text>

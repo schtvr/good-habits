@@ -44,19 +44,11 @@ interface Props {
   navigation: any;
 }
 
-const HomeScreen = ({
-  navigation,
-  userFriends,
-  userQuests,
-}: Props): JSX.Element => {
-  const [myQuests, setMyQuests] = useState<IQuest[]>([]);
-  const [myFriendsa, setMyFriends] = useState([]);
-  const [userToken, setToken] = useState('');
-
+const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
 
   const {user} = useSelector(stateSelector);
-  const {activeQuests} = useSelector(questSelector);
+  const {activeQuests, myQuests} = useSelector(questSelector);
   const {myFriends} = useSelector(friendSelector);
 
   const getToken = async () => {
@@ -109,7 +101,24 @@ const HomeScreen = ({
       await getUsersFriends();
     };
     start();
-  }, []);
+  }, [myQuests]);
+
+  const renderAccordians = () => {
+    const items = [];
+    for (let item of activeQuests) {
+      items.push(
+        <Accordian
+          key={item.id}
+          title={item.name}
+          data={item.description}
+          date={item.duration}
+          btnText="completed"
+          btnText2="upload"
+        />,
+      );
+    }
+    return items;
+  };
 
   return (
     <View style={styles.body}>
@@ -129,7 +138,7 @@ const HomeScreen = ({
           />
           <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
         </View>
-        {activeQuests ? (
+        {activeQuests.length ? (
           <View style={styles.container}>
             <Text style={styles.activeQuests}>Active Quests</Text>
             {renderAccordians()}
@@ -138,7 +147,7 @@ const HomeScreen = ({
           <View style={styles.container}>
             <Text style={styles.activeQuests}>No Active Quests</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-              <Text>Go to all quests</Text>
+              <Text style={styles.noQuests}>Go to all quests</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -147,24 +156,6 @@ const HomeScreen = ({
       </ScrollView>
     </View>
   );
-};
-const renderAccordians = () => {
-  const {activeQuests} = useSelector(questSelector);
-  const items = [];
-  for (let item of activeQuests) {
-    const date = new Date(Date.now() + item.startDate);
-    items.push(
-      <Accordian
-        key={item.id}
-        title={item.name}
-        data={item.description}
-        date={item.duration}
-        btnText="completed"
-        btnText2="upload"
-      />,
-    );
-  }
-  return items;
 };
 
 const styles = StyleSheet.create({
@@ -183,6 +174,12 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     fontSize: 22,
     color: '#979dac',
+  },
+  noQuests: {
+    alignSelf: 'center',
+    paddingBottom: 20,
+    fontSize: 22,
+    color: 'blue',
   },
   progressBar: {
     width: '50%',

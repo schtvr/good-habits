@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {View, Text, StyleSheet } from 'react-native';
+import {View, StyleSheet } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
@@ -12,19 +12,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const { activeQuests, quests } = useSelector(questSelector)
+  const { activeQuests, completedQuests } = useSelector(questSelector)
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
-  };
-  const getQuests = async () => {
-    dispatch(
-      getAllQuests({
-        api: {
-          url: 'quests',
-        },
-      }),
-    );
   };
   const populateQuests = async () => {
     dispatch(
@@ -49,21 +40,8 @@ const ProfileScreen = () => {
     )
   };
 
-
-
-
   useEffect(() => {
-    getQuests();
     populateQuests();
-    const doShit = async () => {
-      console.log('Done with do shit', quests);
-      const activeQuestDetails = activeQuests.map((activeQuest) => {
-        return quests.filter((quest) => quest.id === activeQuest.questId);
-      });
-      console.log('ALl the quests', activeQuestDetails);
-    }
-    doShit();
-
   }, []);
 
   return (
@@ -76,7 +54,7 @@ const ProfileScreen = () => {
         questList={activeQuests}/>
       <QuestListCard
         cardTitle="Your previous quests"
-        questList={activeQuests}/>
+        questList={completedQuests}/>
     </View>
   );
 };

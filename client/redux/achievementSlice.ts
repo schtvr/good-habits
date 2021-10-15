@@ -14,7 +14,6 @@ export const achievementSlice = createSlice({
       state = initialState;
     },
     getAllAchievements: (state, body) => {
-      console.log('BODY OF SLICE', body);
       state.achievements = body.data.data;
     },
   },

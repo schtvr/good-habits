@@ -42,14 +42,11 @@ export const userSlice = createSlice({
   },
   reducers: {
     clearState: state => {
-      console.log('clearState:');
-      console.log('state', state);
       state.user = initialState.user;
       state.isAuthenticated = false;
     },
     signOut: (state, body) => {
       state.user = initialState.user;
-      console.log('BOODDY', body);
       const removeToken = async () => {
         state.isAuthenticated = false;
         await AsyncStorage.removeItem('token', body.data.token);
@@ -57,7 +54,6 @@ export const userSlice = createSlice({
       removeToken();
     },
     register: (state, body) => {
-      console.log('user/register', body);
       state.user = {
         ...body.data.user,
       };
@@ -65,7 +61,6 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     signIn: (state, body) => {
-      console.log('user/login', body);
       setToken(body.data.data);
       state.isAuthenticated = true;
     },
@@ -73,7 +68,7 @@ export const userSlice = createSlice({
       state.usersList = body.data.data;
     },
     error: (state, body) => {
-      console.log('user-error', body);
+      console.log('user-error', body.data);
       if (body.data) state.error = body.data.message;
       else state.error = 'server error';
     },
@@ -81,7 +76,6 @@ export const userSlice = createSlice({
       state.user = body.data.data;
     },
     getAllRanking: (state, body) => {
-      console.log('BODY IN', body);
       state.globalRankings = body.data.data;
     },
     getFriendRanking: (state, body) => {

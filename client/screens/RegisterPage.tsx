@@ -18,7 +18,6 @@ const RegisterPage = ({navigation}): JSX.Element => {
   const dispatch = useDispatch();
 
   const registerUser = async () => {
-    console.log('Registering in-----------------------------------');
     dispatch(
       register({
         api: {

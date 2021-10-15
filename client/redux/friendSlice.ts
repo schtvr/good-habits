@@ -16,10 +16,14 @@ export const friendSlice = createSlice({
     getAllFriends: (state, body) => {
       state.myFriends = body.data.data;
     },
+    addFriend: (state, body) => {
+      console.log(body);
+      // state.myFriends = body.data.data;
+    },
   },
 });
 
-export const {getAllFriends} = friendSlice.actions;
+export const {getAllFriends, addFriend} = friendSlice.actions;
 export const friendSelector = state => state.friendInfo;
 
 export default friendSlice.reducer;
