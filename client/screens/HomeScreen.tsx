@@ -63,7 +63,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
     }
     return items;
   };
-
+  // console.log('MYFRIENDS', myFriends[0].userName);
   return (
     <View style={styles.body}>
       <ScrollView style={{flex: 1}}>
