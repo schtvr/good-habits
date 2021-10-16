@@ -47,6 +47,7 @@ const completeTaskById = async (req: Request, res:Response) => {
     update.gainedExp += task.completionExp;
     update.tasks.push(completedTask);
     await checkAchievements(user, 'Tasks', update);
+    console.log(update);
 
     return sendRes(res, true, 200, 'Task completed', update);
   } catch (err) {

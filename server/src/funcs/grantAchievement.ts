@@ -8,9 +8,6 @@ const grantAchievement = async (achieve: AchievementTemplate, user: User, update
     await user.createAchievement({
       templateId: achieve.id
     });
-    await user.update({
-      exp: user.exp += achieve.completionExp
-    });
     update.achievements.push(achieve);
     update.gainedExp += achieve.completionExp;
   } catch (err) {

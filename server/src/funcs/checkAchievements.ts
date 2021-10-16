@@ -19,6 +19,9 @@ const checkAchievements = async (user: User, category: string, update: IUpdate) 
         }
       }
     }
+    await user.update({
+      exp: user.exp += update.gainedExp
+    });
   } catch (err) {
     console.log(err);
   }
