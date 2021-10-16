@@ -9,7 +9,6 @@ import {
   HasManyCreateAssociationMixin,
   Optional,
 } from 'sequelize';
-import { IUpdate } from '../interfaces/Update';
 import sequelize from './index';
 import TaskHistory from './taskHistory';
 

@@ -29,14 +29,14 @@ class ActiveQuest extends Model<IActiveQuest, IActiveQuestCreationAttributes> im
 
   public async complete () {
     try {
-      await CompletedQuest.create({
+      const completed = await CompletedQuest.create({
         userId: this.userId,
         questId: this.questId,
         startDate: this.startDate,
         progress: this.progress,
       });
       await this.destroy();
-      return true;
+      return completed;
     } catch (err) {
       return false;
     }

@@ -13,7 +13,7 @@ const createQuests = async () => {
     description: 'Start running with the tried and tested \'Couch to 5k\' program!',
     category: 'Health',
     completionExp: 1000,
-    taskCount: 28 
+    taskCount: 28
   });
   await Quest.create({
     name: 'Posture check!',
@@ -60,7 +60,7 @@ const createQuests = async () => {
     duration: 30,
     description: 'Learn to medidate over the course of one month!',
     category: 'Spirtual',
-    completionExp: 1,
+    completionExp: 500,
     taskCount: 5
   });
   
