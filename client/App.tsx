@@ -235,7 +235,7 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {isAuthenticated ? (
+          {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
