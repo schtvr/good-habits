@@ -37,6 +37,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const {user} = useSelector(stateSelector);
   const {myFriends, allFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
+
   useEffect(() => {
     const start = async () => {
       await getUserById(dispatch);
