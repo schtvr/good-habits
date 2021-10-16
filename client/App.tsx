@@ -87,7 +87,7 @@ const headerRight = () => {
         },
       }),
     );
-    
+    setVisible(false);
   };
 
   const rejectMyFriendRequest = async () => {
@@ -160,7 +160,7 @@ const headerRight = () => {
             type="clear"
             buttonStyle={{width: 100, borderRadius: 10}}
             titleStyle={{color: '#383be0'}}
-            onPress={toggleOverlay}
+            onPress={() => setVisible(false)}
           />
         </View>
       </Overlay>
