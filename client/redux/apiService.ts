@@ -1,15 +1,13 @@
-const LOCALURL ='http://192.168.1.70:3001';
+const LOCALURL = 'http://192.168.2.16:3000';
 
-console.log(LOCALURL);
 const apiService = store => next => action => {
   // console.log(action);
   if (!action?.payload?.api) return next(action);
   const api = action.payload.api;
   let type = action.type;
   const method = api.method || 'GET';
-  console.log( api.body);
   const body = api.body ? JSON.stringify(api.body) : undefined;
-  
+
   const defaultHeaders = {'Content-Type': 'application/json'};
   const headers = {
     ...defaultHeaders,
