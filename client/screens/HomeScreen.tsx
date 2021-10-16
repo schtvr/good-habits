@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-
 import {
   Text,
   View,
@@ -15,19 +14,16 @@ import Accordian from '../components/Accordian';
 import {IQuest, IUser} from '../interfaces/interfaces';
 import {useSelector, useDispatch} from 'react-redux';
 import {stateSelector} from '../redux/userSlice';
+import {questSelector} from '../redux/questSlice';
+import {friendSelector} from '../redux/friendSlice';
 import {
-  questSelector,
-} from '../redux/questSlice';
-import {
-  friendSelector,
-} from '../redux/friendSlice';
-import { getUserById, 
-  getUsersActiveQuests, 
-  getUsersFriends, 
-  getDailyTasks, 
+  getUserById,
+  getUsersActiveQuests,
+  getUsersFriends,
+  getDailyTasks,
   getMyFriendRequests,
-  getUserTaskHistory } from '../funcs/dispatch/dispatchFuncs'
-import { achievementSelector } from '../redux/achievementSlice';
+  getUserTaskHistory,
+} from '../funcs/dispatch/dispatchFuncs';
 
 interface Props {
   userFriends: [];
@@ -39,9 +35,8 @@ interface Props {
 const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
   const {user} = useSelector(stateSelector);
-  const {myFriends} = useSelector(friendSelector);
+  const {myFriends, allFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
-
   useEffect(() => {
     const start = async () => {
       await getUserById(dispatch);
@@ -52,7 +47,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       await getUserTaskHistory(dispatch);
     };
     start();
-  }, [myQuests]);
+  }, [allFriends]);
 
   const renderAccordians = () => {
     const items = [];
@@ -61,7 +56,6 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
     }
     return items;
   };
-  // console.log('MYFRIENDS', myFriends[0].userName);
   return (
     <View style={styles.body}>
       <ScrollView style={{flex: 1}}>
