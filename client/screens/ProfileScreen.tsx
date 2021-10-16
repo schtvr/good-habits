@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react';
-import {View, StyleSheet } from 'react-native';
+import {View, StyleSheet, ImageBackground } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import { Card } from 'react-native-elements';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
+import { ThemeProvider } from 'react-native-elements';
 import { getActiveQuests, getCompletedQuests, questSelector } from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { stateSelector } from '../redux/userSlice';
+import { elementsTheme }  from '../styles/react-native-elements-theme-provider';
+
 
 
 
@@ -47,19 +51,32 @@ const ProfileScreen = () => {
   }, []);
   console.log(user)
   return (
-    <View>
-      <ProfileHeader
-        userName={user.userName}/>
-      <CuratedTrophies />
-      <CompletedStats
-        level={user.level}
-        howManyCompletedQuestsYouGotLilBoy={completedQuests.length}/>
-      <QuestListCard
-        cardTitle="Your active quests"
-        questList={activeQuests}/>
-      <QuestListCard
-        cardTitle="Your previous quests"
-        questList={completedQuests}/>
+    <View style={{flex: 1}}>
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}
+      >
+        <ThemeProvider theme={elementsTheme}>
+          <Card >
+            <ProfileHeader
+              userName={user.userName}/>
+          </Card>
+        </ThemeProvider>
+          <ThemeProvider theme={elementsTheme}>
+          <Card>
+            <CompletedStats
+              level={user.level}
+              howManyCompletedQuestsYouGotLilBoy={completedQuests.length}/>
+            <CuratedTrophies />
+          </Card>
+            <QuestListCard
+              cardTitle="Your active quests"
+              questList={activeQuests}/>
+          <QuestListCard
+            cardTitle="Your previous quests"
+            questList={completedQuests}/>
+          </ThemeProvider>
+      </ImageBackground>
     </View>
   );
 };
