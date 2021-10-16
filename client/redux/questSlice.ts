@@ -10,7 +10,7 @@ const initialState = {
   otherUserQuests: {
     completedQuests: [],
     activeQuests: [],
-  }
+  },
 };
 
 export const questSlice = createSlice({
@@ -27,10 +27,9 @@ export const questSlice = createSlice({
       state.completedQuests = [];
       state.activeTasks = [];
       state.otherUserQuests = {
-        completedQuests : [],
-        activeQuests : [],
-      }
-
+        completedQuests: [],
+        activeQuests: [],
+      };
     },
     getAllQuests: (state, body) => {
       state.quests = body.data.data;
@@ -39,7 +38,7 @@ export const questSlice = createSlice({
       state.tasks = body.data.data;
     },
     addQuest: (state, body) => {
-      state.myQuests = body.data.data;
+      state.myQuests.push(body.data.data);
     },
     getActiveQuests: (state, body) => {
       state.activeQuests = body.data.data;

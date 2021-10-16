@@ -42,12 +42,19 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       await getUserById(dispatch);
       await getUsersActiveQuests(dispatch);
       await getUsersFriends(dispatch);
-      await getDailyTasks(dispatch);
       await getMyFriendRequests(dispatch);
       await getUserTaskHistory(dispatch);
     };
     start();
   }, [allFriends]);
+
+  useEffect(() => {
+    const helper = async () => {
+      await getUsersActiveQuests(dispatch);
+      await getDailyTasks(dispatch);
+    };
+    helper();
+  }, [myQuests]);
 
   const renderAccordians = () => {
     const items = [];
@@ -66,14 +73,14 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
 
         <View style={styles.header}>
           <Image source={require('../assets/avatar.png')} />
-          <Text style={styles.level}>Lvl {user.level}</Text>
+          <Text style={styles.level}>Lvl {Math.floor(user.exp / 100)}</Text>
           <LinearProgress
             style={styles.progressBar}
             color="yellow"
-            value={user.exp}
+            value={(user.exp % 100) / 100}
             variant={'determinate'}
           />
-          <Text style={styles.EXP}>{user.exp}/100 EXP</Text>
+          <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
         </View>
         {activeQuests.length ? (
           <View style={styles.container}>

@@ -12,18 +12,18 @@ const QuestDetailsScreen = ({route}) => {
 
   let {tasks} = useSelector(questSelector);
   const {id} = route.params;
-  
+
   useEffect(() => {
     const getTasks = async () => {
       await getTasksByid();
     };
     getTasks();
   }, []);
-  
+
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
-  
+
   const getTasksByid = async () => {
     dispatch(
       getAllTasks({
@@ -36,7 +36,6 @@ const QuestDetailsScreen = ({route}) => {
       }),
     );
   };
-
   return (
     <View>
       <QuestDetailCard id={id} />
