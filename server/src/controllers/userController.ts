@@ -207,17 +207,17 @@ const getFriendRequestSent = async (req: Request, res: Response) => {
 const acceptFriendRequest = async (req: Request, res: Response) => {
   const friendId = req.params.id;
   const user = req.user;
-  if (!friendId || !user) return res.status(403).send({
-    status: 'Bad',
-    message: 'Missing userId or not authenticated',
-  });
+  if (friendId === 'undefined' || !user) { 
+    return res.status(403).send({
+      status: 'Bad',
+      message: 'Missing userId or not authenticated',
+    });
 
-  try { 
+  } 
+
+  try {
+    console.log(friendId); 
     const userToFriend = await User.findByPk(friendId, {
-      include: {
-        model: ActiveQuest,
-        as: 'activeQuests' 
-      },
       attributes: {
         include: ['id', 'userName'],
         exclude: ['firstName', 'lastName', 'email', 'password']

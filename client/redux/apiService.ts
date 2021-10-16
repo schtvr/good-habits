@@ -1,4 +1,4 @@
-const LOCALURL = 'http://192.168.2.16:3000';
+const LOCALURL = 'http://192.168.1.70:3001';
 
 const apiService = store => next => action => {
   // console.log(action);
