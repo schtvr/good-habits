@@ -86,6 +86,9 @@ export const userSlice = createSlice({
     getUser: (state, body) => {
       state.user = body.data.data;
     },
+    updateExp: (state, body) => {
+      state.user.exp += body.update.gainedExp;
+    },
     getAllRanking: (state, body) => {
       state.globalRankings = body.data.data;
     },

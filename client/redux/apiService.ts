@@ -1,4 +1,4 @@
-const LOCALURL = 'http://192.168.2.16:3000';
+import { LOCALURL } from 'react-native-dotenv';
 
 const apiService = store => next => action => {
   // console.log(action);
@@ -22,13 +22,22 @@ const apiService = store => next => action => {
         store.dispatch({type: type, data});
         return;
       }
+      if (data.data && data.data.gainedExp) {
+        dispatchUpdates(store, data.data);
+      }
       store.dispatch({type: type, data});
     })
     .catch(error => {
       type = 'user/error';
       store.dispatch({type: type, error});
     });
-  // return next({type: type});
+   //return next({type: type});
 };
+
+const dispatchUpdates = async (store, update) => {
+  // TODO: SORT COMPLETED QUESTS ON UPDATE
+  store.dispatch({ type: 'achievements/sortCompletedTask', update })
+  store.dispatch({ type: 'user/updateExp', update })
+}
 
 export default apiService;
