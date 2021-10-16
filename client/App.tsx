@@ -65,7 +65,7 @@ const headerRight = () => {
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
-  
+
   let id;
   if (friendRequests[0]) {
     id = friendRequests[0].id;
@@ -235,7 +235,7 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {!isAuthenticated ? (
+          {isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
