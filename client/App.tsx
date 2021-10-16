@@ -106,11 +106,11 @@ const headerRight = () => {
 
   return (
     <View style={styles.header}>
-      <Badge
+      {!(friendRequests.length === 0) && <Badge
         badgeStyle={{position: 'absolute', right: -50}}
         value={friendRequests.length}
         status="error"
-      />
+      />}
       <TouchableOpacity onPress={toggleOverlay}>
         <MaterialCommunityIcons
           style={styles.icons}
