@@ -23,6 +23,13 @@ const createUsers = async () => {
     email: 'stinkybum@garbage.com',
     password: bcrypt.hashSync('password123', 10)
   });
+  await User.create({
+    userName: 'fefe',
+    firstName: 'fefe',
+    lastName: 'fefe',
+    email: 'fefe',
+    password: bcrypt.hashSync('fefe', 10)
+  });
 };
 
 export default createUsers;
