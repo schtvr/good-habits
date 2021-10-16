@@ -3,7 +3,6 @@ import {createSlice, createSelector} from '@reduxjs/toolkit';
 const initialState = {
   myFriends: [],
   friendRequests: [],
-  allFriends: [],
 };
 
 export const friendSlice = createSlice({
@@ -23,17 +22,10 @@ export const friendSlice = createSlice({
       console.log('ADDED', body);
     },
     getFriendRequest: (state, body) => {
-      //console.log(shit, body.data.data);
-      state.friendRequests =  body.data.data;
-      //if (body.data.data[0]) {
-       // state.friendRequests.push(
-       ///   body.data.data[0].friendRequests,
-       //   body.data.data[0].userName,
-       // );
-      //}
+      state.friendRequests = body.data.data;
     },
     acceptFriendRequest: (state, body) => {
-      state.allFriends.push(body.data.data);
+      state.myFriends = body.data.data.friend;
     },
     rejectFriendRequest: (state, body) => {
       console.log('ACCEPT', body);
