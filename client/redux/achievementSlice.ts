@@ -4,7 +4,7 @@ const initialState = {
   achievements: [],
   userAchievements: [],
   completedTasks: [],
-  update: {}
+  update: {},
 };
 
 export const achievementSlice = createSlice({
@@ -20,6 +20,9 @@ export const achievementSlice = createSlice({
     },
     getAllAchievements: (state, body) => {
       state.achievements = body.data.data;
+    },
+    getOwnedAchievements: (state, body) => {
+      state.userAchievements = body.data.data;
     },
     sortCompletedTask: (state, body) => {
       state.userAchievements = [
@@ -45,7 +48,8 @@ export const {
   clearAchievements,
   sortCompletedTask,
   getTaskHistory,
-  sendTaskComplete
+  sendTaskComplete,
+  getOwnedAchievements,
 } = achievementSlice.actions;
 export const achievementSelector = state => state.achievementInfo;
 

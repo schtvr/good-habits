@@ -16,6 +16,7 @@ import {
   achievementSelector,
   getAllAchievements,
 } from '../redux/achievementSlice';
+import { getTemplateAchievements, getUserAchievements } from '../funcs/dispatch/dispatchFuncs'
 
 interface IAchievement {
   id: number;
@@ -23,22 +24,18 @@ interface IAchievement {
   description: string;
   url: ImageSourcePropType;
 }
-// interface Props {
-//   achievements: IAchievement;
-// }
 
 const AchievementsPage = (): JSX.Element => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<null | number>(null);
   const [myAchievements, setMyAchievements] = useState<IAchievement[]>([]);
   const dispatch = useDispatch();
-  const {achievements} = useSelector(achievementSelector);
+  const { achievements, userAchievements } = useSelector(achievementSelector);
+  console.log('-------------------inside achievements', userAchievements);
 
   useEffect(() => {
-    const start = async () => {
-      await getAchievements();
-    };
-    start();
+    getTemplateAchievements(dispatch);
+    getUserAchievements(dispatch);
   }, []);
 
   const onOpenModal = (index: number) => {
@@ -46,27 +43,25 @@ const AchievementsPage = (): JSX.Element => {
     setModalVisible(!modalVisible);
   };
 
-  const getAchievements = async () => {
-    dispatch(
-      getAllAchievements({
-        api: {
-          url: 'achievement/templates',
-        },
-      }),
-    );
-  };
+  const checkOwned = (obj) => {
+    for (let ele of userAchievements) {
+      if (ele.templateId === obj.id) obj.owned = true;
+    }
+  }
 
   const renderItem = ({item, index}) => {
+    let obj = {...item}
+    checkOwned(obj);
     const questImage = '../assets/quests.png';
     const taskImage = '../assets/task.png';
     const socialImage = '../assets/social.png';
     const selectImage = () => {
-      if (item.category === 'Quests')
-        return <Image source={require(questImage)} />;
-      if (item.category === 'Tasks')
-        return <Image source={require(taskImage)} />;
-      if (item.category === 'Social')
-        return <Image source={require(socialImage)} />;
+      if (obj.category === 'Quests')
+        return <Image style={obj.owned ? styles.achievementIconOwned : styles.achievementIcon} source={require(questImage)} />;
+      if (obj.category === 'Tasks')
+        return <Image style={obj.owned ? styles.achievementIconOwned : styles.achievementIcon} source={require(taskImage)} />;
+      if (obj.category === 'Social')
+        return <Image style={obj.owned ? styles.achievementIconOwned : styles.achievementIcon} source={require(socialImage)} />;
     };
     return (
       <>
@@ -74,8 +69,8 @@ const AchievementsPage = (): JSX.Element => {
           <View style={styles.row}>
             {selectImage()}
             <View style={styles.content}>
-              <Text style={styles.achievementTitle}>{item.name}</Text>
-              <Text>{item.description}</Text>
+              <Text style={obj.owned ? styles.achievementTitleOwned : styles.achievementTitle}>{obj.name}</Text>
+              <Text>{obj.description}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -98,6 +93,7 @@ const AchievementsPage = (): JSX.Element => {
             <View style={styles.modalView}>
               <Text style={styles.modalText}>{item.name}</Text>
               <Text>{item.description}</Text>
+              <Text>{item.category}</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
@@ -118,7 +114,7 @@ const AchievementsPage = (): JSX.Element => {
       <View style={styles.header}>
         <Text style={styles.achievements}>All Achievements!</Text>
         <Text style={styles.ownedAchievements}>
-          Owned 0/{achievements.length}
+          Owned {userAchievements.length}/{achievements.length}
         </Text>
       </View>
       <FlatList
@@ -157,6 +153,11 @@ const styles = StyleSheet.create({
   achievementTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  achievementTitleOwned: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: 'black'
   },
   centeredView: {
     flex: 1,
@@ -199,6 +200,11 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  achievementIcon: {
+    tintColor: 'gray',
+  },
+  achievementIconOwned: {
   },
 });
 
