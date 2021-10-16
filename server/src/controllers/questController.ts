@@ -5,6 +5,7 @@ import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 import { Op } from 'sequelize';
 import User from '../models/user';
+
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
   if (!req.params.questId) return sendRes(res, false, 422, 'Missing Form information');
@@ -67,7 +68,11 @@ const completeQuest = async (req: Request, res: Response) => {
     const update = createUpdate();
     update.gainedExp += template.completionExp;
     update.quests.push(template);
+
     await checkAchievements(user, 'Quests', update);
+    await user.update({
+      exp: user.exp += update.gainedExp
+    });
 
     return sendRes(res, true, 200, 'Quest completed', update);
   } catch (err) {

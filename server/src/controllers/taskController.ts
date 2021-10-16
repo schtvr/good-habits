@@ -6,6 +6,7 @@ import { createUpdate } from '../interfaces/Update';
 import TaskHistory from '../models/taskHistory';
 import getDaysApart from '../funcs/getDailyTasks/getDaysApart';
 import addTasks from '../funcs/getDailyTasks/addTasks';
+import checkQuestCompleted from '../funcs/checkQuestCompleted';
 
 const getTaskById = async (req: Request, res:Response) => {
   try {
@@ -27,6 +28,7 @@ const completeTaskById = async (req: Request, res:Response) => {
     const user = req.user;
     if (!user) return sendRes(res, false, 403, 'Not authenticated');
     if (!req.params.taskId) return sendRes(res, false, 422, 'Missing taskId');
+
     const task = await Task.findOne({
       where: {
         id: req.params.taskId
@@ -46,9 +48,14 @@ const completeTaskById = async (req: Request, res:Response) => {
     const update = createUpdate();
     update.gainedExp += task.completionExp;
     update.tasks.push(completedTask);
-    await checkAchievements(user, 'Tasks', update);
-    console.log(update);
 
+    await checkAchievements(user, 'Tasks', update);
+    await checkQuestCompleted(user, task, update);
+
+    await user.update({
+      exp: user.exp += update.gainedExp
+    });
+    
     return sendRes(res, true, 200, 'Task completed', update);
   } catch (err) {
     return sendRes(res, false, 500, 'Server error completing task', err);
