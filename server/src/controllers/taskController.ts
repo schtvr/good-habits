@@ -55,7 +55,7 @@ const completeTaskById = async (req: Request, res:Response) => {
     await user.update({
       exp: user.exp += update.gainedExp
     });
-
+    
     return sendRes(res, true, 200, 'Task completed', update);
   } catch (err) {
     return sendRes(res, false, 500, 'Server error completing task', err);

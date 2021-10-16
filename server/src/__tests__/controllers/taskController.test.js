@@ -66,7 +66,7 @@ describe ('Task Controller', () => {
       } else if (task.id === 5) {
         expect(res.body.data.achievements).toHaveLength(1);
         expect(res.body.data.achievements[0].name).toBe('Task starter');
-        expect(res.body.data.gainedExp).toBe(task.completionExp + 100);
+        expect(res.body.data.gainedExp).toBe(task.completionExp + 600);
       } else {
         expect(res.body.data.gainedExp).toBe(task.completionExp);
       }
