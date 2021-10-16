@@ -11,8 +11,7 @@ import checkAchievements from '../funcs/checkAchievements';
 import firebase from 'firebase-admin';
 import ActiveQuest from '../models/activeQuest';
 import Quest from '../models/quest';
-import { Op } from 'sequelize';
-import attachQuestTemplates from '../funcs/attachQuestTemplates';
+import { attachQuestTemplates, attachTemplatesToFriend } from '../funcs/attachQuestTemplates';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -235,14 +234,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
       message: 'You sent me a user that doesn\'t exist dumdum',
     });
     
-    if (userToFriend.activeQuests) {
-      const quest = await Quest.findAll({
-        where: {
-          id: userToFriend.activeQuests[0].questId
-        }
-      });
-      userToFriend.setDataValue('quests', quest);
-    }
+    await attachTemplatesToFriend(userToFriend);
 
     const checkFriendRequests = await user.hasRequestee(userToFriend.id);
     if (!checkFriendRequests) return res.status(404).send({
