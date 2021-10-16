@@ -7,7 +7,7 @@ const QuestListCard = props => {
 
 
   return (
-    <ScrollView>
+    <View style={{overflow: 'visible'}}>
       <Card>
         <Text>{cardTitle}: </Text>
         <Card.Divider />
@@ -23,7 +23,7 @@ const QuestListCard = props => {
             );
         })}
       </Card>
-    </ScrollView>
+    </View>
   );
 };
 

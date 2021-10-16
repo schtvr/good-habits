@@ -8,7 +8,7 @@ import {
 import {Input, Text, Button, Card, ThemeProvider} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {register} from '../redux/userSlice';
-import elementsTheme from '../styles/react-native-elements-theme-provider';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 const RegisterPage = ({navigation}): JSX.Element => {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
     <View style={styles.container}>
       <ImageBackground
         style={{flex: 1}}
-        source={require('../assets/stacked-waves-haikei.png')}>
+        source={require('../assets/mauve-stacked-waves-haikei.png')}>
 
         <ThemeProvider theme={elementsTheme}>
           <Card containerStyle={{marginTop: 50}}>
@@ -45,24 +45,9 @@ const RegisterPage = ({navigation}): JSX.Element => {
             </Text>
           </Card>
           <Card>
-            {/* <Input
-            leftIcon={{type: 'feather', name: 'user'}}
-            placeholder="first name"
-            value={userState.firstName}
-            onChangeText={firstName => setUserState({...userState, firstName})}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          <Input
-            leftIcon={{type: 'entypo', name: 'user'}}
-            placeholder="surname"
-            value={userState.lastName}
-            onChangeText={lastName => setUserState({...userState, lastName})}
-            autoCorrect={false}
-            autoCapitalize="none"
-          /> */}
+
             <Input
-              leftIcon={{type: 'fontisto', name: 'person',color: '#d6685d'}}
+              leftIcon={{type: 'fontisto', name: 'person',color: '#6071d5'}}
               placeholder="username"
               value={userState.userName}
               onChangeText={userName => setUserState({...userState, userName})}
@@ -70,7 +55,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
               autoCapitalize="none"
             />
             <Input
-              leftIcon={{type: 'fontisto', name: 'at',color: '#d6685d'}}
+              leftIcon={{type: 'fontisto', name: 'at',color: '#6071d5'}}
               placeholder="email address"
               value={userState.email}
               onChangeText={email => setUserState({...userState, email})}
@@ -78,7 +63,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
               autoCapitalize="none"
             />
             <Input
-              leftIcon={{type: 'fontisto', name: 'unlocked',color: '#d6685d',}}
+              leftIcon={{type: 'fontisto', name: 'unlocked',color: '#6071d5',}}
               placeholder="password"
               value={userState.password}
               onChangeText={password => setUserState({...userState, password})}
@@ -112,10 +97,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     alignSelf: 'center',
-    color: '#602a25',
+    color: '#2d3c8f',
   },
   link: {
-    color: '#602a25',
+    color: '#2d3c8f',
     fontWeight: 'bold',
     alignSelf: 'center',
     marginTop: 10,

@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingBottom: 15,
   },
   trophy: {
     flexDirection: 'column',

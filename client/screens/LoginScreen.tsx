@@ -4,7 +4,7 @@ import {signIn, stateSelector} from '../redux/userSlice';
 import {View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import {Input, Text, Button, Card, ThemeProvider} from 'react-native-elements';
 import messaging from '@react-native-firebase/messaging';
-import elementsTheme from '../styles/react-native-elements-theme-provider';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 
 const LoginScreen = ({navigation}): JSX.Element => {
@@ -35,7 +35,7 @@ const LoginScreen = ({navigation}): JSX.Element => {
     <View style={styles.container}>
       <ImageBackground
         style={{flex: 1}}
-        source={require('../assets/stacked-waves-haikei.png')}>
+        source={require('../assets/mauve-stacked-waves-haikei.png')}>
 
       <ThemeProvider theme={elementsTheme}>
         <Card containerStyle={{marginTop: 50}}>
@@ -48,7 +48,7 @@ const LoginScreen = ({navigation}): JSX.Element => {
             {loginError}
           </Text>
           <Input
-            leftIcon={{type: 'fontisto', name: 'person',color: '#d6685d'}}
+            leftIcon={{type: 'fontisto', name: 'person',color: '#6071d5'}}
             placeholder="Username"
             value={userState.emailOrUserName}
             onChangeText={emailOrUserName => setUserState({...userState, emailOrUserName})}
@@ -56,7 +56,7 @@ const LoginScreen = ({navigation}): JSX.Element => {
             autoCorrect={false}
           />
           <Input
-            leftIcon={{type: 'fontisto', name: 'unlocked',color: '#d6685d',}}
+            leftIcon={{type: 'fontisto', name: 'unlocked',color: '#6071d5',}}
             placeholder="Password"
             value={userState.password}
             onChangeText={password => setUserState({...userState, password})}
@@ -70,7 +70,7 @@ const LoginScreen = ({navigation}): JSX.Element => {
             buttonStyle={styles.btnStyle}
           />
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.link}>Dont have an account? Go to register!</Text>
+            <Text style={styles.link}>Don't have an account? Go to register!</Text>
           </TouchableOpacity>
         </Card>
       </ThemeProvider>
@@ -86,10 +86,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     alignSelf: 'center',
-    color: '#602a25',
+    color: '#2d3c8f',
   },
   link: {
-    color: '#602a25',
+    color: '#2d3c8f',
     fontWeight: 'bold',
     alignSelf: 'center',
     marginTop: 10,
