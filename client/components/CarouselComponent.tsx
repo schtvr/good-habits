@@ -51,11 +51,9 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
   };
 
   const renderItem: ListRenderItem<IFriends> = ({item}) => {
-    console.log('ITEM', item);
     return (
       <View style={styles.carousel}>
         <View>
-          <Text style={styles.friendName}>{item.userName}</Text>
           <TouchableOpacity onPress={() => console.log('hello')}>
             <Image
               style={styles.avatar}
@@ -63,9 +61,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.activeQuest}>
-          Active Quest: {item.activeQuests}
-        </Text>
+        <Text style={styles.activeQuest}>Username: {item.userName}</Text>
       </View>
     );
   };
@@ -86,12 +82,6 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
 };
 
 const styles = StyleSheet.create({
-  friendName: {
-    color: '#979dac',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
   carousel: {
     borderWidth: 1,
     borderColor: '#979dac',
@@ -102,6 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     color: '#979dac',
     fontWeight: 'bold',
+    fontSize: 20,
   },
   avatar: {},
 });
