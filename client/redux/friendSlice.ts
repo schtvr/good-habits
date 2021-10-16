@@ -23,12 +23,14 @@ export const friendSlice = createSlice({
       console.log('ADDED', body);
     },
     getFriendRequest: (state, body) => {
-      if (body.data.data[0]) {
-        state.friendRequests.push(
-          body.data.data[0].friendRequests,
-          body.data.data[0].userName,
-        );
-      }
+      //console.log(shit, body.data.data);
+      state.friendRequests =  body.data.data;
+      //if (body.data.data[0]) {
+       // state.friendRequests.push(
+       ///   body.data.data[0].friendRequests,
+       //   body.data.data[0].userName,
+       // );
+      //}
     },
     acceptFriendRequest: (state, body) => {
       state.allFriends.push(body.data.data);

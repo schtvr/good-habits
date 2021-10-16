@@ -6,12 +6,15 @@ import {
 import sequelize from './index';
 
 interface IRequestList {
+  id: number,
   requesterId: number,
   requesteeId: number,
 }
-
-class RequestList extends Model<IRequestList>
+interface IRequestListCreationAttributes extends
+Optional<IRequestList, 'id'> {}
+class RequestList extends Model<IRequestList, IRequestListCreationAttributes>
   implements IRequestList {
+  public id!: number;
   public requesterId!: number;
   public requesteeId!: number;
 
@@ -21,9 +24,14 @@ class RequestList extends Model<IRequestList>
 
 RequestList.init(
   {
-    requesterId: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
+    requesterId: {
+      type: DataTypes.INTEGER,
       unique: 'userSentRequest',
       allowNull: false,
     },
