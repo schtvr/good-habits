@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,9 +11,7 @@ import {register} from '../redux/userSlice';
 import elementsTheme from '../styles/react-native-elements-theme-provider';
 
 const RegisterPage = ({navigation}): JSX.Element => {
-  const initialColorsState = {color1: '#9957D1', color2: '#556EF5'};
   const dispatch = useDispatch();
-  const [colors, setColors] = useState(initialColorsState);
   const [userState, setUserState] = useState({
     firstName: '',
     lastName: '',
@@ -34,16 +32,14 @@ const RegisterPage = ({navigation}): JSX.Element => {
     );
   };
 
-  const image = { uri: '../assets/stacked-waves-haikei.svg'}
   return (
     <View style={styles.container}>
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/stacked-waves-haikei.png')}>
-        {/* <LinearGradient colors={[colors.color1, colors.color2]} style={styles.test}/> */}
 
         <ThemeProvider theme={elementsTheme}>
-          <Card>
+          <Card containerStyle={{marginTop: 50}}>
             <Text h4 h4Style={styles.headerTitle}>
               Register
             </Text>
@@ -91,8 +87,6 @@ const RegisterPage = ({navigation}): JSX.Element => {
               secureTextEntry
             />
             <Button
-              // ViewComponent={LinearGradient}
-              // linearGradientProps={{    colors: ['red', 'pink'],    start: { x: 0, y: 0.5 },    end: { x: 1, y: 0.5 },  }}
               title="Register"
               onPress={() => registerUser()}
               buttonStyle={styles.btnStyle}
@@ -112,7 +106,6 @@ const RegisterPage = ({navigation}): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#eee',
   },
   bg: {
     flex: 1,

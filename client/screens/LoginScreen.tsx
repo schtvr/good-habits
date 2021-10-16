@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {signIn, stateSelector} from '../redux/userSlice';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {Input, Text, Button} from 'react-native-elements';
+import {View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {Input, Text, Button, Card, ThemeProvider} from 'react-native-elements';
 import messaging from '@react-native-firebase/messaging';
+import elementsTheme from '../styles/react-native-elements-theme-provider';
+
+
 const LoginScreen = ({navigation}): JSX.Element => {
   const [userState, setUserState] = useState({
     emailOrUserName: '',
@@ -30,66 +33,73 @@ const LoginScreen = ({navigation}): JSX.Element => {
 
   return (
     <View style={styles.container}>
-      <Text h3 h3Style={styles.headerTitle}>
-        Sign In
-      </Text>
-      <Text h3 h3Style={styles.headerTitle}>
-        {loginError}
-      </Text>
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'user'}}
-        label="Username or Email"
-        placeholder="John Doe"
-        value={userState.emailOrUserName}
-        onChangeText={emailOrUserName =>
-          setUserState({...userState, emailOrUserName})
-        }
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/stacked-waves-haikei.png')}>
 
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'lock'}}
-        label="Password"
-        placeholder="Password"
-        value={userState.password}
-        onChangeText={password => setUserState({...userState, password})}
-        autoCorrect={false}
-        autoCapitalize="none"
-        secureTextEntry
-      />
-      <Button
-        title="Sign In"
-        onPress={() => signInUser()}
-        buttonStyle={styles.btnStyle}
-      />
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.link}>Dont have an account? Go to register!</Text>
-      </TouchableOpacity>
+      <ThemeProvider theme={elementsTheme}>
+        <Card containerStyle={{marginTop: 50}}>
+          <Text h4 h4Style={styles.headerTitle}>
+            Sign In
+          </Text>
+        </Card>
+        <Card>
+          <Text h3 h3Style={styles.headerTitle}>
+            {loginError}
+          </Text>
+          <Input
+            leftIcon={{type: 'fontisto', name: 'person',color: '#d6685d'}}
+            placeholder="Username"
+            value={userState.emailOrUserName}
+            onChangeText={emailOrUserName => setUserState({...userState, emailOrUserName})}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Input
+            leftIcon={{type: 'fontisto', name: 'unlocked',color: '#d6685d',}}
+            placeholder="Password"
+            value={userState.password}
+            onChangeText={password => setUserState({...userState, password})}
+            autoCorrect={false}
+            autoCapitalize="none"
+            secureTextEntry
+          />
+          <Button
+            title="Sign In"
+            onPress={() => signInUser()}
+            buttonStyle={styles.btnStyle}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.link}>Dont have an account? Go to register!</Text>
+          </TouchableOpacity>
+        </Card>
+      </ThemeProvider>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     backgroundColor: '#dbeaff',
     flex: 1,
   },
   headerTitle: {
     alignSelf: 'center',
-    marginBottom: 50,
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+    color: '#602a25',
   },
   link: {
-    color: '#2e7eff',
+    color: '#602a25',
+    fontWeight: 'bold',
     alignSelf: 'center',
     marginTop: 10,
   },
   btnStyle: {
     width: 150,
     alignSelf: 'center',
+  },
+  test: {
+    flex: 1,
   },
 });
 
