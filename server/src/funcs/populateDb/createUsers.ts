@@ -7,7 +7,7 @@ const createUsers = async () => {
     firstName: 'timbo',
     lastName: 'slice',
     email: 'bigBoy@gmail.com',
-    password: bcrypt.hashSync('password123', 10) 
+    password: bcrypt.hashSync('password123', 10) ,
   });
   await User.create({
     userName: 'dummy',
@@ -21,7 +21,16 @@ const createUsers = async () => {
     firstName: 'dogShit',
     lastName: 'tunic',
     email: 'stinkybum@garbage.com',
-    password: bcrypt.hashSync('password123', 10)
+    password: bcrypt.hashSync('password123', 10),
+    exp: -50
+  });
+  await User.create({
+    userName: 'fefe',
+    firstName: 'fefe',
+    lastName: 'fefe',
+    email: 'fefe',
+    password: bcrypt.hashSync('fefe', 10),
+    exp: 1234
   });
 };
 

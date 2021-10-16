@@ -61,6 +61,7 @@ const headerRight = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
+    if (friendRequests.length === 0) return;
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
@@ -106,11 +107,11 @@ const headerRight = () => {
 
   return (
     <View style={styles.header}>
-      <Badge
+      {!(friendRequests.length === 0) && <Badge
         badgeStyle={{position: 'absolute', right: -50}}
         value={friendRequests.length}
         status="error"
-      />
+      />}
       <TouchableOpacity onPress={toggleOverlay}>
         <MaterialCommunityIcons
           style={styles.icons}
