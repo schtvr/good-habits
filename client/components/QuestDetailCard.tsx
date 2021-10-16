@@ -13,10 +13,10 @@ const QuestDetailCard = props => {
   const {id} = props;
   const {color} = theme;
 
-  let {quests, myQuests} = useSelector(questSelector);
+  let {quests, activeQuests} = useSelector(questSelector);
   quests = quests.filter(quest => quest.id === id)[0];
-  myQuests.length > 0
-    ? (myQuests = myQuests.filter(quest => quest.questId === id))
+  activeQuests.length > 0
+    ? (activeQuests = activeQuests.filter(quest => quest.id === id))
     : [];
 
   const addToMyQuests = async () => {
@@ -60,7 +60,7 @@ const QuestDetailCard = props => {
           <Text style={{marginBottom: 10}}>{description}</Text>
         </View>
       </View>
-      {myQuests.length > 0 ? (
+      {activeQuests.length > 0 ? (
         <Button
           color={color[category]}
           title="Added to quests"

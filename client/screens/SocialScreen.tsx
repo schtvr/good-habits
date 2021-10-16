@@ -2,130 +2,11 @@ import React from 'react';
 import {FlatList, ImageSourcePropType} from 'react-native';
 import {ListRenderItem, TouchableOpacity, Image} from 'react-native';
 import {View, Text, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
-
+import {getUsersFriends} from '../funcs/dispatch/dispatchFuncs';
 import {Card, ListItem, Button, Icon} from 'react-native-elements';
+import {useSelector} from 'react-redux';
+import {friendSelector} from '../redux/friendSlice';
 
-const friends = [
-  {
-    id: 1,
-    name: 'Sean',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'couch to 5k',
-        EXP: 150,
-      },
-    ],
-    activeQuests: ['Improve posture'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-  {
-    id: 2,
-    name: 'Steve',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'Improve posture',
-        EXP: 100,
-      },
-    ],
-    activeQuests: ['Couch to 5k'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-  {
-    id: 3,
-    name: 'Juan',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'Improve posture',
-        EXP: 100,
-      },
-    ],
-    activeQuests: ['Couch to 5k'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-  {
-    id: 4,
-    name: 'Juan',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'Improve posture',
-        EXP: 100,
-      },
-    ],
-    activeQuests: ['Couch to 5k'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-  {
-    id: 5,
-    name: 'Juan',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'Improve posture',
-        EXP: 100,
-      },
-    ],
-    activeQuests: ['Couch to 5k'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-  {
-    id: 6,
-    name: 'Juan',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'Improve posture',
-        EXP: 100,
-      },
-    ],
-    activeQuests: ['Couch to 5k'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-  {
-    id: 7,
-    name: 'Juan',
-    completedQuests: [
-      {
-        name: 'drink water',
-        EXP: 50,
-      },
-      {
-        name: 'Improve posture',
-        EXP: 100,
-      },
-    ],
-    activeQuests: ['Couch to 5k'],
-    url: require('../assets/friend1.png'),
-    level: 5,
-  },
-];
 interface IFriends {
   id: number;
   name: string;
@@ -135,11 +16,12 @@ interface IFriends {
   level: number;
 }
 const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
+  // console.log('ITEM', item.id);
   return (
     <>
       <TouchableOpacity>
         <Card>
-          <Card.Title style={styles.text}>{item.name}</Card.Title>
+          <Card.Title style={styles.text}>{item.userName}</Card.Title>
           <Card.Divider
             color={'black'}
             inset={true}
@@ -157,13 +39,6 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
           <View style={{position: 'absolute', left: 100, top: 60}}>
             <Text style={{paddingLeft: 10}}></Text>
             <Text style={styles.text}>Completed Quests: </Text>
-            {item.completedQuests.map((quest, index) => {
-              return (
-                <Text style={styles.questName} key={index}>
-                  {quest.name}
-                </Text>
-              );
-            })}
           </View>
         </Card>
       </TouchableOpacity>
@@ -172,12 +47,14 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
 };
 
 const SocialScreen = () => {
+  const {myFriends, allFriends} = useSelector(friendSelector);
+
   return (
     <SafeAreaView style={{flex: 1, paddingBottom: 45}}>
       <View>
         <Text style={styles.title}>All Friends!</Text>
         <FlatList
-          data={friends}
+          data={myFriends}
           keyExtractor={item => item.id.toString()}
           renderItem={renderItems}
         />

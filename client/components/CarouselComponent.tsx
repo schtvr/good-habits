@@ -30,6 +30,7 @@ interface IProps {
 
 const CarouselComponent = ({data}: IProps): JSX.Element => {
   if (data.length < 1) return <></>;
+  console.log('CARA DATA', data);
   const [active, setActive] = useState<number>(0);
   const ref = useRef(null);
   const pagination = (): JSX.Element => {
