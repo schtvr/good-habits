@@ -1,12 +1,19 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {Input, Text, Button} from 'react-native-elements';
-import {useDispatch, useSelector} from 'react-redux';
-import {register, stateSelector} from '../redux/userSlice';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
+import {Input, Text, Button, Card, ThemeProvider} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
+import {register} from '../redux/userSlice';
+import elementsTheme from '../styles/react-native-elements-theme-provider';
 
-// /user - post: create user
-// /user - get: get user by id (from JWT payload)
 const RegisterPage = ({navigation}): JSX.Element => {
+  const initialColorsState = {color1: '#9957D1', color2: '#556EF5'};
+  const dispatch = useDispatch();
+  const [colors, setColors] = useState(initialColorsState);
   const [userState, setUserState] = useState({
     firstName: '',
     lastName: '',
@@ -14,8 +21,6 @@ const RegisterPage = ({navigation}): JSX.Element => {
     email: '',
     password: '',
   });
-
-  const dispatch = useDispatch();
 
   const registerUser = async () => {
     dispatch(
@@ -29,89 +34,105 @@ const RegisterPage = ({navigation}): JSX.Element => {
     );
   };
 
+  const image = { uri: '../assets/stacked-waves-haikei.svg'}
   return (
     <View style={styles.container}>
-      <Text h3 h3Style={styles.headerTitle}>
-        Register
-      </Text>
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'user'}}
-        label="Firstname"
-        placeholder="John"
-        value={userState.firstName}
-        onChangeText={firstName => setUserState({...userState, firstName})}
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/stacked-waves-haikei.png')}>
+        {/* <LinearGradient colors={[colors.color1, colors.color2]} style={styles.test}/> */}
 
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'user'}}
-        label="Lastname"
-        placeholder="Doe"
-        value={userState.lastName}
-        onChangeText={lastName => setUserState({...userState, lastName})}
-        autoCorrect={false}
-        autoCapitalize="none"
-      />
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'id-badge'}}
-        label="Username"
-        placeholder="DogShitTunic"
-        value={userState.userName}
-        onChangeText={userName => setUserState({...userState, userName})}
-        autoCorrect={false}
-        autoCapitalize="none"
-      />
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'envelope'}}
-        label="Email"
-        placeholder="example@gmail.com"
-        value={userState.email}
-        onChangeText={email => setUserState({...userState, email})}
-        autoCorrect={false}
-        autoCapitalize="none"
-      />
-      <Input
-        leftIcon={{type: 'font-awesome', name: 'lock'}}
-        label="Password"
-        placeholder="password.."
-        value={userState.password}
-        onChangeText={password => setUserState({...userState, password})}
-        autoCorrect={false}
-        autoCapitalize="none"
-        secureTextEntry
-      />
-      <Button
-        title="Register"
-        onPress={() => registerUser()}
-        buttonStyle={styles.btnStyle}
-      />
-      <TouchableOpacity onPress={() => navigation.navigate('signIn')}>
-        <Text style={styles.link}>Already have an account? Go to sign in</Text>
-      </TouchableOpacity>
+        <ThemeProvider theme={elementsTheme}>
+          <Card>
+            <Text h4 h4Style={styles.headerTitle}>
+              Register
+            </Text>
+          </Card>
+          <Card>
+            {/* <Input
+            leftIcon={{type: 'feather', name: 'user'}}
+            placeholder="first name"
+            value={userState.firstName}
+            onChangeText={firstName => setUserState({...userState, firstName})}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Input
+            leftIcon={{type: 'entypo', name: 'user'}}
+            placeholder="surname"
+            value={userState.lastName}
+            onChangeText={lastName => setUserState({...userState, lastName})}
+            autoCorrect={false}
+            autoCapitalize="none"
+          /> */}
+            <Input
+              leftIcon={{type: 'fontisto', name: 'person',color: '#d6685d'}}
+              placeholder="username"
+              value={userState.userName}
+              onChangeText={userName => setUserState({...userState, userName})}
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            <Input
+              leftIcon={{type: 'fontisto', name: 'at',color: '#d6685d'}}
+              placeholder="email address"
+              value={userState.email}
+              onChangeText={email => setUserState({...userState, email})}
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            <Input
+              leftIcon={{type: 'fontisto', name: 'unlocked',color: '#d6685d',}}
+              placeholder="password"
+              value={userState.password}
+              onChangeText={password => setUserState({...userState, password})}
+              autoCorrect={false}
+              autoCapitalize="none"
+              secureTextEntry
+            />
+            <Button
+              // ViewComponent={LinearGradient}
+              // linearGradientProps={{    colors: ['red', 'pink'],    start: { x: 0, y: 0.5 },    end: { x: 1, y: 0.5 },  }}
+              title="Register"
+              onPress={() => registerUser()}
+              buttonStyle={styles.btnStyle}
+            />
+            <TouchableOpacity onPress={() => navigation.navigate('signIn')}>
+              <Text style={styles.link}>
+                Already have an account? Go to sign in
+              </Text>
+            </TouchableOpacity>
+          </Card>
+        </ThemeProvider>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#dbeaff',
+    flex: 1,
+    // backgroundColor: '#eee',
+  },
+  bg: {
     flex: 1,
   },
   headerTitle: {
     alignSelf: 'center',
-    marginBottom: 40,
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+    color: '#602a25',
   },
   link: {
-    color: '#2e7eff',
+    color: '#602a25',
+    fontWeight: 'bold',
     alignSelf: 'center',
     marginTop: 10,
   },
   btnStyle: {
     width: 150,
     alignSelf: 'center',
+  },
+  test: {
+    flex: 1,
   },
 });
 
