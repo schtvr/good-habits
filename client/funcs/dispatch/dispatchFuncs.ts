@@ -10,7 +10,7 @@ import {
   getActiveQuests,
   clearQuests,
 } from '../../redux/questSlice';
-import {getTaskHistory, clearAchievements} from '../../redux/achievementSlice';
+import {getTaskHistory, clearAchievements, getAllAchievements, getOwnedAchievements} from '../../redux/achievementSlice';
 
 export const getToken = async () => {
   return await AsyncStorage.getItem('token');
@@ -93,7 +93,6 @@ export const getUserTaskHistory = async (dispatch: Function) => {
     }),
   );
 };
-// MINE
 
 export const userLogOut = async (dispatch: Function) => {
   dispatch(
@@ -110,4 +109,27 @@ export const userLogOut = async (dispatch: Function) => {
   dispatch(clearAchievements());
   dispatch(clearQuests());
   dispatch(clearFriends());
+};
+
+export const getTemplateAchievements = async (dispatch: Function) => {
+  dispatch(
+    getAllAchievements({
+      api: {
+        url: 'achievement/templates',
+      },
+    }),
+  );
+};
+
+export const getUserAchievements = async (dispatch: Function) => {
+  dispatch(
+    getOwnedAchievements({
+      api: {
+        url: 'achievement',
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      },
+    }),
+  );
 };
