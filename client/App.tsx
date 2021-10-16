@@ -34,6 +34,7 @@ import {
 } from './redux/friendSlice';
 
 import OtherProfileScreen from './screens/OtherProfilesScreen';
+import { getMyFriendRequests } from './funcs/dispatch/dispatchFuncs';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,16 +64,18 @@ const headerRight = () => {
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
-  console.log('FRIEND REQUESTS', friendRequests);
+  
   let id;
   if (friendRequests[0]) {
-    id = friendRequests[0].requesteeId;
+    id = friendRequests[0].id;
   }
+  console.log('FRIEND REQUESTS LOL', friendRequests);
   const dispatch = useDispatch();
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
   const acceptMyFriendRequest = async () => {
+    await getMyFriendRequests(dispatch);
     dispatch(
       acceptFriendRequest({
         api: {
@@ -84,9 +87,11 @@ const headerRight = () => {
         },
       }),
     );
+    
   };
 
   const rejectMyFriendRequest = async () => {
+    await getMyFriendRequests(dispatch);
     dispatch(
       rejectFriendRequest({
         api: {
@@ -104,7 +109,7 @@ const headerRight = () => {
     <View style={styles.header}>
       <Badge
         badgeStyle={{position: 'absolute', right: -50}}
-        value={friendRequests.length / 2}
+        value={friendRequests.length}
         status="error"
       />
       <TouchableOpacity onPress={toggleOverlay}>
@@ -131,7 +136,7 @@ const headerRight = () => {
             flex: 1,
             justifyContent: 'flex-end',
           }}>
-          <Text>{friendRequests[1]}</Text>
+          <Text>{friendRequests[0]?.userName}</Text>
           <Button
             title="Accept"
             onPress={acceptMyFriendRequest}
