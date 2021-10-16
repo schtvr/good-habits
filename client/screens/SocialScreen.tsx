@@ -1,21 +1,23 @@
 import React from 'react';
 import {FlatList, ImageSourcePropType} from 'react-native';
 import {ListRenderItem, TouchableOpacity, Image} from 'react-native';
-import {View, Text, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
-import {getUsersFriends} from '../funcs/dispatch/dispatchFuncs';
-import {Card, ListItem, Button, Icon} from 'react-native-elements';
+import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {Card} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import {friendSelector} from '../redux/friendSlice';
 
 interface IFriends {
-  id: number;
-  name: string;
-  completedQuests: [];
-  activeQuests: [];
-  url: ImageSourcePropType;
-  level: number;
+  id: number
+  name: string
+  completedQuests: []
+  activeQuests: []
+  quests: []
+  url: ImageSourcePropType
+  level: number
 }
+
 const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
+  console.log('BIG ITEM TIME', item);
   // console.log('ITEM', item.id);
   return (
     <>
@@ -26,7 +28,8 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
             color={'black'}
             inset={true}
             insetType={'middle'}
-            subHeader={`Current Quest: ${item.activeQuests}`}
+            subHeader={`Current Quest: ${item.activeQuests.length > 0 ? 
+            item.quests[0].description : 'Not on any quests!'}`}
             subHeaderStyle={styles.text}
           />
           <View style={{flexDirection: 'column'}}>
@@ -34,7 +37,7 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
               resizeMode="cover"
               source={require('../assets/friend1.png')}
             />
-            <Text>Lvl {item.level}</Text>
+            <Text>Lvl {Math.floor(item.exp / 100)}</Text>
           </View>
           <View style={{position: 'absolute', left: 100, top: 60}}>
             <Text style={{paddingLeft: 10}}></Text>

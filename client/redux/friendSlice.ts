@@ -16,6 +16,7 @@ export const friendSlice = createSlice({
       state.friendRequests = [];
     },
     getAllFriends: (state, body) => {
+      console.log('GET ALL FRIENDS LOG', body.data.data);
       state.myFriends = body.data.data;
     },
     addFriend: (state, body) => {
