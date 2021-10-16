@@ -198,40 +198,37 @@ const findCompletedQuestsById = async (req: Request, res: Response) => {
   const user = req.user;
   const userId = req.params.userId;
   if (!user || !userId) return sendRes(res, false, 403, 'Please provide a valid userId/user');
-  try{
+  try {
     const userToFind = User.findOne({
       where: {
         id: userId
       }
-    })
+    });
     if (!userToFind) return sendRes(res, false, 404, 'Couldn\'t find a user with that id');
     const completedQuests = await user.getCompletedQuests();
     return sendRes(res, true, 200, 'Enjoy your completed quests!', completedQuests);
-  }catch(err) {
+  } catch (err) {
     return sendRes(res, false, 500, 'Enjoy your error', err);
   }
-}
+};
 
 const findActiveQuestsById = async (req: Request, res: Response) => {
   const user = req.user;
   const userId = req.params.userId;
   if (!user || !userId) return sendRes(res, false, 403, 'Please provide a valid userId/user');
-  try{
+  try {
     const userToFind = User.findOne({
       where: {
         id: userId
       }
-    })
+    });
     if (!userToFind) return sendRes(res, false, 404, 'Couldn\'t find a user with that id');
     const activeQuests = await user.getActiveQuests();
     return sendRes(res, true, 200, 'Enjoy your active quests!', activeQuests);
-  }catch(err) {
+  } catch (err) {
     return sendRes(res, false, 500, 'Enjoy your error', err);
   }
-}
-
-
-
+};
 
 export default {
   startQuest,

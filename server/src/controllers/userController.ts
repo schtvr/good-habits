@@ -10,15 +10,18 @@ import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
 import firebase from 'firebase-admin';
 import ActiveQuest from '../models/activeQuest';
+import Quest from '../models/quest';
+import { attachQuestTemplates, attachTemplatesToFriend } from '../funcs/attachQuestTemplates';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
 const createUser = async (req: Request, res:Response) => {
   try {
     const { body } = req;
-    const { password, firstName, lastName, userName, email } = req.body;
-    if (!body || !password || !firstName || !lastName ||
-    !userName || !email) return sendRes(res, false, 403, 'Missing form data');
+    const { password, userName, email } = req.body;
+    if (!body || !password || !userName || !email) {
+      return sendRes(res, false, 403, 'Missing form data');
+    }
 
     if (userName.toLowerCase().includes('victor')) return sendRes(res, false, 418, 'Must be at least 13 years old to use this app');
 
@@ -212,21 +215,26 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
       status: 'Bad',
       message: 'Missing userId or not authenticated',
     });
-
   } 
 
   try {
-    console.log(friendId); 
     const userToFriend = await User.findByPk(friendId, {
+      include: [
+        { model: ActiveQuest,
+          as: 'activeQuests'
+        }
+      ],
       attributes: {
-        include: ['id', 'userName'],
-        exclude: ['firstName', 'lastName', 'email', 'password']
+        include: ['id', 'userName', 'exp'],
+        exclude: ['firstName', 'lastName', 'password', 'email', 'level']
       }
     });
     if (!userToFriend) return res.status(404).send({
       status: 'Bad',
       message: 'You sent me a user that doesn\'t exist dumdum',
     });
+    
+    await attachTemplatesToFriend(userToFriend);
 
     const checkFriendRequests = await user.hasRequestee(userToFriend.id);
     if (!checkFriendRequests) return res.status(404).send({
@@ -261,25 +269,28 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
     });
   }
 };
+
 const getFriends = async (req: Request, res: Response) => {
   const user = req.user;
-  if (!user) return res.status(403).send({
-    status: 'Bad',
-    message: 'Not authenticated',
-  });
+  if (!user) return sendRes(res, false, 403, 'Not authenticated');
   try {
-    const friends = await user.getFriends(userAttributes);
-    return res.status(200).send({
-      status: 'Okay',
-      message: 'Enjoy your friends loser',
-      data: friends,
+    const friends = await user.getFriends({
+      include: [
+        { model: ActiveQuest,
+          as: 'activeQuests'
+        }
+      ],
+      attributes: {
+        include: ['id', 'userName', 'exp'],
+        exclude: ['firstName', 'lastName', 'password', 'email', 'level']
+      }
     });
+
+    await attachQuestTemplates(friends);
+    
+    return sendRes(res, true, 200, 'Friends retrieved', friends);
   } catch (err) {
-    res.status(500).send({
-      status: 'Bad',
-      message: 'Internal Server Error',
-      data: err,
-    });
+    return sendRes(res, false, 500, 'Server error retrieving friends', err);
   }
 };
 

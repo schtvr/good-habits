@@ -26,6 +26,7 @@ import CompletedQuest from './completedQuest';
 import RequestList from './requestList';
 import FriendList from './friendList';
 import FirebaseToken from './firebaseToken';
+import Quest from './quest';
 
 export interface IUser {
   id: number
@@ -36,6 +37,8 @@ export interface IUser {
   password: string
   exp: number
   level: number
+  activeQuests?: ActiveQuest[] | null
+  quests?: Quest[] | null
 }
 
 interface IUserCreationAttributes extends Optional<IUser, 'id' | 'exp' | 'level'> {}
@@ -49,6 +52,8 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public password!: string;
   public exp!: number;
   public level!: number;
+  public activeQuests?: ActiveQuest[] | null;
+  public quests?: Quest[] | null;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -82,7 +87,6 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public getRequesters!: BelongsToManyGetAssociationsMixin<RequestList>;
   public hasRequester!: BelongsToManyHasAssociationMixin<RequestList, number>;
   public removeRequester!: BelongsToManyRemoveAssociationsMixin<RequestList, number>;
-
 
   public createFirebaseTokens!: HasOneCreateAssociationMixin<FirebaseToken>;
   public getFirebaseTokens!: HasOneGetAssociationMixin<FirebaseToken>;
@@ -120,11 +124,11 @@ User.init(
     },
     firstName: {
       type: new DataTypes.STRING(128),
-      allowNull: false,
+      allowNull: true,
     },
     lastName: {
       type: new DataTypes.STRING(128),
-      allowNull: false,
+      allowNull: true,
     },
     userName: {
       type: new DataTypes.STRING(128),
