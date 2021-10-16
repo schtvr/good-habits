@@ -3,7 +3,7 @@ import createMedidateTasks from './tasks/mediationTasks';
 import createCouchTasks from './tasks/couchto5kTasks';
 import createAppleTasks from './tasks/appleTasks';
 import createFoodTasks from './tasks/foodSaverTasks';
-import createYogaTasks from './tasks/readinTrainingTasks';
+import createYogaTasks from './tasks/yogaTasks';
 import createReadingTasks from './tasks/readinTrainingTasks';
 
 const createQuests = async () => {
