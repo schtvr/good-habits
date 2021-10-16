@@ -216,11 +216,15 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
   } 
 
   try {
-    console.log(friendId); 
     const userToFriend = await User.findByPk(friendId, {
+      include: [
+        { model: ActiveQuest,
+          as: 'activeQuests'
+        }
+      ],
       attributes: {
-        include: ['id', 'userName'],
-        exclude: ['firstName', 'lastName', 'email', 'password']
+        include: ['id', 'userName', 'exp'],
+        exclude: ['firstName', 'lastName', 'password', 'email', 'level']
       }
     });
     if (!userToFriend) return res.status(404).send({
@@ -268,7 +272,17 @@ const getFriends = async (req: Request, res: Response) => {
     message: 'Not authenticated',
   });
   try {
-    const friends = await user.getFriends(userAttributes);
+    const friends = await user.getFriends({
+      include: [
+        { model: ActiveQuest,
+          as: 'activeQuests'
+        }
+      ],
+      attributes: {
+        include: ['id', 'userName', 'exp'],
+        exclude: ['firstName', 'lastName', 'password', 'email', 'level']
+      }
+    });
     return res.status(200).send({
       status: 'Okay',
       message: 'Enjoy your friends loser',

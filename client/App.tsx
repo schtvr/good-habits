@@ -69,7 +69,6 @@ const headerRight = () => {
   if (friendRequests[0]) {
     id = friendRequests[0].id;
   }
-  console.log('FRIEND REQUESTS LOL', friendRequests);
   const dispatch = useDispatch();
   const getToken = async () => {
     return await AsyncStorage.getItem('token');

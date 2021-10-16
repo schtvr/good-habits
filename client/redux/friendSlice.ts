@@ -25,7 +25,10 @@ export const friendSlice = createSlice({
       state.friendRequests = body.data.data;
     },
     acceptFriendRequest: (state, body) => {
-      state.myFriends = body.data.data.friend;
+      state.myFriends = [
+        ...state.myFriends,
+        ...body.data.data.friend
+      ];
     },
     rejectFriendRequest: (state, body) => {
       console.log('ACCEPT', body);
