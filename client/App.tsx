@@ -61,6 +61,7 @@ const headerRight = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
+    if (friendRequests.length === 0) return;
     setVisible(!visible);
   };
   const {friendRequests} = useSelector(friendSelector);
