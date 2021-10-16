@@ -12,7 +12,7 @@ import {Button} from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import {questSelector} from '../redux/questSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
-import { sortCompletedTask, achievementSelector } from '../redux/achievementSlice'
+import { sendTaskComplete, achievementSelector } from '../redux/achievementSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 if (Platform.OS === 'android') {
@@ -33,6 +33,7 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
   
   const {activeTasks} = useSelector(questSelector);
   const { completedTasks } = useSelector(achievementSelector);
+  const { update } = useSelector(achievementSelector);
   
   useEffect(() => {
     const res = activeTasks.filter((task) => (
@@ -54,8 +55,10 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
   };
   
   const completeTask = async (taskId) => {
+    // send request and get update back
+    // dispatch (update exp ---> update.gainexp)
     dispatch(
-      sortCompletedTask({
+      sendTaskComplete({
         api: {
           url: `task/${taskId}`,
           method: 'POST',
@@ -63,9 +66,9 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
             Authorization: `Bearer ${await getToken()}`,
           },
         },
-        }),
-      );
-    };
+      }),
+    );
+  };
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
