@@ -107,7 +107,7 @@ describe('User controller', () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
+      const res = await request.put(`/user/friendRequest/${otherUser.id}`).set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -119,7 +119,7 @@ describe('User controller', () => {
       const token = jwt.sign({ userId: user.id }, config.SECRET, {
         expiresIn: '7d'
       });
-      const res = await request.put('/user/1337/friendRequest').set(
+      const res = await request.put('/user/friendRequest/1337').set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -135,7 +135,7 @@ describe('User controller', () => {
         expiresIn: '7d'
       });
 
-      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
+      const res = await request.put(`/user/friendRequest/${otherUser.id}`).set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -147,7 +147,7 @@ describe('User controller', () => {
       );
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
-      const res3 = await request.put(`/user/${res2.body['data'][0].id}/cancelFriendRequest`).set(
+      const res3 = await request.put(`/user/cancelFriendRequest/${res2.body['data'][0].id}`).set(
         'Authorization',
         `Bearer ${token2}`
       );
@@ -173,7 +173,7 @@ describe('User controller', () => {
         expiresIn: '7d'
       });
 
-      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
+      const res = await request.put(`/user/friendRequest/${otherUser.id}`).set(
         'Authorization',
         `Bearer ${token}`
       );
@@ -185,7 +185,7 @@ describe('User controller', () => {
       );
       expect(res2.body.status).toBe('Okay');
       expect(res2.body.message).toBe('Enjoy your friend requests loser');
-      const res3 = await request.put(`/user/${res2.body['data'][0].id}/cancelFriendRequest`).set(
+      const res3 = await request.put(`/user/cancelFriendRequest/${res2.body['data'][0].id}`).set(
         'Authorization',
         `Bearer ${token2}`
       );
@@ -211,7 +211,7 @@ describe('User controller', () => {
         expiresIn: '7d'
       });
 
-      const res = await request.put(`/user/${otherUser.id}/friendRequest`).set(
+      const res = await request.put(`/user/friendRequest/${otherUser.id}`).set(
         'Authorization',
         `Bearer ${token}`
       );

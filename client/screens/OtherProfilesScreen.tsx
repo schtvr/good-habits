@@ -16,7 +16,6 @@ const OtherProfileScreen = ({route}) => {
   const { userName, level } = otherUser;
   const { otherUserQuests, quests } = useSelector(questSelector);
   const { completedQuests, activeQuests } = otherUserQuests;
-  const {myFriends} = useSelector(friendSelector);
 
   const { id } = route.params;
   let scopedCompletedQuests = []
@@ -27,12 +26,11 @@ const OtherProfileScreen = ({route}) => {
   };
 
   const addAFriend = async ()  => {
-    console.log('ID', id)
     dispatch(
       addFriend({
         api: {
           method: 'PUT',
-          url: `user/${id}/friendRequest`,
+          url: `user/friendRequest/${id}`,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },

@@ -9,18 +9,24 @@ import leaderboards from './controllers/leaderboardController';
 const router = express.Router();
 
 // USER ROUTES
-router.post('/user', user.createUser);
+// GET
 router.get('/user', verify , user.getYourInfo);
 router.get('/users', verify , user.getAllUsers);
-router.put('/user/:id/friendRequest',verify ,user.putFriendRequest);
 router.get('/user/friendRequestReceived', verify ,user.getFriendRequestReceived);
 router.get('/user/friendRequestSent', verify ,user.getFriendRequestSent);
-router.put('/user/acceptFriendRequest/:id', verify ,user.acceptFriendRequest);
 router.get('/user/friends', verify ,user.getFriends);
-router.put('/user/:id/cancelFriendRequest', verify ,user.cancelFriendRequest);
-router.put('/user/:id/unfriend', verify ,user.unfriend);
-router.get('/user/:userId', verify , user.findUserById);
+router.get('/user/:userId', user.findUserById); // always have this as last get request pls
 
+// POST
+router.post('/user', user.createUser);
+
+// PUT
+router.put('/user/friendRequest/:id',verify ,user.putFriendRequest);
+router.put('/user/acceptFriendRequest/:id', verify ,user.acceptFriendRequest);
+router.put('/user/cancelFriendRequest/:id', verify ,user.cancelFriendRequest);
+router.put('/user/unfriend/:id', verify ,user.unfriend);
+
+// LEADERBOARD ROUTES
 router.get('/leaderboards', leaderboards.getAllRankings);
 router.get('/leaderboards/friends', verify, leaderboards.getFriendRankings);
 

@@ -96,7 +96,7 @@ const headerRight = () => {
       rejectFriendRequest({
         api: {
           method: 'PUT',
-          url: `user/${id}/cancelFriendRequest`,
+          url: `user/cancelFriendRequest/${id}`,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },

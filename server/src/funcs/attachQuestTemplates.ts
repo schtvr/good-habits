@@ -4,11 +4,11 @@ import { Op } from 'sequelize';
 
 export const attachQuestTemplates = async (friends: User[]) => {
   for await (const friend of friends) {
-    await attachTemplatesToFriend(friend);
+    await attachTemplatesToUser(friend);
   }
 };
 
-export const attachTemplatesToFriend = async (friend: User) => {
+export const attachTemplatesToUser = async (friend: User) => {
   if (friend.activeQuests) {
     const questIds: number[] = [];
     friend.activeQuests.forEach(quest => {
