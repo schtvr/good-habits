@@ -38,6 +38,7 @@ export interface IUser {
   exp: number
   level: number
   activeQuests?: ActiveQuest[] | null
+  completedQuests?: CompletedQuest[] | null
   quests?: Quest[] | null
 }
 
@@ -53,6 +54,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public exp!: number;
   public level!: number;
   public activeQuests?: ActiveQuest[] | null;
+  public completedQuests?: CompletedQuest[] | null;
   public quests?: Quest[] | null;
 
   public readonly createdAt!: Date;

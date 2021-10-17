@@ -10,8 +10,7 @@ import { createUpdate } from '../interfaces/Update';
 import checkAchievements from '../funcs/checkAchievements';
 import firebase from 'firebase-admin';
 import ActiveQuest from '../models/activeQuest';
-import Quest from '../models/quest';
-import { attachQuestTemplates, attachTemplatesToFriend } from '../funcs/attachQuestTemplates';
+import { attachQuestTemplates, attachTemplatesToUser } from '../funcs/attachQuestTemplates';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -84,10 +83,11 @@ const findUserById = async (req: Request, res: Response) => {
     message: 'Missing userId or not authenticated',
   });
   try {
-    const user = await User.findOne({
-      where: {
-        id: req.params.userId
-      },
+    const user = await User.findByPk(userId, {
+      include: [{
+        model: ActiveQuest,
+        as: 'activeQuests'
+      }],
       attributes : {
         include: ['id', 'userName', 'level', 'exp'],
         exclude: [
@@ -98,6 +98,9 @@ const findUserById = async (req: Request, res: Response) => {
         ]
       }
     });
+    if (!user) return sendRes(res, false, 403, 'No user found with that id.');
+    
+    await attachTemplatesToUser(user);
 
     return sendRes(res, true, 200, 'Here is the user lol', user);
   } catch (err) {
@@ -234,7 +237,7 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
       message: 'You sent me a user that doesn\'t exist dumdum',
     });
     
-    await attachTemplatesToFriend(userToFriend);
+    await attachTemplatesToUser(userToFriend);
 
     const checkFriendRequests = await user.hasRequestee(userToFriend.id);
     if (!checkFriendRequests) return res.status(404).send({
