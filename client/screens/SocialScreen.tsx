@@ -22,8 +22,6 @@ interface IFriends {
 }
 
 const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
-  console.log('BIG ITEM TIME', item);
-  // console.log('ITEM', item.id);
   return (
     <>
       <TouchableOpacity>
