@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   achievements: [],
   userAchievements: [],
+  newAchievements: [],
   completedTasks: [],
   update: {},
 };
@@ -18,25 +19,26 @@ export const achievementSlice = createSlice({
       state.userAchievements = [];
       state.completedTasks = [];
     },
+    clearNewAchievements: state => {
+      state.newAchievements = [];
+    },
     getAllAchievements: (state, body) => {
       state.achievements = body.data.data;
     },
     getOwnedAchievements: (state, body) => {
       state.userAchievements = body.data.data;
     },
+    getNewAchievements: (state, body) => {
+      state.newAchievements = body.update.achievements;
+    },
     sortCompletedTask: (state, body) => {
       state.userAchievements = [
         ...state.userAchievements,
         ...body.update.achievements,
       ];
-      state.completedTasks = [
-        ...state.completedTasks,
-        ...body.update.tasks
-      ];
+      state.completedTasks = [...state.completedTasks, ...body.update.tasks];
     },
-    sendTaskComplete: (state, body) => {
-
-    },
+    sendTaskComplete: (state, body) => {},
     getTaskHistory: (state, body) => {
       state.completedTasks = [...state.completedTasks, ...body.data.data];
     },
@@ -50,6 +52,8 @@ export const {
   getTaskHistory,
   sendTaskComplete,
   getOwnedAchievements,
+  getNewAchievements,
+  clearNewAchievements,
 } = achievementSlice.actions;
 export const achievementSelector = state => state.achievementInfo;
 

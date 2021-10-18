@@ -10,6 +10,7 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from 'react-native';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import {LinearProgress, Card, ThemeProvider} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
@@ -27,6 +28,10 @@ import {
   getUserTaskHistory,
 } from '../funcs/dispatch/dispatchFuncs';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
+import {
+  achievementSelector,
+  clearNewAchievements,
+} from '../redux/achievementSlice';
 
 interface Props {
   userFriends: [];
@@ -40,7 +45,8 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const {user, loading} = useSelector(stateSelector);
   const {myFriends, allFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
-
+  const {newAchievements} = useSelector(achievementSelector);
+  const [confetti, setConfetti] = useState(false);
   useEffect(() => {
     const start = async () => {
       await getUserById(dispatch);
@@ -60,44 +66,69 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
     helper();
   }, [myQuests]);
 
+  const renderConfetti = () => {
+    setConfetti(true);
+    setTimeout(() => {
+      setConfetti(false);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (newAchievements.length === 0) return;
+    renderConfetti();
+    dispatch(clearNewAchievements());
+  }, [newAchievements]);
+
   const renderAccordians = () => {
     const items = [];
-    // for (let item of activeQuests) {
-    //   items.push(<Accordian key={item.id} title={item.name} id={item.id} />);
-    // }
 
     for (let i = 0; i < activeQuests.length; i++) {
-      items.push(<Accordian index={i} title={activeQuests[i].name} id={activeQuests[i].id} length={activeQuests.length} />)
+      items.push(
+        <Accordian
+          key={i}
+          index={i}
+          title={activeQuests[i].name}
+          id={activeQuests[i].id}
+          length={activeQuests.length}
+        />,
+      );
     }
 
     return items;
   };
   return (
     <View style={styles.body}>
-      <ImageBackground
-        style={{flex: 1}}
-        source={require('../assets/mauve-stacked-waves-haikei.png')}
-      >
-        <ThemeProvider theme={elementsTheme}>
-          <ScrollView style={{flex: 1}}>
-            <Button
-              title="Achievements"
-              onPress={() => navigation.navigate('Achievements')}
-            />
-            <Card>
-              <View style={styles.header}>
-                <Image source={require('../assets/avatar.png')} />
-                <Text style={styles.level}>Lvl {Math.floor(user.exp / 100)}</Text>
-                <LinearProgress
-                  style={styles.progressBar}
-                  color="#2d3c8f"
-                  value={(user.exp % 100) / 100}
-                  variant={'determinate'}
-                />
-                <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
-              </View>
-            </Card>
-            {activeQuests.length ? (
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}>
+          <ThemeProvider theme={elementsTheme}>
+            <ScrollView style={{flex: 1}}>
+              <Button
+                title="Achievements"
+                onPress={() => navigation.navigate('Achievements')}
+              />
+              <Card>
+                <View style={styles.header}>
+                  <Image source={require('../assets/avatar.png')} />
+                  <Text style={styles.level}>
+                    Lvl {Math.floor(user.exp / 100)}
+                  </Text>
+                  <LinearProgress
+                    style={styles.progressBar}
+                    color="#2d3c8f"
+                    value={(user.exp % 100) / 100}
+                    variant={'determinate'}
+                  />
+                  <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
+                </View>
+              </Card>
+              {activeQuests.length ? (
                 <Card>
                   <View style={styles.container}>
                     <Text style={styles.activeQuests}>Active Quests</Text>
@@ -122,7 +153,15 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
             </ScrollView>
           </ThemeProvider>
         </ImageBackground>
-
+      )}
+      {confetti && (
+        <ConfettiCannon
+          fadeOut={true}
+          count={200}
+          fallSpeed={1500}
+          origin={{x: -10, y: 0}}
+        />
+      )}
     </View>
   );
 };
