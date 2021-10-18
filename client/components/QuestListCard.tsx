@@ -12,7 +12,7 @@ const QuestListCard = props => {
         <Card.Divider />
 
         { questList?.length < 1
-          ? <Text>Nothing to display... yet!</Text>
+          ? <Text style={styles.name}>Nothing to display... yet!</Text>
           : questList?.map((quest, i) => {
             return (
               <View key={i} style={styles.activeQuestList}>
