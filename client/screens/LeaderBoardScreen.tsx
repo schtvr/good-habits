@@ -15,6 +15,7 @@ const LeaderBoardScreen = () => {
   const [isGlobal, setIsGlobal] = useState(true);
   const toggleSwitch = () => setIsGlobal(previousState => !previousState);
   const {globalRankings, friendRankings} = useSelector(stateSelector);
+  let {user} = useSelector(stateSelector);
   const dispatch = useDispatch();
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -51,7 +52,8 @@ const LeaderBoardScreen = () => {
   }, []);
 
   const makeList = players => {
-    return players.sort((b, a) => a.level - b.level).slice(0, 10);
+    if (!isGlobal) players.push(user);
+    return players.sort((b, a) => a.exp - b.exp).slice(0, 10);
   };
 
   const playerList = isGlobal
@@ -87,15 +89,17 @@ const LeaderBoardScreen = () => {
                 <DataTable.Header>
                   <DataTable.Title>Position</DataTable.Title>
                   <DataTable.Title>User</DataTable.Title>
+                  <DataTable.Title numeric>Level</DataTable.Title>
                   <DataTable.Title numeric>Exp</DataTable.Title>
                 </DataTable.Header>
                 {playerList.map((player, index) => {
                   return (
                     <DataTable.Row key={player.id}>
-                      <DataTable.Cell>{index + 1}</DataTable.Cell>
-                      <DataTable.Cell>{player.userName}</DataTable.Cell>
-                      <DataTable.Cell numeric>{player.exp}</DataTable.Cell>
-                    </DataTable.Row>
+                <DataTable.Cell numeric>{index + 1}       </DataTable.Cell>
+                <DataTable.Cell>{player.userName}</DataTable.Cell>
+                <DataTable.Cell numeric>{Math.floor(player.exp / 100)}</DataTable.Cell>
+                <DataTable.Cell numeric>{player.exp}</DataTable.Cell>
+              </DataTable.Row>
                   );
                 })}
               </DataTable>

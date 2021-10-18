@@ -61,7 +61,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.activeQuest}>Username: {item.userName}</Text>
+        <Text style={styles.activeQuest}>{item.userName}</Text>
       </View>
     );
   };
