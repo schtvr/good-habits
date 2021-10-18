@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
-import { LinearProgress, Card, ThemeProvider} from 'react-native-elements';
+import {LinearProgress, Card, ThemeProvider} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
 import {IQuest, IUser} from '../interfaces/interfaces';
@@ -25,7 +26,7 @@ import {
   getMyFriendRequests,
   getUserTaskHistory,
 } from '../funcs/dispatch/dispatchFuncs';
-import { elementsTheme } from '../styles/react-native-elements-theme-provider'
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 interface Props {
   userFriends: [];
@@ -36,7 +37,7 @@ interface Props {
 
 const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
-  const {user} = useSelector(stateSelector);
+  const {user, loading} = useSelector(stateSelector);
   const {myFriends, allFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
 
@@ -97,29 +98,31 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
               </View>
             </Card>
             {activeQuests.length ? (
+                <Card>
+                  <View style={styles.container}>
+                    <Text style={styles.activeQuests}>Active Quests</Text>
+                    {renderAccordians()}
+                  </View>
+                </Card>
+              ) : (
+                <Card>
+                  <View style={styles.container}>
+                    <Text style={styles.activeQuests}>No Active Quests</Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Search')}>
+                      <Text style={styles.noQuests}>Go to all quests</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Card>
+              )}
               <Card>
-                <View style={styles.container}>
-                  <Text style={styles.activeQuests}>Active Quests</Text>
-                  {renderAccordians()}
-                </View>
+                <Text style={styles.activeFriends}>Active Friends</Text>
+                <CarouselComponent data={myFriends} />
               </Card>
-            ) : (
-              <Card>
-                <View style={styles.container}>
-                  <Text style={styles.activeQuests}>No Active Quests</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-                    <Text style={styles.noQuests}>Go to all quests</Text>
-                  </TouchableOpacity>
-                </View>
-              </Card>
-            )}
-            <Card>
-            <Text style={styles.activeFriends}>Active Friends</Text>
-              <CarouselComponent data={myFriends} />
-            </Card>
-          </ScrollView>
-        </ThemeProvider>
-      </ImageBackground>
+            </ScrollView>
+          </ThemeProvider>
+        </ImageBackground>
+
     </View>
   );
 };
@@ -181,6 +184,15 @@ const styles = StyleSheet.create({
   },
   friendButtons: {
     alignItems: 'flex-end',
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 
