@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Switch} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {DataTable} from 'react-native-paper';
+import { View, Text, StyleSheet, Switch, ImageBackground } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { DataTable, Provider as PaperProvider} from 'react-native-paper';
 import {
   stateSelector,
   getAllRanking,
   getFriendRanking,
 } from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Card, ThemeProvider } from 'react-native-elements'
+import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 
 const LeaderBoardScreen = () => {
   const [isGlobal, setIsGlobal] = useState(true);
@@ -60,41 +62,51 @@ const LeaderBoardScreen = () => {
 
   return (
     <View style={styles.body}>
-      <View style={styles.titleContainer}>
-        {isGlobal ? (
-          <Text style={styles.title}>Global Leaderboard</Text>
-        ) : (
-          <Text style={styles.title}>Friends Leaderboard</Text>
-        )}
-        <Switch
-          style={styles.switch}
-          trackColor={{false: '#00d9ff', true: '#029400'}}
-          thumbColor={isGlobal ? '#016300' : '#0085b5'}
-          onValueChange={toggleSwitch}
-          value={isGlobal}
-        />
-      </View>
-      <View style={styles.tableContainer}>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Position</DataTable.Title>
-            <DataTable.Title>User</DataTable.Title>
-            <DataTable.Title numeric>Lvl</DataTable.Title>
-            <DataTable.Title numeric>Exp</DataTable.Title>
-          </DataTable.Header>
-
-          {playerList.map((player, index) => {
-            return (
-              <DataTable.Row key={player.id}>
-                <DataTable.Cell>{index + 1}</DataTable.Cell>
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}
+      >
+        <ThemeProvider theme={elementsTheme}>
+          <Card>
+            <View style={styles.titleContainer}>
+              {isGlobal ? (
+                <Text style={styles.title}>Global Leaderboard</Text>
+              ) : (
+                <Text style={styles.title}>Friends Leaderboard</Text>
+              )}
+              <Switch
+                style={styles.switch}
+                trackColor={{false: '#6071d5', true: '#6071d5'}}
+                thumbColor={isGlobal ? '#2d3c8f' : '#2d3c8f'}
+                onValueChange={toggleSwitch}
+                value={isGlobal}
+              />
+            </View>
+          </Card>
+          <View style={styles.tableContainer}>
+            <Card>
+              <DataTable style={{ borderRadius: 12}}>
+                <DataTable.Header>
+                  <DataTable.Title>Position</DataTable.Title>
+                  <DataTable.Title>User</DataTable.Title>
+                  <DataTable.Title numeric>Level</DataTable.Title>
+                  <DataTable.Title numeric>Exp</DataTable.Title>
+                </DataTable.Header>
+                {playerList.map((player, index) => {
+                  return (
+                    <DataTable.Row key={player.id}>
+                <DataTable.Cell numeric>{index + 1}       </DataTable.Cell>
                 <DataTable.Cell>{player.userName}</DataTable.Cell>
                 <DataTable.Cell numeric>{Math.floor(player.exp / 100)}</DataTable.Cell>
-                <DataTable.Cell numeric>{player.exp % 100}</DataTable.Cell>
+                <DataTable.Cell numeric>{player.exp}</DataTable.Cell>
               </DataTable.Row>
-            );
-          })}
-        </DataTable>
-      </View>
+                  );
+                })}
+              </DataTable>
+            </Card>
+          </View>
+        </ThemeProvider>
+      </ImageBackground>
     </View>
   );
 };
@@ -107,18 +119,14 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
-    paddingBottom: 20,
     fontSize: 22,
-    color: '#979dac',
+    color: '#111',
   },
   titleContainer: {
     flexDirection: 'column',
-    paddingTop: 20,
   },
   tableContainer: {
-    paddingHorizontal: 20,
-    backgroundColor: '#e0e0e0',
-    margin: 20,
+    paddingHorizontal: 0,
   },
   switch: {
     alignSelf: 'center',
