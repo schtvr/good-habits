@@ -374,7 +374,7 @@ const setPfp = async (req: Request, res: Response) => {
     await user.update({
       pfp
     });
-    return sendRes(res, true, 200, 'Profile pic set thanks boi');
+    return sendRes(res, true, 200, 'Profile pic set thanks boi', {pfp});
   } catch (err) {
     console.log(err);
     return sendRes(res, false, 500, 'Setting pfp failed', err);
