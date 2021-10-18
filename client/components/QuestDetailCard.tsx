@@ -62,14 +62,12 @@ const QuestDetailCard = props => {
       </View>
       {activeQuests.length > 0 ? (
         <Button
-          color={color[category]}
           title="Added to quests"
           disabled={true}
           onPress={() => console.log('no good')}
         />
       ) : (
         <Button
-          color={color[category]}
           title="Add to active quests"
           onPress={addToMyQuests}
         />
