@@ -6,6 +6,7 @@ import {
   FlatList,
   Switch,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {Avatar, Input} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,18 +17,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
   let {quests} = useSelector(questSelector);
-  let { usersList } = useSelector(stateSelector);
+  let {usersList} = useSelector(stateSelector);
   let {user} = useSelector(stateSelector);
   usersList = usersList.filter(friend => friend.userName !== user.userName);
   const [questArray, setQuestArray] = useState([...quests]);
   const [usersArray, setUsersArray] = useState([...usersList]);
   const [searchFriends, setSearchFriends] = useState(false);
   const [searchVal, setSearchVal] = useState('');
+  const {loading} = useSelector(stateSelector);
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
 
   const renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
         <View style={styles.listItems}>
           <Avatar size="large" source={require('../assets/avatar.png')} />
           <Text>{item.userName}</Text>
@@ -62,7 +65,6 @@ const SearchDetailsScreen = ({navigation}) => {
       }),
     );
   };
-
 
   useEffect(() => {
     getQuests();
@@ -111,7 +113,13 @@ const SearchDetailsScreen = ({navigation}) => {
   let renderList;
   if (searchFriends) renderList = searchVal ? usersArray : [];
   else renderList = searchVal ? questArray : quests;
-
+  if (loading)
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.loader}>Loading...</Text>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   return (
     <View style={{marginTop: 20, flex: 1}}>
       <Input
@@ -119,7 +127,6 @@ const SearchDetailsScreen = ({navigation}) => {
         onChangeText={text => handleSearch(text)}
         value={searchVal}
       />
-
       {searchFriends ? (
         <>
           <Text style={styles.title}>All Users</Text>
@@ -127,7 +134,7 @@ const SearchDetailsScreen = ({navigation}) => {
             data={renderList}
             numColumns={3}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
           />
         </>
       ) : (
@@ -137,7 +144,7 @@ const SearchDetailsScreen = ({navigation}) => {
           <FlatList
             data={renderList}
             numColumns={3}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             renderItem={({item}) => {
               return (
                 <View style={styles.listItems}>
@@ -202,6 +209,15 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 

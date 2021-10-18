@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
-import { LinearProgress, Card, ThemeProvider} from 'react-native-elements';
+import {LinearProgress, Card, ThemeProvider} from 'react-native-elements';
 import CarouselComponent from '../components/CarouselComponent';
 import Accordian from '../components/Accordian';
 import {IQuest, IUser} from '../interfaces/interfaces';
@@ -25,7 +26,7 @@ import {
   getMyFriendRequests,
   getUserTaskHistory,
 } from '../funcs/dispatch/dispatchFuncs';
-import { elementsTheme } from '../styles/react-native-elements-theme-provider'
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 interface Props {
   userFriends: [];
@@ -36,7 +37,7 @@ interface Props {
 
 const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
-  const {user} = useSelector(stateSelector);
+  const {user, loading} = useSelector(stateSelector);
   const {myFriends, allFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
 
@@ -73,53 +74,62 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   };
   return (
     <View style={styles.body}>
-      <ImageBackground
-        style={{flex: 1}}
-        source={require('../assets/mauve-stacked-waves-haikei.png')}
-      >
-        <ThemeProvider theme={elementsTheme}>
-          <ScrollView style={{flex: 1}}>
-            <Button
-              title="Achievements"
-              onPress={() => navigation.navigate('Achievements')}
-            />
-            <Card>
-              <View style={styles.header}>
-                <Image source={require('../assets/avatar.png')} />
-                <Text style={styles.level}>Lvl {Math.floor(user.exp / 100)}</Text>
-                <LinearProgress
-                  style={styles.progressBar}
-                  color="yellow"
-                  value={(user.exp % 100) / 100}
-                  variant={'determinate'}
-                />
-                <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
-              </View>
-            </Card>
-            {activeQuests.length ? (
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}>
+          <ThemeProvider theme={elementsTheme}>
+            <ScrollView style={{flex: 1}}>
+              <Button
+                title="Achievements"
+                onPress={() => navigation.navigate('Achievements')}
+              />
               <Card>
-                <View style={styles.container}>
-                  <Text style={styles.activeQuests}>Active Quests</Text>
-                  {renderAccordians()}
+                <View style={styles.header}>
+                  <Image source={require('../assets/avatar.png')} />
+                  <Text style={styles.level}>
+                    Lvl {Math.floor(user.exp / 100)}
+                  </Text>
+                  <LinearProgress
+                    style={styles.progressBar}
+                    color="yellow"
+                    value={(user.exp % 100) / 100}
+                    variant={'determinate'}
+                  />
+                  <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
                 </View>
               </Card>
-            ) : (
+              {activeQuests.length ? (
+                <Card>
+                  <View style={styles.container}>
+                    <Text style={styles.activeQuests}>Active Quests</Text>
+                    {renderAccordians()}
+                  </View>
+                </Card>
+              ) : (
+                <Card>
+                  <View style={styles.container}>
+                    <Text style={styles.activeQuests}>No Active Quests</Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Search')}>
+                      <Text style={styles.noQuests}>Go to all quests</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Card>
+              )}
               <Card>
-                <View style={styles.container}>
-                  <Text style={styles.activeQuests}>No Active Quests</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-                    <Text style={styles.noQuests}>Go to all quests</Text>
-                  </TouchableOpacity>
-                </View>
+                <Text style={styles.activeFriends}>Active Friends</Text>
+                <CarouselComponent data={myFriends} />
               </Card>
-            )}
-            <Card>
-            <Text style={styles.activeFriends}>Active Friends</Text>
-              <CarouselComponent data={myFriends} />
-            </Card>
-          </ScrollView>
-        </ThemeProvider>
-      </ImageBackground>
+            </ScrollView>
+          </ThemeProvider>
+        </ImageBackground>
+      )}
     </View>
   );
 };
@@ -181,6 +191,15 @@ const styles = StyleSheet.create({
   },
   friendButtons: {
     alignItems: 'flex-end',
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 

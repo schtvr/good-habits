@@ -1,20 +1,27 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Switch, ImageBackground } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { DataTable, Provider as PaperProvider} from 'react-native-paper';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Switch,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {DataTable, Provider as PaperProvider} from 'react-native-paper';
 import {
   stateSelector,
   getAllRanking,
   getFriendRanking,
 } from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card, ThemeProvider } from 'react-native-elements'
-import { elementsTheme } from '../styles/react-native-elements-theme-provider';
+import {Card, ThemeProvider} from 'react-native-elements';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 const LeaderBoardScreen = () => {
   const [isGlobal, setIsGlobal] = useState(true);
   const toggleSwitch = () => setIsGlobal(previousState => !previousState);
-  const {globalRankings, friendRankings} = useSelector(stateSelector);
+  const {globalRankings, friendRankings, loading} = useSelector(stateSelector);
   let {user} = useSelector(stateSelector);
   const dispatch = useDispatch();
   const getToken = async () => {
@@ -62,51 +69,59 @@ const LeaderBoardScreen = () => {
 
   return (
     <View style={styles.body}>
-      <ImageBackground
-        style={{flex: 1}}
-        source={require('../assets/mauve-stacked-waves-haikei.png')}
-      >
-        <ThemeProvider theme={elementsTheme}>
-          <Card>
-            <View style={styles.titleContainer}>
-              {isGlobal ? (
-                <Text style={styles.title}>Global Leaderboard</Text>
-              ) : (
-                <Text style={styles.title}>Friends Leaderboard</Text>
-              )}
-              <Switch
-                style={styles.switch}
-                trackColor={{false: '#6071d5', true: '#6071d5'}}
-                thumbColor={isGlobal ? '#2d3c8f' : '#2d3c8f'}
-                onValueChange={toggleSwitch}
-                value={isGlobal}
-              />
-            </View>
-          </Card>
-          <View style={styles.tableContainer}>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}>
+          <ThemeProvider theme={elementsTheme}>
             <Card>
-              <DataTable style={{ borderRadius: 12}}>
-                <DataTable.Header>
-                  <DataTable.Title>Position</DataTable.Title>
-                  <DataTable.Title>User</DataTable.Title>
-                  <DataTable.Title numeric>Level</DataTable.Title>
-                  <DataTable.Title numeric>Exp</DataTable.Title>
-                </DataTable.Header>
-                {playerList.map((player, index) => {
-                  return (
-                    <DataTable.Row key={player.id}>
-                <DataTable.Cell numeric>{index + 1}       </DataTable.Cell>
-                <DataTable.Cell>{player.userName}</DataTable.Cell>
-                <DataTable.Cell numeric>{Math.floor(player.exp / 100)}</DataTable.Cell>
-                <DataTable.Cell numeric>{player.exp}</DataTable.Cell>
-              </DataTable.Row>
-                  );
-                })}
-              </DataTable>
+              <View style={styles.titleContainer}>
+                {isGlobal ? (
+                  <Text style={styles.title}>Global Leaderboard</Text>
+                ) : (
+                  <Text style={styles.title}>Friends Leaderboard</Text>
+                )}
+                <Switch
+                  style={styles.switch}
+                  trackColor={{false: '#6071d5', true: '#6071d5'}}
+                  thumbColor={isGlobal ? '#2d3c8f' : '#2d3c8f'}
+                  onValueChange={toggleSwitch}
+                  value={isGlobal}
+                />
+              </View>
             </Card>
-          </View>
-        </ThemeProvider>
-      </ImageBackground>
+            <View style={styles.tableContainer}>
+              <Card>
+                <DataTable style={{borderRadius: 12}}>
+                  <DataTable.Header>
+                    <DataTable.Title>Position</DataTable.Title>
+                    <DataTable.Title>User</DataTable.Title>
+                    <DataTable.Title numeric>Level</DataTable.Title>
+                    <DataTable.Title numeric>Exp</DataTable.Title>
+                  </DataTable.Header>
+                  {playerList.map((player, index) => {
+                    return (
+                      <DataTable.Row key={player.id}>
+                        <DataTable.Cell numeric>{index + 1} </DataTable.Cell>
+                        <DataTable.Cell>{player.userName}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {Math.floor(player.exp / 100)}
+                        </DataTable.Cell>
+                        <DataTable.Cell numeric>{player.exp}</DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  })}
+                </DataTable>
+              </Card>
+            </View>
+          </ThemeProvider>
+        </ImageBackground>
+      )}
     </View>
   );
 };
@@ -131,6 +146,15 @@ const styles = StyleSheet.create({
   switch: {
     alignSelf: 'center',
     justifyCenter: 'center',
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 

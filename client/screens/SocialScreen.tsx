@@ -6,11 +6,19 @@ import {
   FlatList,
   ImageSourcePropType,
 } from 'react-native';
-import { View, Text, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
-import { Card, ThemeProvider } from 'react-native-elements';
-import { useSelector } from 'react-redux';
-import { friendSelector } from '../redux/friendSlice';
-import { elementsTheme } from '../styles/react-native-elements-theme-provider';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
+import {Card, ThemeProvider} from 'react-native-elements';
+import {useSelector} from 'react-redux';
+import {friendSelector} from '../redux/friendSlice';
+import {stateSelector} from '../redux/userSlice';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 interface IFriends {
   id: number;
@@ -56,34 +64,43 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
 
 const SocialScreen = ({navigation}) => {
   const {myFriends, allFriends} = useSelector(friendSelector);
+  const {loading} = useSelector(stateSelector);
 
   return (
     <View style={{flex: 1}}>
-      <ImageBackground
-        style={{flex: 1}}
-        source={require('../assets/mauve-stacked-waves-haikei.png')}
-        resizeMode='stretch'
-      >
-        <ThemeProvider theme={elementsTheme}>
-          {myFriends.length > 0 ? (
-            <View>
-              <Text style={styles.title}>All Friends!</Text>
-              <FlatList
-                data={myFriends}
-                keyExtractor={item => item.id.toString()}
-                renderItem={renderItems}
-              />
-            </View>
-          ) : (
-            <>
-              <Text style={styles.addFriend}>Try sending a friend request!</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-                <Text style={styles.link}>Go to friend page!</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </ThemeProvider>
-      </ImageBackground>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}
+          resizeMode="stretch">
+          <ThemeProvider theme={elementsTheme}>
+            {myFriends.length > 0 ? (
+              <View>
+                <Text style={styles.title}>All Friends!</Text>
+                <FlatList
+                  data={myFriends}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={renderItems}
+                />
+              </View>
+            ) : (
+              <>
+                <Text style={styles.addFriend}>
+                  Try sending a friend request!
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+                  <Text style={styles.link}>Go to friend page!</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </ThemeProvider>
+        </ImageBackground>
+      )}
     </View>
   );
 };
@@ -128,6 +145,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingTop: 20,
     fontSize: 16,
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 
