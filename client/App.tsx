@@ -35,6 +35,7 @@ import {
 
 import OtherProfileScreen from './screens/OtherProfilesScreen';
 import { getMyFriendRequests } from './funcs/dispatch/dispatchFuncs';
+import UploadPfp from './screens/UploadPfp';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -258,6 +259,7 @@ const App: () => Node = () => {
                 name="ProfileSettings"
                 component={ProfileSettings}
               />
+              <Stack.Screen name="Upload Profile Picture" component={UploadPfp} />
               <Stack.Screen name="Search" component={SearchDetailsScreen} />
             </>
           )}
