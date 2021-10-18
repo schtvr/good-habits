@@ -10,7 +10,7 @@ import {
 import {CheckBox} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {userLogOut} from '../funcs/dispatch/dispatchFuncs';
-import {stateSelector} from '../redux/userSlice';
+import {clearError, stateSelector} from '../redux/userSlice';
 
 const SettingsScreen = ({navigation}) => {
   const [checked, setChecked] = useState(false);
@@ -19,6 +19,7 @@ const SettingsScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const logoutUser = async () => {
     await userLogOut(dispatch);
+    dispatch(clearError());
   };
   return (
     <ScrollView>

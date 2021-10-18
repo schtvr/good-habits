@@ -47,6 +47,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const {activeQuests, myQuests} = useSelector(questSelector);
   const {newAchievements} = useSelector(achievementSelector);
   const [confetti, setConfetti] = useState(false);
+
   useEffect(() => {
     const start = async () => {
       await getUserById(dispatch);
@@ -93,7 +94,6 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
         />,
       );
     }
-
     return items;
   };
   return (
