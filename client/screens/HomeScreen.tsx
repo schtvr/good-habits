@@ -61,9 +61,14 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
 
   const renderAccordians = () => {
     const items = [];
-    for (let item of activeQuests) {
-      items.push(<Accordian key={item.id} title={item.name} id={item.id} />);
+    // for (let item of activeQuests) {
+    //   items.push(<Accordian key={item.id} title={item.name} id={item.id} />);
+    // }
+
+    for (let i = 0; i < activeQuests.length; i++) {
+      items.push(<Accordian index={i} title={activeQuests[i].name} id={activeQuests[i].id} length={activeQuests.length} />)
     }
+
     return items;
   };
   return (
@@ -121,7 +126,6 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     paddingHorizontal: 10,
     paddingBottom: 20,
   },
