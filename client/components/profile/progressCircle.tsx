@@ -185,7 +185,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
   },
-  innerCircleStyle: {}
+  innerCircleStyle: {
+    color: 'green'
+  }
 });
 
 export default CircularProgressBar;

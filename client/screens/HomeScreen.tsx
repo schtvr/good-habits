@@ -74,37 +74,30 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   };
   return (
     <View style={styles.body}>
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <Text style={styles.loader}>Loading...</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : (
-        <ImageBackground
-          style={{flex: 1}}
-          source={require('../assets/mauve-stacked-waves-haikei.png')}>
-          <ThemeProvider theme={elementsTheme}>
-            <ScrollView style={{flex: 1}}>
-              <Button
-                title="Achievements"
-                onPress={() => navigation.navigate('Achievements')}
-              />
-              <Card>
-                <View style={styles.header}>
-                  <Image source={require('../assets/avatar.png')} />
-                  <Text style={styles.level}>
-                    Lvl {Math.floor(user.exp / 100)}
-                  </Text>
-                  <LinearProgress
-                    style={styles.progressBar}
-                    color="yellow"
-                    value={(user.exp % 100) / 100}
-                    variant={'determinate'}
-                  />
-                  <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
-                </View>
-              </Card>
-              {activeQuests.length ? (
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}
+      >
+        <ThemeProvider theme={elementsTheme}>
+          <ScrollView style={{flex: 1}}>
+            <Button
+              title="Achievements"
+              onPress={() => navigation.navigate('Achievements')}
+            />
+            <Card>
+              <View style={styles.header}>
+                <Image source={require('../assets/avatar.png')} />
+                <Text style={styles.level}>Lvl {Math.floor(user.exp / 100)}</Text>
+                <LinearProgress
+                  style={styles.progressBar}
+                  color="#2d3c8f"
+                  value={(user.exp % 100) / 100}
+                  variant={'determinate'}
+                />
+                <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
+              </View>
+            </Card>
+            {activeQuests.length ? (
                 <Card>
                   <View style={styles.container}>
                     <Text style={styles.activeQuests}>Active Quests</Text>
@@ -129,7 +122,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
             </ScrollView>
           </ThemeProvider>
         </ImageBackground>
-      )}
+
     </View>
   );
 };
