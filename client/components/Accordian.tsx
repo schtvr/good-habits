@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   btn: {
     marginBottom: 10,
     marginTop: 10,
-    width: 100,
+    width: 150,
     backgroundColor: '#ddd',
     borderWidth: 4,
     borderColor: '#2d3c8f',
