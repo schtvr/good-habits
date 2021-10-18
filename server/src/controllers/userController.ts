@@ -11,6 +11,10 @@ import checkAchievements from '../funcs/checkAchievements';
 import firebase from 'firebase-admin';
 import ActiveQuest from '../models/activeQuest';
 import { attachQuestTemplates, attachTemplatesToUser } from '../funcs/attachQuestTemplates';
+import CompletedQuest from '../models/completedQuest';
+import AchievementTemplate from '../models/achievementTemplate';
+import Achievement from '../models/achievement';
+import { Op } from 'sequelize';
 
 // CHECK FOR PASSWORD LENGTH
 // VALIDATE FORM
@@ -76,6 +80,7 @@ const getYourInfo = async (req: Request, res: Response) => {
   }
 };
 
+// 3 most recent achievements
 const findUserById = async (req: Request, res: Response) => {
   const userId = req.params.userId;
   if (!userId) return res.status(403).send({
@@ -87,6 +92,10 @@ const findUserById = async (req: Request, res: Response) => {
       include: [{
         model: ActiveQuest,
         as: 'activeQuests'
+      }, 
+      {
+        model: CompletedQuest,
+        as: 'completedQuests'
       }],
       attributes : {
         include: ['id', 'userName', 'level', 'exp'],
@@ -101,6 +110,25 @@ const findUserById = async (req: Request, res: Response) => {
     if (!user) return sendRes(res, false, 403, 'No user found with that id.');
     
     await attachTemplatesToUser(user);
+    const recentAchieves = await Achievement.findAll({
+      where: {
+        userId: user.id
+      },
+      limit: 3,
+      order: [['createdAt', 'asc']] 
+    });
+    const achievementIds: number[] = [];
+    for (const achievement of recentAchieves) {
+      achievementIds.push(achievement.templateId);
+    }
+    const achievementTemplates = await AchievementTemplate.findAll({
+      where: {
+        id: {
+          [Op.in]: achievementIds
+        }
+      }
+    });
+    user.setDataValue('recentAchievements', achievementTemplates);
 
     return sendRes(res, true, 200, 'Here is the user lol', user);
   } catch (err) {
