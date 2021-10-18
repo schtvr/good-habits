@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,8 +6,10 @@ import {
   ImageBackground,
 } from 'react-native';
 import {Input, Text, Button, Card, ThemeProvider} from 'react-native-elements';
-import {useDispatch} from 'react-redux';
-import {register} from '../redux/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {clearError} from '../redux/userSlice';
+
+import {register, stateSelector} from '../redux/userSlice';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 import SVGatorComponent from '../styles/layered-waves-haikei(1)';
 
@@ -20,6 +22,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
     email: '',
     password: '',
   });
+  const {loading, error} = useSelector(stateSelector);
 
   const registerUser = async () => {
     dispatch(
@@ -33,13 +36,17 @@ const RegisterPage = ({navigation}): JSX.Element => {
     );
   };
 
+  const changeScreens = () => {
+    dispatch(clearError());
+    navigation.navigate('signIn');
+  };
+
   return (
     <View style={styles.container}>
-      <SVGatorComponent />
+      {/* <SVGatorComponent /> */}
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}>
-
         <ThemeProvider theme={elementsTheme}>
           <Card containerStyle={{marginTop: 50}}>
             <Text h4 h4Style={styles.headerTitle}>
@@ -47,9 +54,11 @@ const RegisterPage = ({navigation}): JSX.Element => {
             </Text>
           </Card>
           <Card>
-
+            <Text h4 h3Style={styles.headerTitle}>
+              {error}
+            </Text>
             <Input
-              leftIcon={{type: 'fontisto', name: 'person',color: '#6071d5'}}
+              leftIcon={{type: 'fontisto', name: 'person', color: '#6071d5'}}
               placeholder="username"
               value={userState.userName}
               onChangeText={userName => setUserState({...userState, userName})}
@@ -57,7 +66,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
               autoCapitalize="none"
             />
             <Input
-              leftIcon={{type: 'fontisto', name: 'at',color: '#6071d5'}}
+              leftIcon={{type: 'fontisto', name: 'at', color: '#6071d5'}}
               placeholder="email address"
               value={userState.email}
               onChangeText={email => setUserState({...userState, email})}
@@ -65,7 +74,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
               autoCapitalize="none"
             />
             <Input
-              leftIcon={{type: 'fontisto', name: 'unlocked',color: '#6071d5',}}
+              leftIcon={{type: 'fontisto', name: 'unlocked', color: '#6071d5'}}
               placeholder="password"
               value={userState.password}
               onChangeText={password => setUserState({...userState, password})}
@@ -78,7 +87,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
               onPress={() => registerUser()}
               buttonStyle={styles.btnStyle}
             />
-            <TouchableOpacity onPress={() => navigation.navigate('signIn')}>
+            <TouchableOpacity onPress={() => changeScreens()}>
               <Text style={styles.link}>
                 Already have an account? Go to sign in
               </Text>
