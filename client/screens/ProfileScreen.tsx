@@ -20,9 +20,12 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { otherUser, loading, user } = useSelector(stateSelector);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   console.log('USER HERE', user);
 >>>>>>> aa5d4cbf0b4ce981127dd3c066d0d362b84eac53
+=======
+>>>>>>> 6ec1d86afc3493509bbf62a57b974b3e5d0d0a74
 
   useEffect(() => {
     (async () => {
