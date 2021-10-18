@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import {Avatar, Input} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllQuests, questSelector} from '../redux/questSlice';
-import {getUsers, stateSelector} from '../redux/userSlice';
+import { questSelector} from '../redux/questSlice';
+import {stateSelector} from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAllUsers, getQuests } from '../funcs/dispatch/dispatchFuncs';
 
 const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const SearchDetailsScreen = ({navigation}) => {
 
   const [questArray, setQuestArray] = useState([...quests]);
   const [usersArray, setUsersArray] = useState([...usersList]);
-  const [searchFriends, setSearchFriends] = useState(false);
+  const [searchFriends, setSearchFriends] = useState(true);
   const [searchVal, setSearchVal] = useState('');
   const toggleSwitch = () => setSearchFriends(previousState => !previousState);
 
@@ -35,37 +36,9 @@ const SearchDetailsScreen = ({navigation}) => {
     );
   };
 
-  const getQuests = async () => {
-    dispatch(
-      getAllQuests({
-        api: {
-          url: 'quests',
-        },
-      }),
-    );
-  };
-
-  const getToken = async () => {
-    return await AsyncStorage.getItem('token');
-  };
-
-  const getAllUsers = async () => {
-    dispatch(
-      getUsers({
-        api: {
-          url: 'users',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
-
   useEffect(() => {
-    getQuests();
-    getAllUsers();
+    getQuests(dispatch);
+    getAllUsers(dispatch);
   }, []);
 
   const handleSearch = text => {

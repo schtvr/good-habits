@@ -49,7 +49,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     populateQuests();
   }, []);
-  console.log(user)
+
   return (
     <View style={{flex: 1}}>
       <ImageBackground

@@ -4,11 +4,12 @@ import {
   getAllFriends,
   clearFriends,
 } from '../../redux/friendSlice';
-import {getUser, signOut} from '../../redux/userSlice';
+import {getUser, signOut, getUsers} from '../../redux/userSlice';
 import {
   getActiveTasks,
   getActiveQuests,
   clearQuests,
+  getAllQuests,
 } from '../../redux/questSlice';
 import {getTaskHistory, clearAchievements, getAllAchievements, getOwnedAchievements} from '../../redux/achievementSlice';
 
@@ -133,3 +134,27 @@ export const getUserAchievements = async (dispatch: Function) => {
     }),
   );
 };
+
+export const getQuests = async (dispatch: Function) => {
+  dispatch(
+    getAllQuests({
+      api: {
+        url: 'quests',
+      },
+    }),
+  );
+};
+
+export const getAllUsers = async (dispatch: Function) => {
+  dispatch(
+    getUsers({
+      api: {
+        url: 'users',
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      },
+    }),
+  );
+};
+
