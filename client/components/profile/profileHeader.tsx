@@ -11,8 +11,7 @@ const ProfileHeader = props => {
   const { userName} = props
   const navigation = useNavigation();
   const { user } = useSelector(stateSelector);
-  const profileUrl = user.pfp;
-  console.log('url' + profileUrl);
+  const profileUrl = user.pfp || 'https://i.imgur.com/1dhHIkV.png';
   return (
     <View style={styles.container}>
       <View style={styles.pfp}>
