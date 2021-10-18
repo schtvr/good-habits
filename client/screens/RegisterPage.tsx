@@ -35,6 +35,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
 
   return (
     <View style={styles.container}>
+      <SVGatorComponent />
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}>
