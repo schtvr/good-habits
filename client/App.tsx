@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Settings} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Badge, Overlay, Button} from 'react-native-elements';
@@ -242,7 +242,6 @@ const TabStack = () => {
   );
 };
 
-//Remove the ! or change isAuthenticated to true to see other screens!
 
 const App: () => Node = () => {
   const {isAuthenticated} = useSelector(stateSelector);
@@ -277,6 +276,7 @@ const App: () => Node = () => {
               <Stack.Screen name="Upload Profile Picture" component={UploadPfp} />
               <Stack.Screen name="Search" component={SearchDetailsScreen} />
               <Stack.Screen name="Create Quest" component={CreateAQuestScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
             </>
           )}
         </Stack.Navigator>

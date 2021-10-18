@@ -28,7 +28,6 @@ interface IQuest {
 
 
 const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
-  console.log(item);
   return (
     <>
       <TouchableOpacity>
