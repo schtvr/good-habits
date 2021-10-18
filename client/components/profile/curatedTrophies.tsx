@@ -23,7 +23,9 @@ const CuratedTrophies = ({ recentAchievements }) => {
     });
   };
 
-  return <View style={styles.container}>{trophyList()}</View>;
+  return (
+    <View style={styles.container}>{trophyList()}</View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -43,8 +45,8 @@ const styles = StyleSheet.create({
   },
   trophyName: {
     fontSize: 14,
-    height: 40,
     flexWrap: 'wrap',
+    color: '#2d3c8f'
   },
 });
 
