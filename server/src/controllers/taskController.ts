@@ -7,6 +7,7 @@ import TaskHistory from '../models/taskHistory';
 import getDaysApart from '../funcs/getDailyTasks/getDaysApart';
 import addTasks from '../funcs/getDailyTasks/addTasks';
 import checkQuestCompleted from '../funcs/checkQuestCompleted';
+import fixOldTasks from '../funcs/fixOldTasks';
 
 const getTaskById = async (req: Request, res:Response) => {
   try {
@@ -82,6 +83,7 @@ const getTaskHistory = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     if (!user) return sendRes(res, false, 403, 'Not a valid user');
+    await fixOldTasks(user);
     const taskHistory = await user.getTaskHistory();
     return sendRes(res, true, 200, 'Task history retrieved', taskHistory);
   } catch (err) {

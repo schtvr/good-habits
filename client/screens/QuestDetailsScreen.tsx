@@ -1,16 +1,26 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
+import {ThemeProvider} from 'react-native-elements';
 import QuestDetailCard from '../components/QuestDetailCard';
 import QuestListCard from '../components/QuestListCard';
 import FriendListRow from '../components/FriendListRow';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllTasks, questSelector, questSlice} from '../redux/questSlice';
+import {getAllTasks, questSelector} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
+import {stateSelector} from '../redux/userSlice';
 
 const QuestDetailsScreen = ({route}) => {
   const dispatch = useDispatch();
 
   let {tasks} = useSelector(questSelector);
+  const {loading} = useSelector(stateSelector);
   const {id} = route.params;
 
   useEffect(() => {
@@ -37,14 +47,37 @@ const QuestDetailsScreen = ({route}) => {
     );
   };
   return (
-    <View>
-      <QuestDetailCard id={id} />
-      <FriendListRow />
-      <QuestListCard questList={tasks} />
+    <View style={{flex: 1}}>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ThemeProvider theme={elementsTheme}>
+          <ImageBackground
+            style={{flex: 1}}
+            source={require('../assets/mauve-stacked-waves-haikei.png')}>
+            <QuestDetailCard id={id} />
+            <FriendListRow />
+            <QuestListCard questList={tasks} />
+          </ImageBackground>
+        </ThemeProvider>
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
 
 export default QuestDetailsScreen;

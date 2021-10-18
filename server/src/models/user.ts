@@ -27,6 +27,7 @@ import RequestList from './requestList';
 import FriendList from './friendList';
 import FirebaseToken from './firebaseToken';
 import Quest from './quest';
+import AchievementTemplate from './achievementTemplate';
 
 export interface IUser {
   id: number
@@ -40,6 +41,8 @@ export interface IUser {
   activeQuests?: ActiveQuest[] | null
   completedQuests?: CompletedQuest[] | null
   quests?: Quest[] | null
+  complQuests?: Quest[] | null
+  recentAchievements?: AchievementTemplate[] | null
   pfp: string
 }
 
@@ -57,6 +60,8 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public activeQuests?: ActiveQuest[] | null;
   public completedQuests?: CompletedQuest[] | null;
   public quests?: Quest[] | null;
+  public complQuests?: Quest[] | null;
+  public recentAchievements?: AchievementTemplate[] | null;
   public pfp!: string;
 
   public readonly createdAt!: Date;

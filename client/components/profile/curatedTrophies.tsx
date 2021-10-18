@@ -1,18 +1,23 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
-import {user} from '../../screens/ProfileScreen';
 
-const CuratedTrophies = () => {
-  const {curatedTrophies} = user;
+const CuratedTrophies = ({ recentAchievements }) => {
 
+  if (!recentAchievements) return <></>;
   const trophyList = () => {
-    let imagePath = require('../../assets/icons/athlete-24x24-46391.png');
-
-    return curatedTrophies.map(({icon, name, key}) => {
+    return recentAchievements.map(achievement => {
+      let img;
+      if (achievement.category === 'Quests') {
+        img = require('../../assets/quests.png');
+      } else if (achievement.category === 'Tasks') {
+        img = require('../../assets/task.png');
+      } else if (achievement.category === 'Social') {
+        img = require('../../assets/social.png');
+      }
       return (
-        <View key={key} style={styles.trophy}>
-          <Image style={styles.trophyImage} source={imagePath} />
-          <Text style={styles.trophyName}>{name}</Text>
+        <View key={achievement.id} style={styles.trophy}>
+          <Image style={styles.trophyImage} source={img} />
+          <Text style={styles.trophyName}>{achievement.name}</Text>
         </View>
       );
     });
@@ -37,8 +42,7 @@ const styles = StyleSheet.create({
     height: 36,
   },
   trophyName: {
-    fontSize: 12,
-    width: 64,
+    fontSize: 14,
     height: 40,
     flexWrap: 'wrap',
   },

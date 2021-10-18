@@ -8,7 +8,7 @@ import {
   Platform,
   UIManager,
 } from 'react-native';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import {questSelector} from '../redux/questSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
@@ -21,20 +21,22 @@ if (Platform.OS === 'android') {
 
 interface IProps {
   id: number,
-  title: string
+  title: string,
+  index: number,
+  length: number,
 }
 
-const Accordian = ({ id, title }: IProps): JSX.Element => {
+const Accordian = ({ id, title, index, length }: IProps): JSX.Element => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState<boolean>(false);
   const [taskToDo, setTaskToDo] = useState<boolean>(false);
   const [taskList, setTaskList] = useState([]);
   const [completed, setCompleted] = useState<boolean>(false);
-  
+
   const {activeTasks} = useSelector(questSelector);
   const { completedTasks } = useSelector(achievementSelector);
   const { update } = useSelector(achievementSelector);
-  
+
   useEffect(() => {
     const res = activeTasks.filter((task) => (
       task.questId === id
@@ -53,7 +55,7 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
-  
+
   const completeTask = async (taskId) => {
     // send request and get update back
     // dispatch (update exp ---> update.gainexp)
@@ -73,11 +75,24 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
+    console.log('INDEX CHECK',  index)
   };
-  
-  return (
-    <View>
-      <TouchableOpacity style={styles.row} onPress={() => toggleExpand()}>
+
+  const accordianParent = () => {
+
+    const parentBorderHandler = () => {
+      if (length === 1) return {...styles.row, borderRadius: 12}
+      if (length === 2) {
+        if (index === 0) return {...styles.row, borderTopLeftRadius: 12, borderTopRightRadius: 12}
+        return {...styles.row, borderBottomLeftRadius: 12, borderBottomRightRadius: 12}
+      }
+      if (index === 0) return {...styles.row, borderTopLeftRadius: 12, borderTopRightRadius: 12}
+      if (index === length - 1) return {...styles.row, borderBottomLeftRadius: 12, borderBottomRightRadius: 12}
+      return {...styles.row}
+    }
+
+    return(
+    <TouchableOpacity style={parentBorderHandler()} onPress={() => toggleExpand()}>
         <Text style={styles.title}>{title}</Text>
         {taskToDo && !completed && <MaterialCommunityIcons name='priority-high' size={30} style={styles.notification} />}
         <View>
@@ -88,6 +103,12 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
           )}
         </View>
       </TouchableOpacity>
+      )
+  }
+
+  return (
+    <View>
+      {accordianParent()}
 
       <View style={styles.parentHeader} />
       {expanded && (
@@ -100,12 +121,13 @@ const Accordian = ({ id, title }: IProps): JSX.Element => {
                 <Button
                   title={completed ? 'Completed' : 'Complete'}
                   buttonStyle={styles.btn}
+                  titleStyle={{color: '#6071d5'}}
                   onPress={() => completeTask(task.id)}
                   disabled={completed}
                 />
               </View>
             ))}
-            {!taskToDo && 
+            {!taskToDo &&
               <Text style={styles.content}>No tasks for today!</Text>
             }
           </View>
@@ -123,7 +145,8 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 18,
     alignItems: 'center',
-    backgroundColor: '#5c677d',
+    backgroundColor: '#2d3c8f',
+
   },
   parentHeader: {
     height: 1,
@@ -132,8 +155,12 @@ const styles = StyleSheet.create({
   },
   child: {
     flexDirection: 'row',
-    backgroundColor: '#7d8597',
+    backgroundColor: '#6071d5',
     padding: 16,
+    marginLeft: 12,
+    marginRight: 12,
+    borderBottomColor: '#ddd',
+    borderBottomWidth: 2,
   },
   friendList: {
     alignContent: 'center',
@@ -145,19 +172,23 @@ const styles = StyleSheet.create({
   btn: {
     marginBottom: 10,
     marginTop: 10,
-    width: 100,
+    width: 150,
+    backgroundColor: '#ddd',
+    borderWidth: 4,
+    borderColor: '#2d3c8f',
+
   },
   content: {
     fontSize: 18,
     fontWeight: 'bold',
     flexWrap: 'wrap',
     maxWidth: 450,
-    color: '#001233',
+    color: '#ddd',
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#001233',
+    color: '#ddd',
   },
   accoridianBtn: {
     fontSize: 20,
@@ -173,6 +204,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 20,
   },
+
 });
 
 export default Accordian;
