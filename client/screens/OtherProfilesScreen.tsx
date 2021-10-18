@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {View, Button, StyleSheet } from 'react-native';
+import {View, StyleSheet, ImageBackground } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
@@ -8,7 +8,9 @@ import ProfileHeader from '../components/profile/profileHeader';
 import { questSelector, getAllQuests, getOtherUserActiveQuests, getOtherUserCompletedQuests} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getOtherUser, stateSelector } from '../redux/userSlice';
-import  {addFriend, friendSelector} from '../redux/friendSlice'
+import { addFriend } from '../redux/friendSlice'
+import { ThemeProvider, Card, Button } from 'react-native-elements';
+import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 
 const OtherProfileScreen = ({route}) => {
   const dispatch = useDispatch();
@@ -92,24 +94,34 @@ const OtherProfileScreen = ({route}) => {
   }, [])
 
   return (
-    <View>
-      <ProfileHeader
-        userName={userName}/>
-      <CuratedTrophies />
-      <CompletedStats
-        level={level}
-        howManyCompletedQuestsYouGotLilBoy={completedQuests.length}
-      />
-      <View style={{paddingTop: 10}} />
-      <Button
-        title="Send friend request"
-        onPress={addAFriend}/>
+    <View style={{flex: 1}}>
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}
+      >
+        <ThemeProvider theme={elementsTheme}>
+      <Card>
+        <ProfileHeader
+          userName={userName}/>
+        <Button
+          title="Send friend request"
+          onPress={addAFriend}/>
+      </Card>
+      <Card>
+        <CompletedStats
+          level={level}
+          howManyCompletedQuestsYouGotLilBoy={completedQuests.length}
+        />
+        <CuratedTrophies />
+      </Card>
       <QuestListCard
         cardTitle={`${userName}'s active quests`}
         questList={scopedActiveQuests}/>
       <QuestListCard
         cardTitle={`${userName}'s previous quests`}
         questList={scopedCompletedQuests}/>
+        </ThemeProvider>
+      </ImageBackground>
     </View>
   );
 }
