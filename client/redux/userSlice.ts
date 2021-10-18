@@ -9,6 +9,7 @@ interface IState {
     exp: number;
     level: number;
     firebaseId: string;
+    pfp: string;
   };
   otherUser: {
     userName: string;
@@ -21,6 +22,7 @@ interface IState {
   usersList: any[];
   globalRankings: [];
   friendRankings: [];
+  pfp: string;
 }
 
 const initialState: IState = {
@@ -30,7 +32,8 @@ const initialState: IState = {
     id: 0,
     exp: 0,
     level: 0,
-    firebaseId: ''
+    firebaseId: '',
+    pfp: 'https://i.imgur.com/1dhHIkV.png'
   },
   otherUser: {
     userName: '',
@@ -43,6 +46,7 @@ const initialState: IState = {
   usersList: [],
   globalRankings: [],
   friendRankings: [],
+  pfp: 'https://i.imgur.com/1dhHIkV.png'
 };
 
 const setToken = async token => {
@@ -98,6 +102,9 @@ export const userSlice = createSlice({
     getOtherUser: (state, body) => {
       state.otherUser = body.data.data;
     },
+    setPfp: (state, body) => {
+      state.pfp = body.data.data;
+    }
   },
 });
 
@@ -110,6 +117,7 @@ export const {
   getUser,
   getAllRanking,
   getFriendRanking,
+  setPfp
 } = userSlice.actions;
 export const authSelector = state => state.authInfo.isAuthenticated;
 export const userSelector = state => state.authInfo.user;

@@ -7,7 +7,8 @@ const stripPassword = (user: User) => {
     lastName: user.lastName,
     email: user.email,
     exp: user.exp,
-    level: user.level
+    level: user.level,
+    pfp: user.pfp
   };
 };
 

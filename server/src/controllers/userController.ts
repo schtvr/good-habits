@@ -366,6 +366,24 @@ const unfriend = async (req: Request, res: Response) => {
   }
 };
 
+const setPfp = async (req: Request, res: Response) => {
+  const user = req.user;
+  const pfp = req.body.pfp;
+  if (!user || !pfp) return sendRes(res, false, 403, 'Not authenticated or no Pfp sent');
+  try {
+    await user.update({
+      pfp
+    });
+    return sendRes(res, true, 200, 'Profile pic set thanks boi');
+  } catch (err) {
+    console.log(err);
+    return sendRes(res, false, 500, 'Setting pfp failed', err);
+  }
+
+
+};
+
+
 export default {
   createUser,
   findUserById,
@@ -377,5 +395,6 @@ export default {
   putFriendRequest,
   getFriends,
   getAllUsers,
-  getYourInfo
+  getYourInfo,
+  setPfp
 };

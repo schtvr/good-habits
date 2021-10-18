@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react'
 import {
   StyleSheet,
@@ -9,11 +10,35 @@ import {
   Image
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { useDispatch } from 'react-redux';
+import { setPfp } from '../redux/userSlice';
 
 
 
 const UploadPfp = () => {
   const [photo, setPhoto] = useState('');
+  const dispatch = useDispatch();
+  const getToken = async () => {
+    return await AsyncStorage.getItem('token');
+  };
+  const updatePfpUrl = async (newPfpUrl) => {
+    dispatch(
+      setPfp({
+        api: {
+          url: `setPfp`,
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          body: {
+            pfp: newPfpUrl
+          }
+        },
+        
+      }),
+    );
+  };
+
   const cloudinaryUpload = (photo) => {
     const data = new FormData()
     data.append('file', photo)
@@ -24,7 +49,7 @@ const UploadPfp = () => {
       body: data
     }).then(res => res.json()).
       then(data => {
-        console.log(data)
+        updatePfpUrl(data.url);
         setPhoto(data.url)
       }).catch(err => {
         console.log("An Error Occured While Uploading",err)
