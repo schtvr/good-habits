@@ -5,6 +5,7 @@ import checkAchievements from '../funcs/checkAchievements';
 import { createUpdate } from '../interfaces/Update';
 import { Op } from 'sequelize';
 import User from '../models/user';
+import Task from '../models/task';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -230,6 +231,56 @@ const findActiveQuestsById = async (req: Request, res: Response) => {
   }
 };
 
+interface IQuestCreation {
+  duration: number;
+  name: string;
+  description: string;
+  category: string;
+  completionExp: number;
+  taskCount: number;
+} 
+
+const createAQuest = async (req: Request, res: Response) => {
+  const user = req.user;
+  const newQuest:IQuestCreation = req.body.quest;
+  if (!newQuest || !user) return sendRes(res, false, 400, 'You need to send a user with the request');
+  try {
+    const createdQuest = await Quest.create(newQuest);
+    //await user.addActiveQuest(createdQuest.id);
+    return sendRes(res, true, 200, 'Quest has been created!');
+  } catch (err) {
+    return sendRes(res, false, 500, 'Quest Creation failed', err);
+  }
+};
+
+interface ITaskCreation {
+  name: string;
+  description: string;
+  completionExp: number; 
+  index: number; 
+  day: number; 
+}
+
+const addTaskToQuest = async (req: Request, res: Response) => {
+  const user = req.user;
+  const questId = req.params.questId;
+  const newTask:ITaskCreation = req.body.task;
+  if (!user || !questId) return sendRes(res, false, 401, 'You are unauthorized');
+  try {
+    const quest = await Quest.findByPk(questId);
+    if (!quest) return sendRes(res, false, 404, 'No quest found with that id');
+    const createdTask = await Task.create(newTask);
+    await quest.addTask(createdTask);
+    return sendRes(res, true, 200, 'Task has been created and added to quest');
+  } catch (err) {
+    return sendRes(res, false, 500, 'Quest creation has errored', err);
+  } 
+
+};
+
+
+
+
 export default {
   startQuest,
   completeQuest,
@@ -240,5 +291,7 @@ export default {
   getCompletedQuests,
   dropQuest,
   findActiveQuestsById,
-  findCompletedQuestsById
+  findCompletedQuestsById,
+  createAQuest,
+  addTaskToQuest
 };
