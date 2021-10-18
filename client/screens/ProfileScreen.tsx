@@ -19,7 +19,6 @@ import { getToken } from '../funcs/dispatch/dispatchFuncs';
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { otherUser, loading, user } = useSelector(stateSelector);
-  console.log('USER HERE', user);
 
   useEffect(() => {
     (async () => {

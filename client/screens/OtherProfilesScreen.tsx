@@ -11,9 +11,6 @@ import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
-import {
-  getAllQuests,
-} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getOtherUser, stateSelector} from '../redux/userSlice';
 import {addFriend} from '../redux/friendSlice';
