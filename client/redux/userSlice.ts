@@ -83,7 +83,6 @@ export const userSlice = createSlice({
     },
     signIn: (state, body) => {
       state.loading = true;
-      console.log(state);
       setToken(body.data.data);
       state.isAuthenticated = true;
       state.loading = false;

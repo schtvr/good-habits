@@ -45,13 +45,6 @@ const OtherProfileScreen = ({route}) => {
 
   const populateOtherUser = async () => {
     dispatch(
-      getAllQuests({
-        api: {
-          url: 'quests',
-        },
-      }),
-    );
-    dispatch(
       getOtherUser({
         api: {
           url: 'user/' + id,
