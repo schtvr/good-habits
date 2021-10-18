@@ -63,6 +63,7 @@ export const userSlice = createSlice({
       state.error = '';
     },
     signOut: (state, body) => {
+      state.error = '';
       state.user = initialState.user;
       const removeToken = async () => {
         state.isAuthenticated = false;
