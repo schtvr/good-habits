@@ -1,7 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import { stateSelector } from '../../redux/userSlice';
 import { useNavigation } from '@react-navigation/core';
 
 
