@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ImageBackground,
   ActivityIndicator,
+  TouchableOpacity
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from 'react-native-elements';
@@ -15,17 +16,13 @@ import { ThemeProvider } from 'react-native-elements';
 import { getOtherUser, stateSelector } from '../redux/userSlice';
 import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 import { getToken } from '../funcs/dispatch/dispatchFuncs';
+import CuratedTrophies from '../components/profile/curatedTrophies';
+import { useNavigation } from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { otherUser, loading, user } = useSelector(stateSelector);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  console.log('USER HERE', user);
->>>>>>> aa5d4cbf0b4ce981127dd3c066d0d362b84eac53
-=======
->>>>>>> 6ec1d86afc3493509bbf62a57b974b3e5d0d0a74
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -63,6 +60,11 @@ const ProfileScreen = () => {
                 exp={otherUser.exp}
                 howManyCompletedQuestsYouGotLilBoy={otherUser.complQuests?.length}
               />
+              <View style={styles.padder}></View>
+              <CuratedTrophies recentAchievements={otherUser.recentAchievements} />
+              <TouchableOpacity onPress={() => navigation.navigate('Achievements')}>
+                <Text style={styles.linkText}>Go to achievements</Text>
+              </TouchableOpacity>
             </Card>
             <QuestListCard
               cardTitle="Your active quests"
@@ -86,11 +88,19 @@ const styles = StyleSheet.create({
   loaderContainer: {
     marginTop: 100,
   },
+  padder: {
+    marginTop: 8
+  },
   loader: {
     alignSelf: 'center',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  linkText: {
+    alignSelf: 'center',
+    color: '#2d3c8f',
+    marginTop: 5
   },
 });
 
