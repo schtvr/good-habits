@@ -9,6 +9,7 @@ import {Input, Text, Button, Card, ThemeProvider} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {register} from '../redux/userSlice';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
+import SVGatorComponent from '../styles/layered-waves-haikei(1)';
 
 const RegisterPage = ({navigation}): JSX.Element => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const RegisterPage = ({navigation}): JSX.Element => {
 
   return (
     <View style={styles.container}>
+      <SVGatorComponent />
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}>

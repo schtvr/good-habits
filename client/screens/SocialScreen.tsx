@@ -6,10 +6,11 @@ import {
   FlatList,
   ImageSourcePropType,
 } from 'react-native';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import {Card} from 'react-native-elements';
-import {useSelector} from 'react-redux';
-import {friendSelector} from '../redux/friendSlice';
+import { View, Text, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
+import { Card, ThemeProvider } from 'react-native-elements';
+import { useSelector } from 'react-redux';
+import { friendSelector } from '../redux/friendSlice';
+import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 
 interface IFriends {
   id: number;
@@ -57,25 +58,33 @@ const SocialScreen = ({navigation}) => {
   const {myFriends, allFriends} = useSelector(friendSelector);
 
   return (
-    <SafeAreaView style={{flex: 1, paddingBottom: 45}}>
-      {myFriends.length > 0 ? (
-        <View>
-          <Text style={styles.title}>All Friends!</Text>
-          <FlatList
-            data={myFriends}
-            keyExtractor={item => item.id.toString()}
-            renderItem={renderItems}
-          />
-        </View>
-      ) : (
-        <>
-          <Text style={styles.addFriend}>Try sending a friend request!</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-            <Text style={styles.link}>Go to friend page!</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </SafeAreaView>
+    <View style={{flex: 1}}>
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}
+        resizeMode='stretch'
+      >
+        <ThemeProvider theme={elementsTheme}>
+          {myFriends.length > 0 ? (
+            <View>
+              <Text style={styles.title}>All Friends!</Text>
+              <FlatList
+                data={myFriends}
+                keyExtractor={item => item.id.toString()}
+                renderItem={renderItems}
+              />
+            </View>
+          ) : (
+            <>
+              <Text style={styles.addFriend}>Try sending a friend request!</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+                <Text style={styles.link}>Go to friend page!</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </ThemeProvider>
+      </ImageBackground>
+    </View>
   );
 };
 

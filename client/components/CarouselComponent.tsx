@@ -84,13 +84,13 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
 const styles = StyleSheet.create({
   carousel: {
     borderWidth: 1,
-    borderColor: '#979dac',
+    borderColor: 'transparent',
     flexDirection: 'row',
   },
   activeQuest: {
     alignSelf: 'center',
     paddingHorizontal: 20,
-    color: '#979dac',
+    color: '#333333',
     fontWeight: 'bold',
     fontSize: 20,
   },
