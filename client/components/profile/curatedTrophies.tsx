@@ -42,8 +42,7 @@ const styles = StyleSheet.create({
     height: 36,
   },
   trophyName: {
-    fontSize: 12,
-    width: 64,
+    fontSize: 14,
     height: 40,
     flexWrap: 'wrap',
   },

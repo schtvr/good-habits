@@ -65,7 +65,7 @@ const OtherProfileScreen = ({route}) => {
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}
       >
-        <ThemeProvider theme={elementsTheme}>
+      <ThemeProvider theme={elementsTheme}>
       <Card>
         <ProfileHeader
           user={otherUser}/>
@@ -78,6 +78,7 @@ const OtherProfileScreen = ({route}) => {
           exp={otherUser.exp}
           howManyCompletedQuestsYouGotLilBoy={otherUser.complQuests?.length}
         />
+        <View style={styles.padder}></View>
         <CuratedTrophies recentAchievements={otherUser.recentAchievements} />
       </Card>
       <QuestListCard
@@ -95,6 +96,9 @@ const OtherProfileScreen = ({route}) => {
 const styles = StyleSheet.create({
   friendBtn: {
     paddingTop: 10
+  },
+  padder: {
+    marginTop: 8 
   }
 })
 

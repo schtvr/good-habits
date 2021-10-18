@@ -2,22 +2,19 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CircularProgressBar from './progressCircle';
 
-
 const CompletedStats = (props) => {
   const { exp, howManyCompletedQuestsYouGotLilBoy } = props;
 
-  console.log(exp);
-
   return (
     <View style={styles.pfp}>
-      <Text style={styles.pfp}>Level: </Text>
+      <Text style={styles.levelText}>Level: </Text>
       <CircularProgressBar
-        activeColor="#2d3c8f"
+        activeColor="peru"
         passiveColor="darkgrey"
         baseColor="white"
-        width={5}
+        width={10}
         percent={exp % 100}
-        radius={15}
+        radius={18}
         duration={1200}
       >
       <Text style={styles.pfp}>
@@ -36,6 +33,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-})
+  levelText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#6071d5'
+  }
+});
 
 export default CompletedStats;
