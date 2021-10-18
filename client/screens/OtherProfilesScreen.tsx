@@ -1,27 +1,35 @@
-import React, { useEffect } from 'react';
-import {View, StyleSheet, ImageBackground } from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
-import { questSelector, getAllQuests, getOtherUserActiveQuests, getOtherUserCompletedQuests} from '../redux/questSlice';
+import {
+  getAllQuests,
+} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getOtherUser, stateSelector } from '../redux/userSlice';
-import { addFriend } from '../redux/friendSlice'
-import { ThemeProvider, Card, Button } from 'react-native-elements';
-import { elementsTheme } from '../styles/react-native-elements-theme-provider';
+import {getOtherUser, stateSelector} from '../redux/userSlice';
+import {addFriend} from '../redux/friendSlice';
+import {ThemeProvider, Card, Button} from 'react-native-elements';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 const OtherProfileScreen = ({route}) => {
   const dispatch = useDispatch();
-  const { otherUser } = useSelector(stateSelector);
+  const { otherUser, loading } = useSelector(stateSelector);
 
   const { id } = route.params;
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
 
-  const addAFriend = async ()  => {
+  const addAFriend = async () => {
     dispatch(
       addFriend({
         api: {
@@ -46,12 +54,12 @@ const OtherProfileScreen = ({route}) => {
     dispatch(
       getOtherUser({
         api: {
-          url: 'user/'+id,
+          url: 'user/' + id,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
-        }
-      })
+        },
+      }),
     );
   }
 
@@ -61,6 +69,12 @@ const OtherProfileScreen = ({route}) => {
 
   return (
     <View style={{flex: 1}}>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}
@@ -89,9 +103,10 @@ const OtherProfileScreen = ({route}) => {
         questList={otherUser.complQuests}/>
         </ThemeProvider>
       </ImageBackground>
+    )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   friendBtn: {
@@ -99,7 +114,16 @@ const styles = StyleSheet.create({
   },
   padder: {
     marginTop: 8 
-  }
-})
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
 
 export default OtherProfileScreen;
