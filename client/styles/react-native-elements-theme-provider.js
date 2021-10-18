@@ -17,6 +17,18 @@ export const elementsTheme = {
       backgroundColor: '#6071d5'
     },
   },
+  DataTable: {
+    alignSelf: 'center',
+    justifySelf: 'center',
+    overflow: 'visible',
+    containerStyle: {
+      borderRadius: 18,
+      width:'90%',
+      backgroundColor:'#fff',
+      borderColor: '#fff',
+      elevation: 5,
+    }
+  }
 }
 
 export const circularTheme = {
