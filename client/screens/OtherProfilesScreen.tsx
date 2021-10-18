@@ -12,10 +12,7 @@ import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
 import {
-  questSelector,
   getAllQuests,
-  getOtherUserActiveQuests,
-  getOtherUserCompletedQuests,
 } from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getOtherUser, stateSelector} from '../redux/userSlice';
@@ -25,15 +22,9 @@ import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 const OtherProfileScreen = ({route}) => {
   const dispatch = useDispatch();
-  const {otherUser, loading} = useSelector(stateSelector);
-  const {userName, level} = otherUser;
-  const {otherUserQuests, quests} = useSelector(questSelector);
-  const {completedQuests, activeQuests} = otherUserQuests;
+  const { otherUser, loading } = useSelector(stateSelector);
 
-  const {id} = route.params;
-  let scopedCompletedQuests = [];
-  let scopedActiveQuests = [];
-
+  const { id } = route.params;
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
@@ -70,39 +61,11 @@ const OtherProfileScreen = ({route}) => {
         },
       }),
     );
-    dispatch(
-      getOtherUserActiveQuests({
-        api: {
-          url: 'quest/' + id + '/active',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-    dispatch(
-      getOtherUserCompletedQuests({
-        api: {
-          url: 'quest/' + id + '/completed',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        },
-      }),
-    );
-  };
-
-  const populateQuestDetails = questList => {
-    return questList.map(passedQuest => {
-      return quests.filter(quest => quest.id === passedQuest.questId);
-    });
-  };
+  }
 
   useEffect(() => {
     populateOtherUser();
-    scopedCompletedQuests = populateQuestDetails(completedQuests);
-    scopedActiveQuests = populateQuestDetails(activeQuests);
-  }, []);
+  }, [])
 
   return (
     <View style={{flex: 1}}>
@@ -112,39 +75,45 @@ const OtherProfileScreen = ({route}) => {
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       ) : (
-        <ImageBackground
-          style={{flex: 1}}
-          source={require('../assets/mauve-stacked-waves-haikei.png')}>
-          <ThemeProvider theme={elementsTheme}>
-            <Card>
-              <ProfileHeader userName={userName} />
-              <Button title="Send friend request" onPress={addAFriend} />
-            </Card>
-            <Card>
-              <CompletedStats
-                level={level}
-                howManyCompletedQuestsYouGotLilBoy={completedQuests.length}
-              />
-              <CuratedTrophies />
-            </Card>
-            <QuestListCard
-              cardTitle={`${userName}'s active quests`}
-              questList={scopedActiveQuests}
-            />
-            <QuestListCard
-              cardTitle={`${userName}'s previous quests`}
-              questList={scopedCompletedQuests}
-            />
-          </ThemeProvider>
-        </ImageBackground>
-      )}
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}
+      >
+      <ThemeProvider theme={elementsTheme}>
+      <Card>
+        <ProfileHeader
+          user={otherUser}/>
+        <Button
+          title="Send friend request"
+          onPress={addAFriend}/>
+      </Card>
+      <Card>
+        <CompletedStats
+          exp={otherUser.exp}
+          howManyCompletedQuestsYouGotLilBoy={otherUser.complQuests?.length}
+        />
+        <View style={styles.padder}></View>
+        <CuratedTrophies recentAchievements={otherUser.recentAchievements} />
+      </Card>
+      <QuestListCard
+        cardTitle={`${otherUser.userName}'s active quests`}
+        questList={otherUser.quests}/>
+      <QuestListCard
+        cardTitle={`${otherUser.userName}'s previous quests`}
+        questList={otherUser.complQuests}/>
+        </ThemeProvider>
+      </ImageBackground>
+    )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   friendBtn: {
-    paddingTop: 10,
+    paddingTop: 10
+  },
+  padder: {
+    marginTop: 8 
   },
   loaderContainer: {
     marginTop: 100,

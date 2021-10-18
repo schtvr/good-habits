@@ -1,28 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import {View, Text, StyleSheet} from 'react-native';
-import { stateSelector } from '../../redux/userSlice';
 import CircularProgressBar from './progressCircle';
 
-
 const CompletedStats = (props) => {
-  const { level, howManyCompletedQuestsYouGotLilBoy } = props;
-
+  const { exp, howManyCompletedQuestsYouGotLilBoy } = props;
 
   return (
     <View style={styles.pfp}>
-      <Text style={styles.pfp}>Level: </Text>
+      <Text style={styles.levelText}>Level: </Text>
       <CircularProgressBar
-        activeColor="darkviolet"
+        activeColor="peru"
         passiveColor="darkgrey"
         baseColor="white"
-        width={5}
-        percent={35}
-        radius={15}
+        width={10}
+        percent={exp % 100}
+        radius={18}
         duration={1200}
       >
       <Text style={styles.pfp}>
-        {level}
+        {(Math.round(exp / 100))}
       </Text>
       </CircularProgressBar>
       <Text> |  {howManyCompletedQuestsYouGotLilBoy} completed quests </Text>
@@ -36,8 +32,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     justifyContent: 'center',
     alignItems: 'center',
-
   },
-})
+  levelText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#6071d5'
+  }
+});
 
 export default CompletedStats;
