@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import config from '../../config';
 import Blacklist from '../models/blacklist';
 import sendRes from '../funcs/sendRes';
+import fixOldTasks from '../funcs/fixOldTasks';
 
 const login = async (req: Request, res: Response) => {
   const { emailOrUserName, password } = req.body;

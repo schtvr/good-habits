@@ -92,7 +92,6 @@ const getTaskHistory = async (req: Request, res: Response) => {
 };
 
 const getDailyTasks = async (req: Request, res: Response) => {
-  console.log('DAILY CALL');
   const user = req.user;
   if (!user) return sendRes(res, false, 403, 'Not a valid user');
 
