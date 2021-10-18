@@ -2,6 +2,7 @@ import User from '../models/user';
 
 const stripPassword = (user: User) => {
   return {
+    id: user.id,
     userName: user.userName,
     firstName: user.firstName,
     lastName: user.lastName,
