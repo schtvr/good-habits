@@ -16,8 +16,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
   let {quests} = useSelector(questSelector);
-  let {usersList} = useSelector(stateSelector);
-
+  let { usersList } = useSelector(stateSelector);
+  let {user} = useSelector(stateSelector);
+  usersList = usersList.filter(friend => friend.userName !== user.userName);
   const [questArray, setQuestArray] = useState([...quests]);
   const [usersArray, setUsersArray] = useState([...usersList]);
   const [searchFriends, setSearchFriends] = useState(false);
@@ -72,7 +73,7 @@ const SearchDetailsScreen = ({navigation}) => {
     setSearchVal(text);
     const re = new RegExp(text, 'i');
     if (searchFriends) {
-      setUsersArray(usersList.filter(user => re.test(user.userName)));
+      setUsersArray(usersList.filter(friend => re.test(friend.userName)));
     } else {
       setQuestArray(quests.filter(quest => re.test(quest.name)));
     }
@@ -108,7 +109,7 @@ const SearchDetailsScreen = ({navigation}) => {
   });
 
   let renderList;
-  if (searchFriends) renderList = searchVal ? usersArray : usersList;
+  if (searchFriends) renderList = searchVal ? usersArray : [];
   else renderList = searchVal ? questArray : quests;
 
   return (
