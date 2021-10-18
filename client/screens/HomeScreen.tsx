@@ -89,7 +89,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
                 <Text style={styles.level}>Lvl {Math.floor(user.exp / 100)}</Text>
                 <LinearProgress
                   style={styles.progressBar}
-                  color="yellow"
+                  color="#2d3c8f"
                   value={(user.exp % 100) / 100}
                   variant={'determinate'}
                 />
