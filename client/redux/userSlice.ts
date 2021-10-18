@@ -16,10 +16,11 @@ interface IState {
     id: number;
     exp: number;
     level: number;
-  }
+  };
   isAuthenticated: boolean;
   error: string;
   usersList: any[];
+  loading: boolean;
   globalRankings: [];
   friendRankings: [];
 }
@@ -32,7 +33,7 @@ const initialState: IState = {
     exp: 0,
     level: 0,
     firebaseId: '',
-    pfp: 'https://i.imgur.com/1dhHIkV.png'
+    pfp: 'https://i.imgur.com/1dhHIkV.png',
   },
   otherUser: {
     userName: '',
@@ -43,6 +44,7 @@ const initialState: IState = {
   isAuthenticated: false,
   error: '',
   usersList: [],
+  loading: false,
   globalRankings: [],
   friendRankings: [],
 };
@@ -58,51 +60,70 @@ export const userSlice = createSlice({
   },
   reducers: {
     signOut: (state, body) => {
+      state.loading = true;
       state.user = initialState.user;
       const removeToken = async () => {
         state.isAuthenticated = false;
         await AsyncStorage.removeItem('token');
       };
       removeToken();
+      state.loading = false;
     },
     register: (state, body) => {
       state.user = {
         ...body.data.user,
       };
-      setToken(body.data.token);
+      (state.error = ''), setToken(body.data.token);
       state.isAuthenticated = true;
     },
     signIn: (state, body) => {
-      console.log(state);
+      state.loading = true;
       setToken(body.data.data);
       state.isAuthenticated = true;
+      state.error = '';
+      state.loading = false;
     },
     getUsers: (state, body) => {
+      state.loading = true;
       state.usersList = body.data.data;
+      state.loading = false;
     },
     error: (state, body) => {
+      state.loading = true;
       console.log('user-error', body.data);
-      if (body.data) state.error = body.data.message;
-      else state.error = 'server error';
+      state.error = body.data.message;
+      state.loading = false;
     },
     getUser: (state, body) => {
+      state.loading = true;
       state.user = body.data.data;
+      state.loading = false;
     },
     updateExp: (state, body) => {
+      state.loading = true;
       state.user.exp += body.update.gainedExp;
+      state.loading = false;
     },
     getAllRanking: (state, body) => {
+      state.loading = true;
       state.globalRankings = body.data.data;
+      state.loading = false;
     },
     getFriendRanking: (state, body) => {
+      state.loading = true;
       state.friendRankings = body.data.data;
+      state.loading = false;
     },
     getOtherUser: (state, body) => {
+      state.loading = true;
       state.otherUser = body.data.data;
+      state.loading = false;
     },
     setPfp: (state, body) => {
+      state.loading = true;
       state.user.pfp = body.data.data.pfp;
-    }
+      state.loading = false;
+    },
   },
 });
 
@@ -115,7 +136,7 @@ export const {
   getUser,
   getAllRanking,
   getFriendRanking,
-  setPfp
+  setPfp,
 } = userSlice.actions;
 export const authSelector = state => state.authInfo.isAuthenticated;
 export const userSelector = state => state.authInfo.user;

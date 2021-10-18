@@ -1,4 +1,4 @@
-import { LOCALURL } from 'react-native-dotenv';
+import {LOCALURL} from 'react-native-dotenv';
 
 const apiService = store => next => action => {
   // console.log(action);
@@ -31,13 +31,13 @@ const apiService = store => next => action => {
       type = 'user/error';
       store.dispatch({type: type, error});
     });
-   //return next({type: type});
+  //return next({type: type});
 };
 
 const dispatchUpdates = async (store, update) => {
   // TODO: SORT COMPLETED QUESTS ON UPDATE
-  store.dispatch({ type: 'achievements/sortCompletedTask', update })
-  store.dispatch({ type: 'user/updateExp', update })
-}
+  store.dispatch({type: 'achievements/sortCompletedTask', update});
+  store.dispatch({type: 'user/updateExp', update});
+};
 
 export default apiService;

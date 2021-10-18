@@ -1,24 +1,31 @@
-import React, { useEffect } from 'react';
-import {View, StyleSheet, ImageBackground } from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import { Card } from 'react-native-elements';
+import {Card} from 'react-native-elements';
 import CompletedStats from '../components/profile/completedStats';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
-import { ThemeProvider } from 'react-native-elements';
-import { getActiveQuests, getCompletedQuests, questSelector } from '../redux/questSlice';
+import {ThemeProvider} from 'react-native-elements';
+import {
+  getActiveQuests,
+  getCompletedQuests,
+  questSelector,
+} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { stateSelector } from '../redux/userSlice';
-import { elementsTheme }  from '../styles/react-native-elements-theme-provider';
-
-
-
+import {stateSelector} from '../redux/userSlice';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const { activeQuests, completedQuests } = useSelector(questSelector)
-  const {user} = useSelector(stateSelector)
+  const {activeQuests, completedQuests} = useSelector(questSelector);
+  const {user, loading} = useSelector(stateSelector);
 
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
@@ -43,83 +50,98 @@ const ProfileScreen = () => {
           },
         },
       }),
-    )
+    );
   };
 
   useEffect(() => {
     populateQuests();
   }, []);
-  console.log(user)
   return (
     <View style={{flex: 1}}>
-      <ImageBackground
-        style={{flex: 1}}
-        source={require('../assets/mauve-stacked-waves-haikei.png')}
-      >
-        <ThemeProvider theme={elementsTheme}>
-          <Card >
-            <ProfileHeader
-              userName={user.userName}/>
-          </Card>
-        </ThemeProvider>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}>
           <ThemeProvider theme={elementsTheme}>
-          <Card>
-            <CompletedStats
-              level={user.level}
-              howManyCompletedQuestsYouGotLilBoy={completedQuests.length}/>
-            <CuratedTrophies />
-          </Card>
+            <Card>
+              <ProfileHeader userName={user.userName} />
+            </Card>
+          </ThemeProvider>
+          <ThemeProvider theme={elementsTheme}>
+            <Card>
+              <CompletedStats
+                level={user.level}
+                howManyCompletedQuestsYouGotLilBoy={completedQuests.length}
+              />
+              <CuratedTrophies />
+            </Card>
             <QuestListCard
               cardTitle="Your active quests"
-              questList={activeQuests}/>
-          <QuestListCard
-            cardTitle="Your previous quests"
-            questList={completedQuests}/>
+              questList={activeQuests}
+            />
+            <QuestListCard
+              cardTitle="Your previous quests"
+              questList={completedQuests}
+            />
           </ThemeProvider>
-      </ImageBackground>
+        </ImageBackground>
+      )}
     </View>
   );
 };
 
 interface IUser {
-  userName: string,
-  profileUrl: string,
-  completedQuests: number,
-  curatedTrophies: any[],
-  level: number,
-  EXP: number,
+  userName: string;
+  profileUrl: string;
+  completedQuests: number;
+  curatedTrophies: any[];
+  level: number;
+  EXP: number;
 }
 
-
-
-export const user : IUser = {
+export const user: IUser = {
   userName: 'username go brr',
   profileUrl: 'https://i.imgur.com/1dhHIkV.png',
   completedQuests: 69,
-  curatedTrophies: [{
-    key: 1,
-    icon: './client/assets/icons/athlete-24x24-46391.png',
-    name: 'Completed 5k',
-  },
-  {
-    key: 2,
-    icon: './client/assets/icons/climb-24x24-46399.png',
-    name: 'Went Up Stairs',
-  },
-  {
-    key: 3,
-    icon: './client/assets/icons/rest-24x24-46425.png',
-    name: 'Took A Nap',
-  },
-],
+  curatedTrophies: [
+    {
+      key: 1,
+      icon: './client/assets/icons/athlete-24x24-46391.png',
+      name: 'Completed 5k',
+    },
+    {
+      key: 2,
+      icon: './client/assets/icons/climb-24x24-46399.png',
+      name: 'Went Up Stairs',
+    },
+    {
+      key: 3,
+      icon: './client/assets/icons/rest-24x24-46425.png',
+      name: 'Took A Nap',
+    },
+  ],
   level: 3,
-  EXP: 280
-}
+  EXP: 280,
+};
 
 const styles = StyleSheet.create({
   pfp: {
-    flexDirection: 'row'
-  }
-})
+    flexDirection: 'row',
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
 
 export default ProfileScreen;

@@ -5,12 +5,13 @@ import {
   Image,
   FlatList,
   ImageSourcePropType,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {Card} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import {friendSelector} from '../redux/friendSlice';
-
+import {stateSelector} from '../redux/userSlice';
 interface IFriends {
   id: number;
   name: string;
@@ -55,27 +56,39 @@ const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
 
 const SocialScreen = ({navigation}) => {
   const {myFriends, allFriends} = useSelector(friendSelector);
+  const {loading} = useSelector(stateSelector);
 
   return (
-    <SafeAreaView style={{flex: 1, paddingBottom: 45}}>
-      {myFriends.length > 0 ? (
-        <View>
-          <Text style={styles.title}>All Friends!</Text>
-          <FlatList
-            data={myFriends}
-            keyExtractor={item => item.id.toString()}
-            renderItem={renderItems}
-          />
+    <>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
       ) : (
-        <>
-          <Text style={styles.addFriend}>Try sending a friend request!</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-            <Text style={styles.link}>Go to friend page!</Text>
-          </TouchableOpacity>
-        </>
+        <SafeAreaView style={{flex: 1, paddingBottom: 45}}>
+          {myFriends.length > 0 ? (
+            <View>
+              <Text style={styles.title}>All Friends!</Text>
+              <FlatList
+                data={myFriends}
+                keyExtractor={item => item.id.toString()}
+                renderItem={renderItems}
+              />
+            </View>
+          ) : (
+            <>
+              <Text style={styles.addFriend}>
+                Try sending a friend request!
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+                <Text style={styles.link}>Go to friend page!</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </SafeAreaView>
       )}
-    </SafeAreaView>
+    </>
   );
 };
 
@@ -119,6 +132,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingTop: 20,
     fontSize: 16,
+  },
+  loaderContainer: {
+    marginTop: 100,
+  },
+  loader: {
+    alignSelf: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 
