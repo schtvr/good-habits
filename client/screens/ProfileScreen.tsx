@@ -49,7 +49,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     populateQuests();
   }, []);
-  console.log(user)
+
   return (
     <View style={{flex: 1}}>
       <ImageBackground
@@ -61,8 +61,7 @@ const ProfileScreen = () => {
             <ProfileHeader
               userName={user.userName}/>
           </Card>
-        </ThemeProvider>
-          <ThemeProvider theme={elementsTheme}>
+        
           <Card>
             <CompletedStats
               level={user.level}
