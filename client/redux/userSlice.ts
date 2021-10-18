@@ -22,7 +22,6 @@ interface IState {
   usersList: any[];
   globalRankings: [];
   friendRankings: [];
-  pfp: string;
 }
 
 const initialState: IState = {
@@ -46,7 +45,6 @@ const initialState: IState = {
   usersList: [],
   globalRankings: [],
   friendRankings: [],
-  pfp: 'https://i.imgur.com/1dhHIkV.png'
 };
 
 const setToken = async token => {
@@ -103,7 +101,7 @@ export const userSlice = createSlice({
       state.otherUser = body.data.data;
     },
     setPfp: (state, body) => {
-      state.pfp = body.data.data;
+      state.user.pfp = body.data.data.pfp;
     }
   },
 });
