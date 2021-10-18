@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import {Card} from 'react-native-elements';
-import {theme} from '../styles/themeProvider';
+
+import {StyleSheet, Text, View, Image } from 'react-native';
+import { Card, Button } from 'react-native-elements';
+import theme from '../styles/themeProvider';
 import {questSelector} from '../redux/questSlice';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
@@ -62,14 +63,12 @@ const QuestDetailCard = props => {
       </View>
       {activeQuests.length > 0 ? (
         <Button
-          color={color[category]}
           title="Added to quests"
           disabled={true}
           onPress={() => console.log('no good')}
         />
       ) : (
         <Button
-          color={color[category]}
           title="Add to active quests"
           onPress={addToMyQuests}
         />
