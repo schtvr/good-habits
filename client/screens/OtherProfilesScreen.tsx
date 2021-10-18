@@ -15,14 +15,8 @@ import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 const OtherProfileScreen = ({route}) => {
   const dispatch = useDispatch();
   const { otherUser } = useSelector(stateSelector);
-  const { userName, level } = otherUser;
-  const { otherUserQuests, quests } = useSelector(questSelector);
-  const { completedQuests, activeQuests } = otherUserQuests;
 
   const { id } = route.params;
-  let scopedCompletedQuests = []
-  let scopedActiveQuests = []
-
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
@@ -59,38 +53,10 @@ const OtherProfileScreen = ({route}) => {
         }
       })
     );
-    dispatch(
-      getOtherUserActiveQuests({
-        api: {
-          url: 'quest/' + id + '/active',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          }
-        }
-      })
-    )
-    dispatch(
-      getOtherUserCompletedQuests({
-        api: {
-          url: 'quest/' + id + '/completed',
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          }
-        }
-      })
-    )
-  }
-
-  const populateQuestDetails = (questList) => {
-    return questList.map((passedQuest) => {
-      return quests.filter(quest => quest.id === passedQuest.questId)
-    })
   }
 
   useEffect(() => {
     populateOtherUser();
-    scopedCompletedQuests = populateQuestDetails(completedQuests);
-    scopedActiveQuests = populateQuestDetails(activeQuests);
   }, [])
 
   return (
@@ -102,24 +68,24 @@ const OtherProfileScreen = ({route}) => {
         <ThemeProvider theme={elementsTheme}>
       <Card>
         <ProfileHeader
-          userName={userName}/>
+          user={otherUser}/>
         <Button
           title="Send friend request"
           onPress={addAFriend}/>
       </Card>
       <Card>
         <CompletedStats
-          level={level}
-          howManyCompletedQuestsYouGotLilBoy={completedQuests.length}
+          exp={otherUser.exp}
+          howManyCompletedQuestsYouGotLilBoy={otherUser.complQuests?.length}
         />
-        <CuratedTrophies />
+        <CuratedTrophies recentAchievements={otherUser.recentAchievements} />
       </Card>
       <QuestListCard
-        cardTitle={`${userName}'s active quests`}
-        questList={scopedActiveQuests}/>
+        cardTitle={`${otherUser.userName}'s active quests`}
+        questList={otherUser.quests}/>
       <QuestListCard
-        cardTitle={`${userName}'s previous quests`}
-        questList={scopedCompletedQuests}/>
+        cardTitle={`${otherUser.userName}'s previous quests`}
+        questList={otherUser.complQuests}/>
         </ThemeProvider>
       </ImageBackground>
     </View>

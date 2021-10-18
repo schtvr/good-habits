@@ -98,7 +98,7 @@ const findUserById = async (req: Request, res: Response) => {
         as: 'completedQuests'
       }],
       attributes : {
-        include: ['id', 'userName', 'level', 'exp'],
+        include: ['id', 'userName', 'level', 'exp', 'pfp'],
         exclude: [
           'password',
           'email',
