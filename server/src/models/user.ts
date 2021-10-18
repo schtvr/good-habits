@@ -40,9 +40,10 @@ export interface IUser {
   activeQuests?: ActiveQuest[] | null
   completedQuests?: CompletedQuest[] | null
   quests?: Quest[] | null
+  pfp: string
 }
 
-interface IUserCreationAttributes extends Optional<IUser, 'id' | 'exp' | 'level'> {}
+interface IUserCreationAttributes extends Optional<IUser, 'id' | 'exp' | 'level' | 'pfp'> {}
 
 class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public id!: number;
@@ -56,6 +57,7 @@ class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public activeQuests?: ActiveQuest[] | null;
   public completedQuests?: CompletedQuest[] | null;
   public quests?: Quest[] | null;
+  public pfp!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -156,6 +158,10 @@ User.init(
       allowNull: false,
       defaultValue: 1,
     },
+    pfp: {
+      type: new DataTypes.STRING(255),
+      allowNull: true,
+    }
   },
   {
     tableName: 'users',

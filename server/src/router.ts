@@ -19,6 +19,7 @@ router.get('/user/:userId', user.findUserById); // always have this as last get 
 
 // POST
 router.post('/user', user.createUser);
+router.post('/setPfp', verify, user.setPfp);
 
 // PUT
 router.put('/user/friendRequest/:id',verify ,user.putFriendRequest);
