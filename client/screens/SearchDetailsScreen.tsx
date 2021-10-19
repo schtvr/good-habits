@@ -158,7 +158,7 @@ const SearchDetailsScreen = ({navigation}) => {
                       );
                   };
                   return (
-                    <View style={styles.listItems}>
+                    <View style={styles.questItems}>
                       <TouchableOpacity
                         onPress={() =>
                           navigation.navigate('QuestDetailsScreen', {
@@ -188,19 +188,20 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    // alignItems: 'center',
   },
   name: {
     width: 110,
     fontWeight: 'bold',
     justifyContent: 'center',
-    // flexWrap: 'wrap',
   },
   listItems: {
-    // paddingHorizontal: 5,
     paddingLeft: 25,
     paddingTop: 20,
     marginLeft: 23,
+  },
+  questItems: {
+    paddingLeft: 27,
+    paddingTop: 20,
   },
   inputStyle: {
     borderColor: 'gray',
