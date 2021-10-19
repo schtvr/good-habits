@@ -16,16 +16,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 import {stateSelector} from '../redux/userSlice';
 
-const QuestDetailsScreen = ({route}) => {
+const QuestDetailsScreen = ({route, navigation}) => {
   const dispatch = useDispatch();
 
   let {tasks} = useSelector(questSelector);
   const {loading} = useSelector(stateSelector);
-  const {id} = route.params;
+  const {id, title} = route.params;
 
   useEffect(() => {
     const getTasks = async () => {
       await getTasksByid();
+      navigation.setOptions({title});
     };
     getTasks();
   }, []);
