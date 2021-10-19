@@ -93,7 +93,7 @@ const CreateAQuestScreen = ({navigation}) => {
     setQuestCreated(true);
   }
   
-  const submitQuest = () => {
+  const submitQuest = async () => {
     delete tasks['99'];
     const questToCreate = {
       ...questForm,
@@ -101,7 +101,8 @@ const CreateAQuestScreen = ({navigation}) => {
       tasks: Object.values(tasks)
 
     };
-    sendNewQuest(dispatch, questToCreate);
+    await sendNewQuest(dispatch, questToCreate);
+    await getQuests(dispatch);
     navigation.navigate('Home');
   }
 

@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {friendSelector} from '../redux/friendSlice';
 import { getQuests } from '../funcs/dispatch/dispatchFuncs'
 import { questSelector } from '../redux/questSlice';
+import { useIsFocused } from '@react-navigation/core';
 
 interface IQuest {
   category: string;
@@ -25,24 +26,21 @@ interface IQuest {
   updatedAt: string;
 }
 
-
-//onPress={() => navigation.navigate('OtherUser', {id: item.id})}
-
-
 const QuestsScreen = ({navigation}) => {
-  
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    getQuests(dispatch);
+  }, [isFocused]);
+
   const {quests} = useSelector(questSelector);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    getQuests(dispatch);
-  }, []);
+  
   
   const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
     return (
       <>
         <TouchableOpacity onPress={() => navigation.navigate('QuestDetailsScreen', {id: item.id})}>
-          
           <Card containerStyle={{flexDirection: 'row'}}>
             <View style={styles.image}>
               <Image
