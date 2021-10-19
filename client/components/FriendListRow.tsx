@@ -36,12 +36,13 @@ const FriendListRow = ({questId}) => {
           <Text style={{fontWeight: 'bold'}}>Friends currently this quest:</Text>
           <View style={styles.daddyBezos}>
           {friends.map(friend => {
-            return <Avatar 
-              size='large' 
-              key={`daddyBezos${friend.id}`} 
-              rounded 
-              source={{ uri: friend.pfp}}
-            />
+            return <View key={`daddyBezos${friend.id}`} style={styles.bezosBois}>
+              <Avatar 
+                size='large' 
+                rounded 
+                source={{ uri: friend.pfp}}
+              />
+            </View>
           })}
           </View>
       </View>
@@ -63,5 +64,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 10 
+  },
+  bezosBois: {
+    margin: 5
   }
 })
