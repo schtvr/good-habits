@@ -6,6 +6,7 @@ import { createUpdate } from '../interfaces/Update';
 import { Op } from 'sequelize';
 import User from '../models/user';
 import Task from '../models/task';
+import userAttributes from '../util/userAttributes';
 
 const startQuest = async (req: Request, res: Response) => {
   if (!req.user) return sendRes(res, false, 400, 'Not authenticated');
@@ -161,19 +162,8 @@ const getFriendsOnQuest = async (req: Request, res: Response) => {
     const template = await Quest.findByPk(questId);
     if (!template) return sendRes(res, false, 403, 'No template found with that questId');
 
-    const friends = await user.getFriends();
-    const friendIds: number[] = [];
-    friends.forEach(friend => {
-      friendIds.push(friend.id);
-    });
-
-    const friendsOnQuest = await template.getActiveQuests({
-      where: {
-        userId: {
-          [Op.in]: friendIds
-        }
-      }
-    });
+    const friends = await user.getFriends(userAttributes);
+    const friendsOnQuest = friends.filter(async friend => await friend.hasActiveQuest(parseInt(questId)));
 
     return sendRes(res, true, 200, 'Friends on quest retrieved', friendsOnQuest);
   } catch (err) {

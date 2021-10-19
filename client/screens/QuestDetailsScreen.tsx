@@ -60,8 +60,7 @@ const QuestDetailsScreen = ({route, navigation}) => {
             style={{flex: 1}}
             source={require('../assets/mauve-stacked-waves-haikei.png')}>
             <QuestDetailCard id={id} />
-            <FriendListRow />
-            <QuestListCard questList={tasks} />
+            <FriendListRow questId={id} />
           </ImageBackground>
         </ThemeProvider>
       )}

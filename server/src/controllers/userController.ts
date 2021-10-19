@@ -320,7 +320,7 @@ const getFriends = async (req: Request, res: Response) => {
         }
       ],
       attributes: {
-        include: ['id', 'userName', 'exp'],
+        include: ['id', 'userName', 'exp', 'pfp'],
         exclude: ['firstName', 'lastName', 'password', 'email', 'level']
       }
     });

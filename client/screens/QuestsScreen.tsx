@@ -6,6 +6,7 @@ import {
   FlatList,
   ImageSourcePropType,
 } from 'react-native';
+<<<<<<< HEAD
 import {
   View,
   Text,
@@ -21,6 +22,16 @@ import {getQuests} from '../funcs/dispatch/dispatchFuncs';
 import {questSelector} from '../redux/questSlice';
 import {useIsFocused} from '@react-navigation/core';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
+=======
+import {View, Text, StyleSheet, SafeAreaView, ImageBackground} from 'react-native';
+import {Card, FAB, Icon, ThemeProvider} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {friendSelector} from '../redux/friendSlice';
+import { getQuests } from '../funcs/dispatch/dispatchFuncs'
+import { questSelector } from '../redux/questSlice';
+import { useIsFocused } from '@react-navigation/core';
+import { elementsTheme } from '../styles/react-native-elements-theme-provider'
+>>>>>>> 671f78135590e7518ec7174fa5c5bb088f6e1a8c
 import QuestDetailCard from '../components/QuestDetailCard';
 
 interface IQuest {
@@ -50,8 +61,15 @@ const QuestsScreen = ({navigation}) => {
   const templateQuests = quests.filter(quest => quest.author === 'FATJORTS');
   const renderQuests = isUser ? userQuests : templateQuests;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 671f78135590e7518ec7174fa5c5bb088f6e1a8c
   const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
+    console.log('ITEM', item)
     return (
+<<<<<<< HEAD
       <>
         <TouchableOpacity
           onPress={() =>
@@ -61,10 +79,19 @@ const QuestsScreen = ({navigation}) => {
         </TouchableOpacity>
       </>
     );
+=======
+    <>
+      <TouchableOpacity onPress={() => navigation.navigate('QuestDetailsScreen', {id: item.id})}>
+        <QuestDetailCard id={item.id} />
+      </TouchableOpacity>
+     </>
+    )
+>>>>>>> 671f78135590e7518ec7174fa5c5bb088f6e1a8c
   };
 
   return (
     <ThemeProvider theme={elementsTheme}>
+<<<<<<< HEAD
       <ImageBackground
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}>
@@ -95,6 +122,25 @@ const QuestsScreen = ({navigation}) => {
             />
           </View>
         </SafeAreaView>
+=======
+       <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}>
+      <SafeAreaView style={{flex: 1}}>
+         <FAB style={{zIndex: 5}} placement="right" color={'peru'}  icon={<Icon size={25} name={"add"} color="white"/>}
+          onPress={() => navigation.navigate('Create Quest')}
+         />
+        <View>
+
+
+          <FlatList
+            data={quests}
+            keyExtractor={item => item.id.toString()}
+            renderItem={renderItems}
+          />
+        </View>
+      </SafeAreaView>
+>>>>>>> 671f78135590e7518ec7174fa5c5bb088f6e1a8c
       </ImageBackground>
     </ThemeProvider>
   );
