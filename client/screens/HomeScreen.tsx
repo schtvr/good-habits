@@ -35,6 +35,7 @@ import {
   achievementSelector,
   clearNewAchievements,
 } from '../redux/achievementSlice';
+import HomeHeader from '../components/HomeHeader';
 
 interface Props {
   userFriends: [];
@@ -167,20 +168,9 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
             <ScrollView style={{flex: 1}}>
 
               <Card>
-                <View style={styles.header}>
-                  <Image source={require('../assets/avatar.png')} />
-                  <Text style={styles.level}>
-                    Lvl {Math.floor(user.exp / 100)}
-                  </Text>
-                  <LinearProgress
-                    style={styles.progressBar}
-                    color="#2d3c8f"
-                    value={(user.exp % 100) / 100}
-                    variant={'determinate'}
-                  />
-                  <Text style={styles.EXP}>{user.exp % 100}/100 EXP</Text>
-                </View>
+                <HomeHeader user={user}/>
               </Card>
+
               {activeQuests.length ? (
                 <Card>
                   <View style={styles.container}>
@@ -194,14 +184,20 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
                     <Text style={styles.activeQuests}>No Active Quests</Text>
                     <TouchableOpacity
                       onPress={() => navigation.navigate('Search')}>
-                      <Text style={styles.noQuests}>Go to all quests</Text>
+                      <Text>Active quests will appear here. Head to the Quests page to get started!</Text>
                     </TouchableOpacity>
                   </View>
                 </Card>
               )}
               <Card>
-                <Text style={styles.activeFriends}>Active Friends</Text>
-                <CarouselComponent data={myFriends} />
+                {myFriends.length < 1 ? (
+                  <Text style={{padding: 12}}>Friends will appear here. Head to the Social page to make some connections!</Text>
+                ) : (
+                  <View>
+                    <Text style={styles.activeFriends}> Active Friends</Text>
+                    <CarouselComponent data={myFriends} />
+                  </View>
+                )}
               </Card>
             </ScrollView>
           </ThemeProvider>
@@ -230,13 +226,13 @@ const styles = StyleSheet.create({
   },
   activeQuests: {
     alignSelf: 'center',
-    paddingBottom: 20,
+    paddingBottom: 12,
     fontSize: 22,
     color: '#222222',
   },
   noQuests: {
     alignSelf: 'center',
-    paddingBottom: 20,
+    paddingBottom: 12,
     fontSize: 22,
     color: '#2d3c8f',
   },
