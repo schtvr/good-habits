@@ -1,6 +1,6 @@
 export default  {
   attributes: {
-    include: ['id', 'userName'],
+    include: ['id', 'userName', 'pfp'],
     exclude: [
       'password',
       'email',
