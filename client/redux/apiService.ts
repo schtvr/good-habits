@@ -1,7 +1,6 @@
-import {LOCALURL} from 'react-native-dotenv';
-// const LOCALURL = 'http://192.168.86.20:3001'
+import Config from 'react-native-config';
+
 const apiService = store => next => action => {
-  // console.log(action);
   if (!action?.payload?.api) return next(action);
   const api = action.payload.api;
   let type = action.type;
@@ -14,7 +13,7 @@ const apiService = store => next => action => {
     ...api.headers,
   };
 
-  fetch(`${LOCALURL}/${api.url}`, {method, body, headers})
+  fetch(`${Config.LOCALURL}/${api.url}`, {method, body, headers})
     .then(res => res.json())
     .then(data => {
       if (data.status === 'Bad') {
@@ -31,11 +30,9 @@ const apiService = store => next => action => {
       type = 'user/error';
       store.dispatch({type: type, error});
     });
-  //return next({type: type});
 };
 
 const dispatchUpdates = async (store, update) => {
-  // TODO: SORT COMPLETED QUESTS ON UPDATE
   if (update.achievements.length > 0) {
     store.dispatch({type: 'achievements/getNewAchievements', update});
   }
