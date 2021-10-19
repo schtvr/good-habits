@@ -49,15 +49,7 @@ const CreateAQuestScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [questCreated, setQuestCreated] = useState(false);
   const {user} = useSelector(stateSelector);
-  const [questForm, setQuestForm] = useState({
-    duration: '',
-    name: '',
-    description: '',
-    category: '',
-    completionExp: 0,
-    taskCount: 0,
-    author: user.userName,
-  });
+
 
   const taskTemplate: ITaskCreation = {
     name: '',
@@ -166,7 +158,7 @@ const CreateAQuestScreen = ({navigation}) => {
   };
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
   const [items, setItems] = useState([
     {label: 'Health', value: 'Health'},
     {label: 'Mental', value: 'Mental'},
@@ -174,6 +166,16 @@ const CreateAQuestScreen = ({navigation}) => {
     {label: 'Financial', value: 'Financial'},
     {label: 'Misc.', value: 'Misc.'},
   ]);
+
+  const [questForm, setQuestForm] = useState({
+    duration: '',
+    name: '',
+    description: '',
+    category: value,
+    completionExp: 0,
+    taskCount: 0,
+    author: user.userName,
+  });
 
   return (
     <View style={styles.container}>
@@ -229,6 +231,7 @@ const CreateAQuestScreen = ({navigation}) => {
                   setOpen={setOpen}
                   setValue={setValue}
                   setItems={setItems}
+                  onChangeValue={() => setQuestForm({...questForm, category: value})}
                 />
                 <Button
                   title="Next"

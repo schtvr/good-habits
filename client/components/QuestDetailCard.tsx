@@ -67,7 +67,6 @@ const QuestDetailCard = props => {
           </Text>
           <Card.Divider />
           <Text style={{marginBottom: 10}}>{description}</Text>
-          <Text style={{marginBottom: 10}}>{description}</Text>
         </View>
       </View>
       {activeQuests.length > 0 ? (
