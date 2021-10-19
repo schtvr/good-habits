@@ -48,7 +48,7 @@ const createUsers = async () => {
     email: 'javier@javier.com',
     password: bcrypt.hashSync('password123', 10),
     exp: 310,
-    pfp: 'https://i.imgur.com/BcVA5cx.png'
+    pfp: 'https://images-ext-1.discordapp.net/external/Vp_uB9ViLcEP3xQQERZjyFv96If-4IyxkEDbnYSo9RE/https/yt3.ggpht.com/a/AATXAJzuxdWhwZ_qNKVZARPTd-CAVGG2D1E3a0Bq4g%3Ds900-c-k-c0xffffffff-no-rj-mo'
   });
   const santi = await User.create({
     userName: 'Santiago',
