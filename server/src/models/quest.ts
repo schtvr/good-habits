@@ -22,10 +22,11 @@ interface IQuest {
   completionExp: number
   taskCount: number
   author: string
+  score: number
 }
 
 interface IQuestCreationAttributes extends
-Optional<IQuest, 'id' | 'author'> {}
+Optional<IQuest, 'id' | 'author'| 'score'> {}
 
 class Quest extends Model<IQuest, IQuestCreationAttributes>
   implements IQuest {
@@ -37,6 +38,7 @@ class Quest extends Model<IQuest, IQuestCreationAttributes>
   public completionExp!: number;
   public taskCount!: number;
   public author!: string;
+  public score!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -95,6 +97,11 @@ Quest.init(
       type: DataTypes.STRING(255),
       allowNull: false,
       defaultValue: 'FATJORTS'
+    },
+    score: {
+      type: DataTypes.INTEGER,
+      allowNull: false, 
+      defaultValue: 0
     }
   },
   {

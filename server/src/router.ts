@@ -43,6 +43,7 @@ router.get('/quests', quests.getQuestTemplates);
 router.get('/friendsOnQuest/:questId', verify, quests.getFriendsOnQuest);
 router.get('/quest/:userId/completed', verify , quests.findCompletedQuestsById);
 router.get('/quest/:userId/active', verify , quests.findActiveQuestsById);
+router.post('/quest/vote/:questId', verify, quests.voteOnQuest);
 router.post('/quest/drop/:questId', verify, quests.dropQuest);
 router.get('/quest/completed', verify, quests.getCompletedQuests);
 

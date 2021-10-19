@@ -311,6 +311,24 @@ const createQuestWithTasks = async (req: Request, res: Response) => {
   }
 };
 
+const voteOnQuest = async (req: Request, res: Response) => {
+  const user = req.user;
+  const questId = req.params.questId;
+  const vote = req.body.vote;
+  if (!user || !questId || !vote) return sendRes(res, false, 403, 'You\'re unauthorized / no quest id / no vote');
+  if (Math.abs(vote) > 1) return sendRes(res, false, 403, 'Lol you can\'t vote more than 1 at a time');
+  try {
+    const questToVote = await Quest.findByPk(questId);
+    if (!questToVote) return sendRes(res, false, 404, 'Could not find quest');
+    await questToVote.update({
+      score: questToVote.score += vote
+    });
+    return sendRes(res,true, 200, 'Successfully upvoted lol', questToVote);
+  } catch (err) {
+    return sendRes(res, false, 500, 'Failed to vote on quest', err);
+  }
+};
+
 export default {
   startQuest,
   completeQuest,
@@ -324,5 +342,6 @@ export default {
   findCompletedQuestsById,
   createAQuest,
   addTaskToQuest,
-  createQuestWithTasks
+  createQuestWithTasks,
+  voteOnQuest
 };
