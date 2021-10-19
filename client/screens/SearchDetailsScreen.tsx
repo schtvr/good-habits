@@ -7,12 +7,14 @@ import {
   Switch,
   TouchableOpacity,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
-import {Avatar, Input} from 'react-native-elements';
+import {Avatar, Input, ThemeProvider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllQuests, questSelector} from '../redux/questSlice';
 import {getUsers, stateSelector} from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
 const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -109,7 +111,6 @@ const SearchDetailsScreen = ({navigation}) => {
         ),
     });
   });
-
   let renderList;
   if (searchFriends) renderList = searchVal ? usersArray : [];
   else renderList = searchVal ? questArray : quests;
@@ -121,49 +122,86 @@ const SearchDetailsScreen = ({navigation}) => {
       </View>
     );
   return (
-    <View style={{marginTop: 20, flex: 1}}>
-      <Input
-        label="search"
-        onChangeText={text => handleSearch(text)}
-        value={searchVal}
-      />
-      {searchFriends ? (
-        <>
-          <Text style={styles.title}>All Users</Text>
-          <FlatList
-            data={renderList}
-            numColumns={3}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
+    <View style={styles.content}>
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}>
+        <ThemeProvider theme={elementsTheme}>
+          <Input
+            containerStyle={{marginTop: 10}}
+            placeholder="Search..."
+            inputStyle={styles.inputStyle}
+            onChangeText={text => handleSearch(text)}
+            value={searchVal}
           />
-        </>
-      ) : (
-        <>
-          <Text style={styles.title}>All Quests</Text>
+          {searchFriends ? (
+            <>
+              <Text style={styles.title}>All Users</Text>
+              <FlatList
+                data={renderList}
+                numColumns={3}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+              />
+            </>
+          ) : (
+            <>
+              <Text style={styles.title}>All Quests</Text>
 
-          <FlatList
-            data={renderList}
-            numColumns={3}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => {
-              return (
-                <View style={styles.listItems}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('QuestDetailsScreen', {id: item.id})
-                    }>
-                    <Avatar
-                      size="large"
-                      source={require('../assets/avatar.png')}
-                    />
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
-        </>
-      )}
+              <FlatList
+                data={renderList}
+                numColumns={3}
+                keyExtractor={item => item.id}
+                renderItem={({item}) => {
+                  const setImage = () => {
+                    if (item.category === 'Health')
+                      return (
+                        <Avatar
+                          size="large"
+                          source={require('../assets/heart.png')}
+                        />
+                      );
+                    if (item.category === 'Spirtual')
+                      return (
+                        <Avatar
+                          size="large"
+                          source={require('../assets/spiritual.png')}
+                        />
+                      );
+                    if (item.category === 'Mental')
+                      return (
+                        <Avatar
+                          size="large"
+                          source={require('../assets/mental.png')}
+                        />
+                      );
+                    if (item.category === 'Financial')
+                      return (
+                        <Avatar
+                          size="large"
+                          source={require('../assets/financial.png')}
+                        />
+                      );
+                  };
+                  return (
+                    <View style={styles.listItems}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('QuestDetailsScreen', {
+                            id: item.id,
+                          })
+                        }>
+                        {setImage()}
+                        <Text style={styles.name}>{item.name}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }}
+              />
+            </>
+          )}
+        </ThemeProvider>
+      </ImageBackground>
     </View>
   );
 };
@@ -172,11 +210,29 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: 'center',
     fontSize: 22,
+    fontWeight: 'bold',
+  },
+  content: {
+    flex: 1,
+  },
+  name: {
+    width: 110,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    // flexWrap: 'wrap',
   },
   listItems: {
-    paddingHorizontal: 25,
+    // paddingHorizontal: 5,
+    paddingLeft: 25,
     paddingTop: 20,
-    alignItems: 'center',
+    alignContent: 'center',
+  },
+  inputStyle: {
+    borderColor: 'gray',
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
   },
   centeredView: {
     flex: 1,

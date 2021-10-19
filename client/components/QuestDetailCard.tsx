@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 
-import {StyleSheet, Text, View, Image } from 'react-native';
-import { Card, Button } from 'react-native-elements';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import {Card, Button} from 'react-native-elements';
 import theme from '../styles/themeProvider';
 import {questSelector} from '../redux/questSlice';
 import {useSelector} from 'react-redux';
@@ -41,13 +41,20 @@ const QuestDetailCard = props => {
   }, []);
 
   const {duration, name, description, category, completionExp} = quests;
+  const setImage = () => {
+    if (category === 'Health')
+      return <Image source={require('../assets/heart.png')} />;
+    if (category === 'Spirtual')
+      return <Image source={require('../assets/spiritual.png')} />;
+    if (category === 'Mental')
+      return <Image source={require('../assets/mental.png')} />;
+    if (category === 'Financial')
+      return <Image source={require('../assets/financial.png')} />;
+  };
   return (
     <Card>
       <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={require('../assets/activity.png')}
-        />
+        {setImage()}
 
         <View style={styles.textArea}>
           <Text
@@ -68,10 +75,7 @@ const QuestDetailCard = props => {
           onPress={() => console.log('no good')}
         />
       ) : (
-        <Button
-          title="Add to active quests"
-          onPress={addToMyQuests}
-        />
+        <Button title="Add to active quests" onPress={addToMyQuests} />
       )}
     </Card>
   );
