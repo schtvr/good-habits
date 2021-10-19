@@ -5,7 +5,8 @@ import {
   StyleSheet,
   ImageBackground,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from 'react-native-elements';
@@ -41,6 +42,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={{flex: 1}}>
+      <ScrollView>
       {loading ? (
         <View style={styles.loaderContainer}>
           <Text style={styles.loader}>Loading...</Text>
@@ -77,6 +79,7 @@ const ProfileScreen = () => {
           </ThemeProvider>
         </ImageBackground>
       )}
+      </ScrollView>
     </View>
   );
 };
