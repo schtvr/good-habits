@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import QuestListCard from '../components/QuestListCard';
 import ProfileHeader from '../components/profile/profileHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getOtherUser, stateSelector} from '../redux/userSlice';
+import { friendSelector } from '../redux/friendSlice';
 import {addFriend} from '../redux/friendSlice';
 import {ThemeProvider, Card, Button} from 'react-native-elements';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
@@ -21,11 +22,22 @@ import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 const OtherProfileScreen = ({route, navigation}) => {
   const dispatch = useDispatch();
   const {otherUser, loading} = useSelector(stateSelector);
+  const { myFriends } = useSelector(friendSelector);
+  const [isFriend, setIsFriend] = useState(true);
+  console.log(myFriends);
 
   const {id, title} = route.params;
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
+  
+  useEffect(() => {
+    for (const friend of myFriends) {
+      if (friend.id === id) {
+        setIsFriend(false);
+      }
+    }
+  }, []);
 
   const addAFriend = async () => {
     dispatch(
@@ -74,7 +86,13 @@ const OtherProfileScreen = ({route, navigation}) => {
             <ThemeProvider theme={elementsTheme}>
               <Card>
                 <ProfileHeader user={otherUser} />
-                <Button title="Send friend request" onPress={addAFriend} />
+                <Button 
+                title={ isFriend 
+                  ? "Send friend request" 
+                  : `${otherUser.userName} is already your friend!`
+                }
+                onPress={addAFriend}
+                disabled={!isFriend}/>
               </Card>
               <Card>
                 <CompletedStats
