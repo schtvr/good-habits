@@ -165,8 +165,6 @@ const getFriendsOnQuest = async (req: Request, res: Response) => {
     const friends = await user.getFriends(userAttributes);
     const friendsOnQuest = friends.filter(async friend => await friend.hasActiveQuest(parseInt(questId)));
 
-    console.log(friendsOnQuest);
-
     return sendRes(res, true, 200, 'Friends on quest retrieved', friendsOnQuest);
   } catch (err) {
     return sendRes(res, false, 500, 'Server error getting friends on quest');
