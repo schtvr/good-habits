@@ -122,7 +122,6 @@ const AchievementsPage = (): JSX.Element => {
   const Modals = (): JSX.Element => {
     if (selectedItem !== null) {
       const item = achievements[selectedItem];
-      console.log('ACHIE', achievements);
       const selectImage = () => {
         if (item.category === 'Quests')
           return <Image source={require(questImage)} />;

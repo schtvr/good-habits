@@ -75,7 +75,6 @@ const Accordian = ({ id, title, index, length }: IProps): JSX.Element => {
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
-    console.log('INDEX CHECK',  index)
   };
 
   const accordianParent = () => {

@@ -28,7 +28,6 @@ const ProfileSettings = () => {
   };
 
   const {user} = useSelector(stateSelector);
-  console.log('USER', user);
   return (
     <ImageBackground
       style={{flex: 1}}

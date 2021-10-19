@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ListRenderItem,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ImageSourcePropType,
-  ImageBackground,
-} from 'react-native';
-import {View, ScrollView, StyleSheet, SafeAreaView} from 'react-native';
+import {View, ScrollView, StyleSheet, ImageBackground, Keyboard} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {friendSelector} from '../redux/friendSlice';
 import {getQuests} from '../funcs/dispatch/dispatchFuncs';
@@ -229,6 +221,7 @@ const CreateAQuestScreen = ({navigation}) => {
                   value={value}
                   items={items}
                   setOpen={setOpen}
+                  onPress={() => Keyboard.dismiss()}
                   setValue={setValue}
                   setItems={setItems}
                   onChangeValue={() => setQuestForm({...questForm, category: value})}
