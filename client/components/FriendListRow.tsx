@@ -27,14 +27,14 @@ const FriendListRow = ({questId}) => {
   
   if (activeFriendList.length === 0) return (
     <Card>
-      <Text>No friends on the quest!</Text>
+      <Text>No friends currently on this quest!</Text>
     </Card>
   );
   return (
     <View>
       <Card>
       <View>
-        <Text style={{fontWeight: 'bold'}}>Friends currently this quest:</Text>
+        <Text style={{fontWeight: 'bold'}}>Friends currently on this quest:</Text>
         <View style={styles.daddyBezos}>
          {activeFriendList.map(friend => {
             return <View key={`daddyBezos${friend.id}`} style={styles.bezosBois}>
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginTop: 10 
   },
   bezosBois: {
-    margin: 5
   }
 })
