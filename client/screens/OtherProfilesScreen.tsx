@@ -18,11 +18,11 @@ import {addFriend} from '../redux/friendSlice';
 import {ThemeProvider, Card, Button} from 'react-native-elements';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 
-const OtherProfileScreen = ({route}) => {
+const OtherProfileScreen = ({route, navigation}) => {
   const dispatch = useDispatch();
-  const { otherUser, loading } = useSelector(stateSelector);
+  const {otherUser, loading} = useSelector(stateSelector);
 
-  const { id } = route.params;
+  const {id, title} = route.params;
   const getToken = async () => {
     return await AsyncStorage.getItem('token');
   };
@@ -52,11 +52,12 @@ const OtherProfileScreen = ({route}) => {
         },
       }),
     );
-  }
+  };
 
   useEffect(() => {
     populateOtherUser();
-  }, [])
+    navigation.setOptions({title});
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -66,47 +67,49 @@ const OtherProfileScreen = ({route}) => {
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       ) : (
-      <ImageBackground
-        style={{flex: 1}}
-        source={require('../assets/mauve-stacked-waves-haikei.png')}
-      >
-        <ScrollView>
-      <ThemeProvider theme={elementsTheme}>
-      <Card>
-        <ProfileHeader
-          user={otherUser}/>
-        <Button
-          title="Send friend request"
-          onPress={addAFriend}/>
-      </Card>
-      <Card>
-        <CompletedStats
-          exp={otherUser.exp}
-          howManyCompletedQuestsYouGotLilBoy={otherUser.complQuests?.length}
-        />
-        <View style={styles.padder}></View>
-        <CuratedTrophies recentAchievements={otherUser.recentAchievements} />
-      </Card>
-      <QuestListCard
-        cardTitle={`${otherUser.userName}'s active quests`}
-        questList={otherUser.quests}/>
-      <QuestListCard
-        cardTitle={`${otherUser.userName}'s previous quests`}
-        questList={otherUser.complQuests}/>
-        </ThemeProvider>
-        </ScrollView>
-      </ImageBackground>
-    )}
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}>
+          <ScrollView>
+            <ThemeProvider theme={elementsTheme}>
+              <Card>
+                <ProfileHeader user={otherUser} />
+                <Button title="Send friend request" onPress={addAFriend} />
+              </Card>
+              <Card>
+                <CompletedStats
+                  exp={otherUser.exp}
+                  howManyCompletedQuestsYouGotLilBoy={
+                    otherUser.complQuests?.length
+                  }
+                />
+                <View style={styles.padder}></View>
+                <CuratedTrophies
+                  recentAchievements={otherUser.recentAchievements}
+                />
+              </Card>
+              <QuestListCard
+                cardTitle={`${otherUser.userName}'s active quests`}
+                questList={otherUser.quests}
+              />
+              <QuestListCard
+                cardTitle={`${otherUser.userName}'s previous quests`}
+                questList={otherUser.complQuests}
+              />
+            </ThemeProvider>
+          </ScrollView>
+        </ImageBackground>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   friendBtn: {
-    paddingTop: 10
+    paddingTop: 10,
   },
   padder: {
-    marginTop: 8 
+    marginTop: 8,
   },
   loaderContainer: {
     marginTop: 100,

@@ -33,7 +33,9 @@ const SearchDetailsScreen = ({navigation}) => {
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
+        onPress={() =>
+          navigation.navigate('OtherUser', {id: item.id, title: item.userName})
+        }>
         <View style={styles.listItems}>
           <Avatar size="large" rounded source={{uri: item.pfp}} />
           <Text style={styles.userName}>{item.userName}</Text>
@@ -163,6 +165,7 @@ const SearchDetailsScreen = ({navigation}) => {
                         onPress={() =>
                           navigation.navigate('QuestDetailsScreen', {
                             id: item.id,
+                            title: item.name,
                           })
                         }>
                         {setImage()}
