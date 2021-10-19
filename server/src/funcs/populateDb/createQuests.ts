@@ -24,7 +24,7 @@ const createQuests = async () => {
     taskCount: 0
   });
   const appleQuest = await Quest.create({
-    name: 'An apple a day keeps the doctor away',
+    name: 'Keep the doctors away',
     duration: 14,
     description: 'Eat an apple every day for 2 weeks!',
     category: 'Health',
@@ -63,7 +63,7 @@ const createQuests = async () => {
     completionExp: 500,
     taskCount: 5
   });
-  
+
   await createMedidateTasks(meditateQuest);
   await createCouchTasks(couchQuest);
   await createAppleTasks(appleQuest);
