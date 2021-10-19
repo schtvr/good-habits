@@ -26,35 +26,8 @@ interface IQuest {
 }
 
 
+//onPress={() => navigation.navigate('OtherUser', {id: item.id})}
 
-const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
-  return (
-    <>
-      <TouchableOpacity>
-        <Card containerStyle={{flexDirection: 'row'}}>
-          <View style={styles.image}>
-            <Image
-              resizeMode="cover"
-              source={require('../assets/friend1.png')}
-            />
-            <View style={styles.userInfo}>
-              <Text style={styles.title}>{item.name}</Text>
-              <Text style={styles.level}>Duration {item.duration} days</Text>
-              <Text style={styles.level}>Number of Tasks: {item.taskCount}</Text>
-            </View>
-          </View>
-          <Card.Divider
-            color={'black'}
-            inset={true}
-            insetType={'middle'}
-            subHeader={item.description}
-            subHeaderStyle={styles.text}
-          />
-        </Card>
-      </TouchableOpacity>
-    </>
-  );
-};
 
 const QuestsScreen = ({navigation}) => {
   
@@ -64,7 +37,36 @@ const QuestsScreen = ({navigation}) => {
   useEffect(() => {
     getQuests(dispatch);
   }, []);
-
+  
+  const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
+    return (
+      <>
+        <TouchableOpacity onPress={() => navigation.navigate('QuestDetailsScreen', {id: item.id})}>
+          
+          <Card containerStyle={{flexDirection: 'row'}}>
+            <View style={styles.image}>
+              <Image
+                resizeMode="cover"
+                source={require('../assets/friend1.png')}
+              />
+              <View style={styles.userInfo}>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.level}>Duration {item.duration} days</Text>
+                <Text style={styles.level}>Number of Tasks: {item.taskCount}</Text>
+              </View>
+            </View>
+            <Card.Divider
+              color={'black'}
+              inset={true}
+              insetType={'middle'}
+              subHeader={item.description}
+              subHeaderStyle={styles.text}
+            />
+          </Card>
+        </TouchableOpacity>
+      </>
+    );
+  };
   
   return (
     <SafeAreaView style={{flex: 1, paddingBottom: 45}}>

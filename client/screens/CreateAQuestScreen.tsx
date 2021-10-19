@@ -16,6 +16,7 @@ import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 import {Input, Text, Button, Card, ThemeProvider, Slider} from 'react-native-elements';
 import { PrivateValueStore } from '@react-navigation/core';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { sendNewQuest } from '../funcs/dispatch/dispatchFuncs'
 
 interface IQuestCreation {
   duration: string
@@ -35,6 +36,7 @@ interface ITaskCreation {
 
 
 const CreateAQuestScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const [questCreated, setQuestCreated] = useState(false);
   const [questForm, setQuestForm] = useState({
     duration: '',
@@ -58,75 +60,55 @@ const CreateAQuestScreen = ({navigation}) => {
       day: 99, 
     }
   })
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-  }, []);
-
-  
-/*calendaar logic>
-//calendar markings Obj: {
-  markings{
-  [startDate]: {selected: true, marked: true, selectedColor: '#6071d5'}, 
-  [endDate]: {selected: true, marked: true, selectedColor: '#6071d5'}, 
-  [selectedDates]: shaded
-  }
-  prev date: prev date
-}
-
-on press =>
- delete prev date property
- add new current date property
- set Task date to selected date
- 
-on crate task button press =>
-  push task to quest
-  set task date property on markings obj
-*/
-
-const addDates = ((duration) => {
-  let num = parseInt(duration)+1;
-  let dur = num.toString();
-  if (num < 10) {
-    dur = (`0${num}`)
-  }
-  let str = '2021-09-' + dur
-  return str;
-})
+  const addDates = ((duration) => {
+    let num = parseInt(duration)+1;
+    let dur = num.toString();
+    if (num < 10) {
+      dur = (`0${num}`)
+    }
+    let str = '2021-09-' + dur
+    return str;
+  })
 
 
-const [calendarMarks, setCalendarMarks] = useState({
-  markings: {
-    '2021-09-01': {selected: true, selectedColor: '#6071d5'},
-  },
-  prevDate: ''
-}
-)
-const [selectedDay, setSelectedDay] = useState('99');
-const handleChange = () => {
-  setCalendarMarks({
-    ...calendarMarks, 
+  const [calendarMarks, setCalendarMarks] = useState({
     markings: {
       '2021-09-01': {selected: true, selectedColor: '#6071d5'},
-      [addDates(questForm.duration)]: {selected: true, selectedColor: '#6071d5'},
     },
-    prevDate: '',
+    prevDate: ''
   })
-  setQuestCreated(true);
-}
-const submitQuest = () => {
-  delete tasks['99'];
-  const questToCreate = {
-    ...questForm,
-    taskCount: Object.keys(tasks).length,
-    tasks: Object.values(tasks)
-  };
-  console.log(questToCreate);
-}
 
-const selectDay = (date) => {
+  const [selectedDay, setSelectedDay] = useState('99');
+  
+  const handleChange = () => {
+    setCalendarMarks({
+      ...calendarMarks, 
+      markings: {
+        '2021-09-01': {selected: true, selectedColor: '#6071d5'},
+        [addDates(questForm.duration)]: {selected: true, selectedColor: '#6071d5'},
+      },
+      prevDate: '',
+    })
+    setQuestCreated(true);
+  }
+  
+  const submitQuest = () => {
+    delete tasks['99'];
+    const questToCreate = {
+      ...questForm,
+      taskCount: Object.keys(tasks).length,
+      tasks: Object.values(tasks)
+
+    };
+    sendNewQuest(dispatch, questToCreate);
+    navigation.navigate('Home');
+  }
+
+  const selectDay = (date) => {
   
   setSelectedDay(date.day);
+  
   setCalendarMarks({
     ...calendarMarks, 
     markings: {
@@ -137,18 +119,18 @@ const selectDay = (date) => {
       [date.dateString]: {...calendarMarks.markings[date.dateString], selected: true, selectedColor: 'grey'},
      },
     prevDate: date.dateString,
-  })
-}
+    })
+  }
 
-const addADot = () => {
-  setCalendarMarks({
-  ...calendarMarks, 
-  markings: {
-    ...calendarMarks.markings,
-    [addDates(parseInt(selectedDay)-1)]: {selected:true, marked: true, markedColor: 'red', selectedColor: 'grey'},
-  },
-})
-}
+  const addADot = () => {
+    setCalendarMarks({
+    ...calendarMarks, 
+    markings: {
+      ...calendarMarks.markings,
+      [addDates(parseInt(selectedDay)-1)]: {selected:true, marked: true, markedColor: 'red', selectedColor: 'grey'},
+    },
+  })
+  }
 
 
   

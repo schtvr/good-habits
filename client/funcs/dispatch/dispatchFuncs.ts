@@ -16,6 +16,7 @@ import {
   clearAchievements,
   getAllAchievements,
   getOwnedAchievements,
+  sendTaskComplete,
 } from '../../redux/achievementSlice';
 
 export const getToken = async () => {
@@ -158,6 +159,21 @@ export const getAllUsers = async (dispatch: Function) => {
         headers: {
           Authorization: `Bearer ${await getToken()}`,
         },
+      },
+    }),
+  );
+};
+
+export const sendNewQuest = async (dispatch: Function, questToCreate) => {
+  dispatch(
+    sendTaskComplete({
+      api: {
+        method: 'POST',
+        url: 'createQuestWithTasks',
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+        body: questToCreate,
       },
     }),
   );
