@@ -1,41 +1,66 @@
-import React from 'react'
+import React, {useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Card } from 'react-native-elements'
+import { Card, Avatar } from 'react-native-elements'
+import { getToken } from '../funcs/dispatch/dispatchFuncs';
+import { LOCALURL } from 'react-native-dotenv';
 
-const FriendListRow = () => {
+//const LOCALURL = 'http://192.168.0.11:3001';
+
+const FriendListRow = ({questId}) => {
+  
+  // quest id
+  // send request to 
+  // /friendsOnQuest/:questId  -> send jwt
 
   const populateFriendsLists = () => {
-    const activeFriendList = [];
-    const historyFriendList = [];
+    const [activeFriendList, setActiveFriendList] = useState([]);
 
     // check thru friends' active quests and history
     // or some api thing idk
+    useEffect(() => {
+      (async () => {
+        const res = await fetch(`${LOCALURL}/friendsOnQuest/${questId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${await getToken()}`
+          }
+        });
+        const whatever = await res.json();
+        setActiveFriendList(whatever.data);
+      })();
+    }, []);
     
-    activeFriendList.push('Spike','Jet','Faye');
-    historyFriendList.push('Ed','Ein');
 
-    if (activeFriendList.length < 1 && historyFriendList.length < 1) return;
+    if (activeFriendList.length < 1) return;
     return (
       <Card>
-        { activeFriendList.length > 0 ? renderFriendsList(activeFriendList, true) : '' }
-        <Card.Divider style={{paddingTop: 15}}/>
-        { historyFriendList.length > 0 ? renderFriendsList(historyFriendList, false) : '' }
+        { activeFriendList.length > 0 ? renderFriendsList(activeFriendList) : '' }
       </Card>
     )
   }
 
-  const renderFriendsArray = (friends: string[]) => {
-    if (friends.length === 1) return friends[0];
-    if (friends.length === 2) return `${friends[0]} and ${friends[1]}`
-    friends[friends.length-1] = `and ${friends[friends.length-1]}`
+  const renderFriendsArray = (friends: any[]) => {
+    console.log('FRIENDS LOG', friends[0]);
+    if (friends.length === 1) return friends[0].userName;
+    if (friends.length === 2) return `${friends[0].userName} and ${friends[1].userName}`
+    friends[friends.length-1].userName = `and ${friends[friends.length-1].userName}`
     return friends.join(', ')
   }
 
-  const renderFriendsList = (friends: any[], isCurrent: boolean) => {
+  const renderFriendsList = (friends: any[]) => {
     return (
       <View>
-          <Text>Friends { isCurrent ? 'currently on' : 'who\'ve completed' } this quest:</Text>
-          <Text>{ renderFriendsArray(friends) }</Text>
+          <Text style={{fontWeight: 'bold'}}>Friends currently this quest:</Text>
+          <View style={styles.daddyBezos}>
+          {friends.map(friend => {
+            return <Avatar 
+              size='large' 
+              key={`daddyBezos${friend.id}`} 
+              rounded 
+              source={{ uri: friend.pfp}}
+            />
+          })}
+          </View>
       </View>
     )
   }
@@ -49,4 +74,11 @@ const FriendListRow = () => {
 
 export default FriendListRow
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  daddyBezos: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10 
+  }
+})

@@ -191,7 +191,7 @@ const TabStack = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Good Habits',
+          title: 'Concentrated Jort Juice',
           headerRight,
           tabBarIcon: () => {
             return <MaterialCommunityIcons name="home" size={26} />;
