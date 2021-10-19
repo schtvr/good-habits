@@ -277,9 +277,38 @@ const addTaskToQuest = async (req: Request, res: Response) => {
   } 
 
 };
+// duration: string
+//   name: string
+//   description: string
+//   category: string
+//   completionExp: number
+//   taskCount: number
+//   tasks: [];
 
-
-
+const createQuestWithTasks = async (req: Request, res: Response) => {
+  const user = req.user;
+  const {duration, name, description, category, completionExp, taskCount, tasks} = req.body;
+  if (!user) return sendRes(res, false, 401, 'You are unauthorized');
+  try {
+    const durationParsed = parseInt(duration);
+    const newQuest = await Quest.create({
+      duration: durationParsed,
+      name,
+      description,
+      category,
+      completionExp,
+      taskCount
+    });
+    for await (let task of tasks) {
+      await newQuest.createTask({...task,
+        index: task.day, completionExp: 0});
+    }
+    return sendRes(res, true, 200, 'Successfully created task');
+  } catch (err) {
+    console.log(err);
+    return sendRes(res, false, 500, 'Failed to create quest', err);
+  }
+};
 
 export default {
   startQuest,
@@ -293,5 +322,6 @@ export default {
   findActiveQuestsById,
   findCompletedQuestsById,
   createAQuest,
-  addTaskToQuest
+  addTaskToQuest,
+  createQuestWithTasks
 };

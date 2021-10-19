@@ -46,6 +46,7 @@ router.get('/quest/:userId/active', verify , quests.findActiveQuestsById);
 router.post('/quest/drop/:questId', verify, quests.dropQuest);
 router.get('/quest/completed', verify, quests.getCompletedQuests);
 
+router.post('/createQuestWithTasks', verify, quests.createQuestWithTasks);
 router.post('/createQuest/:questId', verify, quests.createAQuest);
 router.post('/addTask/:questId', verify, quests.addTaskToQuest);
 
