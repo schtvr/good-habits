@@ -38,11 +38,17 @@ const SocialScreen = ({navigation}) => {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
+
   const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
     return (
       <>
         <TouchableOpacity
-          onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
+          onPress={() =>
+            navigation.navigate('OtherUser', {
+              id: item.id,
+              title: item.userName,
+            })
+          }>
           <Card containerStyle={{flexDirection: 'row'}}>
             <View style={styles.image}>
               <Image
