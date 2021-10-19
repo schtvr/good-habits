@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ImageBackground,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import CompletedStats from '../components/profile/completedStats';
@@ -69,6 +70,7 @@ const OtherProfileScreen = ({route}) => {
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}
       >
+        <ScrollView>
       <ThemeProvider theme={elementsTheme}>
       <Card>
         <ProfileHeader
@@ -92,6 +94,7 @@ const OtherProfileScreen = ({route}) => {
         cardTitle={`${otherUser.userName}'s previous quests`}
         questList={otherUser.complQuests}/>
         </ThemeProvider>
+        </ScrollView>
       </ImageBackground>
     )}
     </View>
