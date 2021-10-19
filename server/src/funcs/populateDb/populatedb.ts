@@ -4,9 +4,9 @@ import createQuests from './createQuests';
 
 const populateDb = async () => {
   try {
-    await createUsers();
     await createQuests();
     await createAchievements();
+    await createUsers();
     
   } catch (err) {
     return;

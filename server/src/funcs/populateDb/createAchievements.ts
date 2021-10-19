@@ -10,7 +10,7 @@ const createAchievements = async () => {
     completionExp: 100
   });
   await AchievementTemplate.create({
-    name: 'Push it the limit',
+    name: 'Push it to the Limit',
     description: 'Complete five quests',
     img: '',
     criteria: 5,
@@ -18,7 +18,7 @@ const createAchievements = async () => {
     completionExp: 500 
   });
   await AchievementTemplate.create({
-    name: 'Huge questicles',
+    name: 'Huge Questicles',
     description: 'Complete ten quests',
     img: '',
     criteria: 10,
@@ -26,7 +26,7 @@ const createAchievements = async () => {
     completionExp: 1000
   });
   await AchievementTemplate.create({
-    name: 'Social butterfly',
+    name: 'Social Butterfly',
     description: 'Made a friend',
     img: '',
     criteria: 1,
@@ -34,7 +34,7 @@ const createAchievements = async () => {
     completionExp: 100
   });
   await AchievementTemplate.create({
-    name: 'Town bike',
+    name: 'Popular!',
     description: 'Made five friends',
     img: '',
     criteria: 5,
@@ -42,7 +42,7 @@ const createAchievements = async () => {
     completionExp: 500
   });
   await AchievementTemplate.create({
-    name: 'Task noob',
+    name: 'Task Noob',
     description: 'Complete your first task',
     img: '',
     criteria: 1,
@@ -50,7 +50,7 @@ const createAchievements = async () => {
     completionExp: 100 
   });
   await AchievementTemplate.create({
-    name: 'Task starter',
+    name: 'Task Starter',
     description: 'Complete five tasks',
     img: '',
     criteria: 5,
@@ -66,7 +66,7 @@ const createAchievements = async () => {
     completionExp: 300
   });
   await AchievementTemplate.create({
-    name: 'Task master',
+    name: 'Task Master',
     description: 'Complete 25 tasks',
     img: '',
     criteria: 25,
