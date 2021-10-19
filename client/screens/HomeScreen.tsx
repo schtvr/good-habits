@@ -28,6 +28,7 @@ import {
   getDailyTasks,
   getMyFriendRequests,
   getUserTaskHistory,
+  getQuests,
 } from '../funcs/dispatch/dispatchFuncs';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 import {
@@ -71,7 +72,9 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
     };
     helper();
   }, [myQuests]);
-
+  useEffect(() => {
+    getQuests(dispatch);
+  }, []);
   const renderConfetti = () => {
     setModalVisible(true);
     setConfetti(true);

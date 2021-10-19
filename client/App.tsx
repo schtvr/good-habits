@@ -4,12 +4,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {Node} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Settings} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Badge, Overlay, Button} from 'react-native-elements';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import QuestsScreen from './screens/QuestsScreen';
 import SocialScreen from './screens/SocialScreen';
 import LeaderBoardScreen from './screens/LeaderBoardScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -36,6 +37,7 @@ import {
 import OtherProfileScreen from './screens/OtherProfilesScreen';
 import { getMyFriendRequests } from './funcs/dispatch/dispatchFuncs';
 import UploadPfp from './screens/UploadPfp';
+import CreateAQuestScreen from './screens/CreateAQuestScreen';
 
 const Auth = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -117,17 +119,30 @@ const headerRight = () => {
         <MaterialCommunityIcons
           style={styles.icons}
           name="notifications-none"
-          size={30}
+          size={26}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-        <MaterialCommunityIcons style={styles.icons} name="search" size={30} />
+        <MaterialCommunityIcons 
+          style={styles.icons}
+          name="search"
+          size={26}
+        />
       </TouchableOpacity>
+     
+      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+        <MaterialCommunityIcons 
+          style={styles.icons}
+          name="more-horiz"
+          size={26}
+        />
+      </TouchableOpacity>
+
       <Overlay
         isVisible={visible}
         onBackdropPress={toggleOverlay}
-        overlayStyle={{height: 200, width: 300}}>
+        overlayStyle={{height: 200, width: 260}}>
         <Text style={styles.content}>Friend Request!</Text>
         <View
           style={{
@@ -214,12 +229,12 @@ const TabStack = () => {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Quests"
+        component={QuestsScreen}
         options={{
           headerRight,
           tabBarIcon: () => {
-            return <MaterialCommunityIcons name="settings" size={26} />;
+            return <MaterialCommunityIcons name="explore" size={26} />;
           },
         }}
       />
@@ -227,7 +242,6 @@ const TabStack = () => {
   );
 };
 
-//Remove the ! or change isAuthenticated to true to see other screens!
 
 const App: () => Node = () => {
   const {isAuthenticated} = useSelector(stateSelector);
@@ -261,6 +275,8 @@ const App: () => Node = () => {
               />
               <Stack.Screen name="Upload Profile Picture" component={UploadPfp} />
               <Stack.Screen name="Search" component={SearchDetailsScreen} />
+              <Stack.Screen name="Create Quest" component={CreateAQuestScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
             </>
           )}
         </Stack.Navigator>
@@ -272,7 +288,7 @@ const App: () => Node = () => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    paddingRight: 30,
+    paddingRight: 5,
   },
   icons: {
     margin: 10,
