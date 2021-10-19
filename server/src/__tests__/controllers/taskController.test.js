@@ -61,11 +61,13 @@ describe ('Task Controller', () => {
       expect(res.body.data.tasks[0].id).toBe(task.id);
       if (task.id === 1) {
         expect(res.body.data.achievements).toHaveLength(1);
-        expect(res.body.data.achievements[0].name).toBe('Task noob');
+        //Used to be Task noob
+        expect(res.body.data.achievements[0].name).toBe('Task Noob');
         expect(res.body.data.gainedExp).toBe(task.completionExp + 100);
       } else if (task.id === 5) {
         expect(res.body.data.achievements).toHaveLength(1);
-        expect(res.body.data.achievements[0].name).toBe('Task starter');
+        //Used to be Task Starter
+        expect(res.body.data.achievements[0].name).toBe('Task Starter');
         expect(res.body.data.gainedExp).toBe(task.completionExp + 600);
       } else {
         expect(res.body.data.gainedExp).toBe(task.completionExp);
