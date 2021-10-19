@@ -4,17 +4,19 @@ import {
   getAllFriends,
   clearFriends,
 } from '../../redux/friendSlice';
-import {getUser, signOut} from '../../redux/userSlice';
+import {getUser, signOut, getUsers} from '../../redux/userSlice';
 import {
   getActiveTasks,
   getActiveQuests,
   clearQuests,
+  getAllQuests,
 } from '../../redux/questSlice';
 import {
   getTaskHistory,
   clearAchievements,
   getAllAchievements,
   getOwnedAchievements,
+  sendTaskComplete,
 } from '../../redux/achievementSlice';
 
 export const getToken = async () => {
@@ -138,3 +140,42 @@ export const getUserAchievements = async (dispatch: Function) => {
     }),
   );
 };
+
+export const getQuests = async (dispatch: Function) => {
+  dispatch(
+    getAllQuests({
+      api: {
+        url: 'quests',
+      },
+    }),
+  );
+};
+
+export const getAllUsers = async (dispatch: Function) => {
+  dispatch(
+    getUsers({
+      api: {
+        url: 'users',
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      },
+    }),
+  );
+};
+
+export const sendNewQuest = async (dispatch: Function, questToCreate) => {
+  dispatch(
+    sendTaskComplete({
+      api: {
+        method: 'POST',
+        url: 'createQuestWithTasks',
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+        body: questToCreate,
+      },
+    }),
+  );
+};
+

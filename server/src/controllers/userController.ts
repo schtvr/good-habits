@@ -27,11 +27,19 @@ const createUser = async (req: Request, res:Response) => {
     }
 
     if (userName.toLowerCase().includes('victor')) return sendRes(res, false, 418, 'Must be at least 13 years old to use this app');
+    
+    const pfps = [
+      'https://i.imgur.com/eQRd6pb.png',
+      'https://i.imgur.com/AgDGYNx.png',
+      'https://i.imgur.com/ccqrmpK.png',
+      'https://i.imgur.com/SRBIyiF.png',
+      'https://i.imgur.com/dEdirbo.png'
+    ];
 
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) res.sendStatus(500);
       try {
-        const user = await User.create({ ...body, password: hash });
+        const user = await User.create({ ...body, password: hash, pfp: pfps[Math.floor(Math.random()*pfps.length)] });
         const token = jwt.sign({ userId: user.id }, config.SECRET, { expiresIn: '7d' });
         try {
           const gottenToken = await user.getFirebaseTokens();

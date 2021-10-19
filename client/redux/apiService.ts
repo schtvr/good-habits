@@ -1,5 +1,5 @@
-import {LOCALURL} from 'react-native-dotenv';
-// const LOCALURL = 'http://192.168.1.100:3000'
+//import {LOCALURL} from 'react-native-dotenv';
+const LOCALURL = 'http://192.168.86.20:3001'
 const apiService = store => next => action => {
   // console.log(action);
   if (!action?.payload?.api) return next(action);

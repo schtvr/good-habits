@@ -107,8 +107,8 @@ const LeaderBoardScreen = () => {
                   {playerList.map((player, index) => {
                     return (
                       <DataTable.Row key={player.id}>
-                        <DataTable.Cell numeric>{index + 1} </DataTable.Cell>
-                        <DataTable.Cell>{player.userName}</DataTable.Cell>
+                        <DataTable.Cell>{index + 1} </DataTable.Cell>
+                        <DataTable.Cell style={{ minWidth: 8}}>{player.userName}</DataTable.Cell>
                         <DataTable.Cell numeric>
                           {Math.floor(player.exp / 100)}
                         </DataTable.Cell>
