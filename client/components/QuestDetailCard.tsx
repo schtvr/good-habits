@@ -61,10 +61,12 @@ const QuestDetailCard = props => {
             style={{fontSize: 18, fontWeight: 'bold', color: color[category]}}>
             {name}
           </Text>
+          {quests.author !== 'FATJORTS' && <Text>Created by {quests.author} </Text>}
           <Text>
             Duration: {duration} days | EXP: {completionExp}
           </Text>
           <Card.Divider />
+          <Text style={{marginBottom: 10}}>{description}</Text>
           <Text style={{marginBottom: 10}}>{description}</Text>
         </View>
       </View>

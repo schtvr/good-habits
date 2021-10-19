@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ListRenderItem,
   TouchableOpacity,
@@ -6,14 +6,21 @@ import {
   FlatList,
   ImageSourcePropType,
 } from 'react-native';
-import {View, Text, StyleSheet, SafeAreaView, ImageBackground} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ImageBackground,
+  Switch,
+} from 'react-native';
 import {Card, FAB, Icon, ThemeProvider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {friendSelector} from '../redux/friendSlice';
-import { getQuests } from '../funcs/dispatch/dispatchFuncs'
-import { questSelector } from '../redux/questSlice';
-import { useIsFocused } from '@react-navigation/core';
-import { elementsTheme } from '../styles/react-native-elements-theme-provider'
+import {getQuests} from '../funcs/dispatch/dispatchFuncs';
+import {questSelector} from '../redux/questSlice';
+import {useIsFocused} from '@react-navigation/core';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 import QuestDetailCard from '../components/QuestDetailCard';
 
 interface IQuest {
@@ -27,48 +34,68 @@ interface IQuest {
   taskCount: number;
   updatedAt: string;
 }
+//'FATJORTS'
 
 const QuestsScreen = ({navigation}) => {
   const isFocused = useIsFocused();
+  const dispatch = useDispatch();
   useEffect(() => {
     getQuests(dispatch);
   }, [isFocused]);
 
   const {quests} = useSelector(questSelector);
-  const dispatch = useDispatch();
+  const [isUser, setIsUser] = useState(false);
 
-
+  const userQuests = quests.filter(quest => quest.author !== 'FATJORTS');
+  const templateQuests = quests.filter(quest => quest.author === 'FATJORTS');
+  const renderQuests = isUser ? userQuests : templateQuests;
 
   const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
-    console.log('ITEM', item)
+    console.log('ITEM', item);
     return (
-    <>
-      <TouchableOpacity onPress={() => navigation.navigate('QuestDetailsScreen', {id: item.id})}>
-        <QuestDetailCard id={item.id} />
-      </TouchableOpacity>
-     </>
-    )
+      <>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('QuestDetailsScreen', {id: item.id})
+          }>
+          <QuestDetailCard id={item.id}/>
+        </TouchableOpacity>
+      </>
+    );
   };
 
   return (
     <ThemeProvider theme={elementsTheme}>
-       <ImageBackground
+      <ImageBackground
         style={{flex: 1}}
         source={require('../assets/mauve-stacked-waves-haikei.png')}>
-      <SafeAreaView style={{flex: 1}}>
-         <FAB style={{zIndex: 5}} placement="right" color={'peru'}  icon={<Icon size={25} name={"add"} color="white"/>}
-          onPress={() => navigation.navigate('Create Quest')}
-         />
-        <View>
-
-
-          <FlatList
-            data={quests}
-            keyExtractor={item => item.id.toString()}
-            renderItem={renderItems}
+        <SafeAreaView style={{flex: 1}}>
+          <FAB
+            style={{zIndex: 5}}
+            placement="right"
+            color={'peru'}
+            icon={<Icon size={25} name={'add'} color="white" />}
+            onPress={() => navigation.navigate('Create Quest')}
           />
-        </View>
-      </SafeAreaView>
+          <View>
+            <View style={styles.toggleBox}>
+              <Text> Built-In Quests </Text>
+              <Switch
+                trackColor={{false: 'yellow', true: '#81b0ff'}}
+                thumbColor={isUser ? '#2d3c8f' : 'peru'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setIsUser(!isUser)}
+                value={isUser}
+              />
+              <Text>Community Quests </Text>
+            </View>
+            <FlatList
+              data={renderQuests}
+              keyExtractor={item => item.id.toString()}
+              renderItem={renderItems}
+            />
+          </View>
+        </SafeAreaView>
       </ImageBackground>
     </ThemeProvider>
   );
@@ -111,6 +138,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     fontSize: 16,
   },
+  toggleBox: {
+    flexDirection: 'row',
+    height: 20,
+    justifyContent: 'center',
+    marginTop: 10,
+
+  }
 });
 
 export default QuestsScreen;

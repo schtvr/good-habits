@@ -17,6 +17,7 @@ import {Input, Text, Button, Card, ThemeProvider, Slider} from 'react-native-ele
 import { PrivateValueStore } from '@react-navigation/core';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { sendNewQuest } from '../funcs/dispatch/dispatchFuncs'
+import { stateSelector } from '../redux/userSlice'
 
 interface IQuestCreation {
   duration: string
@@ -25,19 +26,21 @@ interface IQuestCreation {
   category: string
   completionExp: number
   taskCount: number
-  tasks: [];
-} 
+  tasks: []
+  author: string
+}
 
 interface ITaskCreation {
   name: string
   description: string
   day: number
-} 
+}
 
 
 const CreateAQuestScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [questCreated, setQuestCreated] = useState(false);
+  const {user} = useSelector(stateSelector);
   const [questForm, setQuestForm] = useState({
     duration: '',
     name: '',
@@ -45,19 +48,20 @@ const CreateAQuestScreen = ({navigation}) => {
     category: '',
     completionExp: 0,
     taskCount: 0,
+    author: user.userName,
   })
 
   const taskTemplate: ITaskCreation = {
     name: '',
     description: '',
-    day: 0, 
+    day: 0,
   }
-  
+
   const [tasks, setTasks] = useState({
     '99' : {
       name: 'Please select a day',
       description: '',
-      day: 99, 
+      day: 99,
     }
   })
 
@@ -67,32 +71,32 @@ const CreateAQuestScreen = ({navigation}) => {
     if (num < 10) {
       dur = (`0${num}`)
     }
-    let str = '2021-09-' + dur
+    let str = '2021-11-' + dur
     return str;
   })
 
 
   const [calendarMarks, setCalendarMarks] = useState({
     markings: {
-      '2021-09-01': {selected: true, selectedColor: '#6071d5'},
+      '2021-11-01': {selected: true, selectedColor: '#6071d5'},
     },
     prevDate: ''
   })
 
   const [selectedDay, setSelectedDay] = useState('99');
-  
+
   const handleChange = () => {
     setCalendarMarks({
-      ...calendarMarks, 
+      ...calendarMarks,
       markings: {
-        '2021-09-01': {selected: true, selectedColor: '#6071d5'},
+        '2021-11-01': {selected: true, selectedColor: '#6071d5'},
         [addDates(questForm.duration)]: {selected: true, selectedColor: '#6071d5'},
       },
       prevDate: '',
     })
     setQuestCreated(true);
   }
-  
+
   const submitQuest = async () => {
     delete tasks['99'];
     const questToCreate = {
@@ -103,19 +107,19 @@ const CreateAQuestScreen = ({navigation}) => {
     };
     await sendNewQuest(dispatch, questToCreate);
     await getQuests(dispatch);
-    navigation.navigate('Home');
+    navigation.navigate('Quests');
   }
 
   const selectDay = (date) => {
-  
+
   setSelectedDay(date.day);
-  
+
   setCalendarMarks({
-    ...calendarMarks, 
+    ...calendarMarks,
     markings: {
       ...calendarMarks.markings,
       [calendarMarks.prevDate] : {...calendarMarks.markings[calendarMarks.prevDate], selected: false},
-      '2021-09-01': {...calendarMarks.markings['2021-09-01'], selected: true, selectedColor: '#6071d5'},
+      '2021-11-01': {...calendarMarks.markings['2021-11-01'], selected: true, selectedColor: '#6071d5'},
       [addDates(questForm.duration)]: {...calendarMarks.markings[addDates(questForm.duration)], selected: true, selectedColor: '#6071d5'},
       [date.dateString]: {...calendarMarks.markings[date.dateString], selected: true, selectedColor: 'grey'},
      },
@@ -125,7 +129,7 @@ const CreateAQuestScreen = ({navigation}) => {
 
   const addADot = () => {
     setCalendarMarks({
-    ...calendarMarks, 
+    ...calendarMarks,
     markings: {
       ...calendarMarks.markings,
       [addDates(parseInt(selectedDay)-1)]: {selected:true, marked: true, markedColor: 'red', selectedColor: 'grey'},
@@ -134,7 +138,7 @@ const CreateAQuestScreen = ({navigation}) => {
   }
 
 
-  
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -187,7 +191,7 @@ const CreateAQuestScreen = ({navigation}) => {
                   title="Next"
                   onPress={() => handleChange()}
                   buttonStyle={styles.btnStyle}
-                /> 
+                />
               </Card>
             </View>
           ):(
@@ -205,7 +209,7 @@ const CreateAQuestScreen = ({navigation}) => {
                   onChangeText={name => {
                     if (tasks[selectedDay]?.description) addADot()
                     setTasks({
-                      ...tasks, 
+                      ...tasks,
                       [selectedDay]: {...tasks[selectedDay], name, day: selectedDay}}
                     )}
                   }
@@ -226,24 +230,25 @@ const CreateAQuestScreen = ({navigation}) => {
                   autoCorrect={false}
                   autoCapitalize="none"
                 />
-                <Calendar 
+                <Calendar
                   // Initially visible month. Default = Date()
-                  current={'2021-09-01'}
+                  current={'2021-11-01'}
                   // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                  minDate={'2021-09-01'}
+                  minDate={'2021-11-01'}
                   // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
                   maxDate={addDates(questForm.duration)}
                   // Handler which gets executed on day press. Default = undefined
                   onDayPress={(day) => {selectDay(day)}}
                   // Handler which gets executed on day long press. Default = undefined
                   // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-                  monthFormat={'yyyy MM'}
+                  monthFormat={''}
                   // Handler which gets executed when visible month changes in calendar. Default = undefined
-                  onMonthChange={(month) => {console.log('month changed', month)}}
+                  // onMonthChange={(month) => {console.log('month changed', month)}}
                   // Hide month navigation arrows. Default = false
                   // Replace default arrows with custom ones (direction can be 'left' or 'right')
                   // Do not show days of other months in month page. Default = false
                   hideExtraDays={true}
+                  hideArrows={true}
                   // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
                   // day from another month that is visible in calendar page. Default = false
                   disableMonthChange={true}
