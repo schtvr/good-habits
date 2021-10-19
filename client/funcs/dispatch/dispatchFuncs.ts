@@ -100,10 +100,10 @@ export const getUserTaskHistory = async (dispatch: Function) => {
 };
 
 export const userLogOut = async (dispatch: Function) => {
-  dispatch(clearAchievements());
-  dispatch(clearQuests());
-  dispatch(clearFriends());
-  dispatch(
+  await dispatch(clearAchievements());
+  await dispatch(clearQuests());
+  await dispatch(clearFriends());
+  await dispatch(
     signOut({
       api: {
         method: 'POST',

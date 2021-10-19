@@ -35,7 +35,6 @@ const apiService = store => next => action => {
 };
 
 const dispatchUpdates = async (store, update) => {
-  console.log('UPDATE', update.achievements);
   // TODO: SORT COMPLETED QUESTS ON UPDATE
   if (update.achievements.length > 0) {
     store.dispatch({type: 'achievements/getNewAchievements', update});
