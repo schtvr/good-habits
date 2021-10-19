@@ -35,7 +35,7 @@ import {
 } from './redux/friendSlice';
 
 import OtherProfileScreen from './screens/OtherProfilesScreen';
-import { getMyFriendRequests } from './funcs/dispatch/dispatchFuncs';
+import {getMyFriendRequests} from './funcs/dispatch/dispatchFuncs';
 import UploadPfp from './screens/UploadPfp';
 import CreateAQuestScreen from './screens/CreateAQuestScreen';
 
@@ -99,7 +99,7 @@ const headerRight = () => {
       rejectFriendRequest({
         api: {
           method: 'PUT',
-          url: `user/cancelFriendRequest/${id}`,
+          url: `user/${id}/cancelFriendRequest`,
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
@@ -110,11 +110,13 @@ const headerRight = () => {
 
   return (
     <View style={styles.header}>
-      {!(friendRequests.length === 0) && <Badge
-        badgeStyle={{position: 'absolute', right: -50}}
-        value={friendRequests.length}
-        status="error"
-      />}
+      {!(friendRequests.length === 0) && (
+        <Badge
+          badgeStyle={{position: 'absolute', right: -50}}
+          value={friendRequests.length}
+          status="error"
+        />
+      )}
       <TouchableOpacity onPress={toggleOverlay}>
         <MaterialCommunityIcons
           style={styles.icons}
@@ -124,25 +126,20 @@ const headerRight = () => {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-        <MaterialCommunityIcons 
-          style={styles.icons}
-          name="search"
-          size={26}
-        />
+        <MaterialCommunityIcons style={styles.icons} name="search" size={26} />
       </TouchableOpacity>
-     
+
       <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-        <MaterialCommunityIcons 
+        <MaterialCommunityIcons
           style={styles.icons}
           name="more-horiz"
           size={26}
         />
       </TouchableOpacity>
-
       <Overlay
         isVisible={visible}
         onBackdropPress={toggleOverlay}
-        overlayStyle={{height: 200, width: 260}}>
+        overlayStyle={{height: 175, width: 260, backgroundColor: '#8898f2'}}>
         <Text style={styles.content}>Friend Request!</Text>
         <View
           style={{
@@ -152,30 +149,33 @@ const headerRight = () => {
             flex: 1,
             justifyContent: 'flex-end',
           }}>
-          <Text>{friendRequests[0]?.userName}</Text>
-          <Button
-            title="Accept"
-            onPress={acceptMyFriendRequest}
-            buttonStyle={{
-              width: 100,
-              borderRadius: 10,
-              backgroundColor: '#383be0',
-            }}
-          />
-          <Button
-            title="Reject"
-            onPress={rejectMyFriendRequest}
-            buttonStyle={{
-              width: 100,
-              borderRadius: 10,
-              backgroundColor: '#383be0',
-            }}
-          />
+          <Text style={styles.userName}>{friendRequests[0]?.userName}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Button
+              title="Accept"
+              onPress={acceptMyFriendRequest}
+              buttonStyle={{
+                width: 100,
+                borderRadius: 10,
+                backgroundColor: '#3d4eb3',
+              }}
+            />
+            <Text>{'    '}</Text>
+            <Button
+              title="Reject"
+              onPress={rejectMyFriendRequest}
+              buttonStyle={{
+                width: 100,
+                borderRadius: 10,
+                backgroundColor: '#3d4eb3',
+              }}
+            />
+          </View>
           <Button
             title="cancel"
             type="clear"
             buttonStyle={{width: 100, borderRadius: 10}}
-            titleStyle={{color: '#383be0'}}
+            titleStyle={{color: '#fff'}}
             onPress={() => setVisible(false)}
           />
         </View>
@@ -242,7 +242,6 @@ const TabStack = () => {
   );
 };
 
-
 const App: () => Node = () => {
   const {isAuthenticated} = useSelector(stateSelector);
 
@@ -273,9 +272,15 @@ const App: () => Node = () => {
                 name="ProfileSettings"
                 component={ProfileSettings}
               />
-              <Stack.Screen name="Upload Profile Picture" component={UploadPfp} />
+              <Stack.Screen
+                name="Upload Profile Picture"
+                component={UploadPfp}
+              />
               <Stack.Screen name="Search" component={SearchDetailsScreen} />
-              <Stack.Screen name="Create Quest" component={CreateAQuestScreen} />
+              <Stack.Screen
+                name="Create Quest"
+                component={CreateAQuestScreen}
+              />
               <Stack.Screen name="Settings" component={SettingsScreen} />
             </>
           )}
@@ -294,7 +299,16 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   content: {
-    fontSize: 16,
+    fontSize: 18,
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: 'black',
   },
 });
 
