@@ -90,7 +90,7 @@ const UploadPfp = () => {
       >
       <View>
         <Image 
-          source={{ uri: photo }} 
+          source={{ uri: photo || 'nothing' }} 
           style={styles.profileImage}>
         </Image>
       </View>
