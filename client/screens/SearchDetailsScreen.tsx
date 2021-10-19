@@ -43,11 +43,19 @@ const SearchDetailsScreen = ({navigation}) => {
       </TouchableOpacity>
     );
   };
+  const setSearch = () => {
+    if (searchFriends) {
+      return navigation.setOptions({title: 'Search Users'});
+    } else {
+      return navigation.setOptions({title: 'Search Quests'});
+    }
+  };
 
   useEffect(() => {
     getQuests(dispatch);
     getAllUsers(dispatch);
-  }, []);
+    setSearch();
+  }, [searchFriends]);
 
   const handleSearch = text => {
     setSearchVal(text);
@@ -77,8 +85,8 @@ const SearchDetailsScreen = ({navigation}) => {
           <>
             <Text>Quests</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              thumbColor={searchFriends ? '#f5dd4b' : '#f4f3f4'}
+              trackColor={{false: 'peru', true: '#81b0ff'}}
+              thumbColor={searchFriends ? '#f5dd4b' : '#f5dd4b'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={searchFriends}
@@ -112,7 +120,6 @@ const SearchDetailsScreen = ({navigation}) => {
           />
           {searchFriends ? (
             <>
-              <Text style={styles.title}>All Users</Text>
               <FlatList
                 data={renderList}
                 numColumns={3}
@@ -122,8 +129,6 @@ const SearchDetailsScreen = ({navigation}) => {
             </>
           ) : (
             <>
-              <Text style={styles.title}>All Quests</Text>
-
               <FlatList
                 data={renderList}
                 numColumns={3}
