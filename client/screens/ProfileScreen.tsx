@@ -42,7 +42,6 @@ const ProfileScreen = () => {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView>
       {loading ? (
         <View style={styles.loaderContainer}>
           <Text style={styles.loader}>Loading...</Text>
@@ -50,8 +49,9 @@ const ProfileScreen = () => {
         </View>
       ) : (
         <ImageBackground
-          style={{flex: 1}}
-          source={require('../assets/mauve-stacked-waves-haikei.png')}>
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}>
+            <ScrollView>
           <ThemeProvider theme={elementsTheme}>
             <Card>
               <ProfileHeader user={otherUser} />
@@ -77,9 +77,9 @@ const ProfileScreen = () => {
               questList={otherUser.complQuests}
             />
           </ThemeProvider>
+      </ScrollView>
         </ImageBackground>
       )}
-      </ScrollView>
     </View>
   );
 };
