@@ -44,7 +44,7 @@ const QuestDetailCard = props => {
   const setImage = () => {
     if (category === 'Health')
       return <Image source={require('../assets/heart.png')} />;
-    if (category === 'Spirtual')
+    if (category === 'Spiritual')
       return <Image source={require('../assets/spiritual.png')} />;
     if (category === 'Mental')
       return <Image source={require('../assets/mental.png')} />;
@@ -61,6 +61,7 @@ const QuestDetailCard = props => {
             style={{fontSize: 18, fontWeight: 'bold', color: color[category]}}>
             {name}
           </Text>
+          {quests.author !== 'FATJORTS' && <Text>Created by {quests.author} </Text>}
           <Text>
             Duration: {duration} days | EXP: {completionExp}
           </Text>

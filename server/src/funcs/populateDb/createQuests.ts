@@ -59,7 +59,7 @@ const createQuests = async () => {
     name: 'Mediation crash course',
     duration: 30,
     description: 'Learn to medidate over the course of one month!',
-    category: 'Spirtual',
+    category: 'Spiritual',
     completionExp: 500,
     taskCount: 5
   });
