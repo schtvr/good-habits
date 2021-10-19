@@ -159,38 +159,4 @@ describe('Quest Controller', () => {
     const completedQuests = await user.getCompletedQuests();
     expect(completedQuests).toHaveLength(1);
   });
-  
-  test('get friends on quest', async () => {
-    const users = await User.findAll();
-    try {
-      await user.addFriends(users[1].id);
-      await users[1].addFriends(user.id);
-      await user.addFriends(users[2].id);
-      await users[2].addFriends(user.id);
-      const quests = await Quest.findAll();
-      await quests[0].createActiveQuest({
-        userId: users[1].id
-      });
-      await quests[0].createActiveQuest({
-        userId: users[2].id
-      });
-      await user.createActiveQuest({
-        questId: quests[3].id
-      });
-      await user.createActiveQuest({
-        questId: quests[4].id
-      });
-      //const res = await request.get(`/friendsOnQuest/${quests[0].id}`).set(
-      //  'Authorization',
-      //  `Bearer ${loginRes.body.data}`
-      //);
-      
-      const res = await request.get('/tasks/daily').set(
-        'Authorization',
-        `Bearer ${loginRes.body.data}`
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  });
 });
