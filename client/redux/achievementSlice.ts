@@ -39,7 +39,6 @@ export const achievementSlice = createSlice({
       state.completedTasks = [...state.completedTasks, ...body.update.tasks];
     },
     sendTaskComplete: (state, body) => {
-      console.log('success')
     },
     getTaskHistory: (state, body) => {
       state.completedTasks = [...state.completedTasks, ...body.data.data];
