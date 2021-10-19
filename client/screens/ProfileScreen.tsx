@@ -19,11 +19,13 @@ import { elementsTheme } from '../styles/react-native-elements-theme-provider';
 import { getToken } from '../funcs/dispatch/dispatchFuncs';
 import CuratedTrophies from '../components/profile/curatedTrophies';
 import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/core';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { otherUser, loading, user } = useSelector(stateSelector);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     (async () => {
@@ -38,7 +40,7 @@ const ProfileScreen = () => {
         }),
       );
     })();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={{flex: 1}}>
