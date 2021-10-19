@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {useNavigation} from '@react-navigation/core';
 import {
   View,
   Text,
@@ -30,6 +31,7 @@ interface IProps {
 
 const CarouselComponent = ({data}: IProps): JSX.Element => {
   if (data.length < 1) return <></>;
+  const navigation = useNavigation();
   const [active, setActive] = useState<number>(0);
   const ref = useRef(null);
   const pagination = (): JSX.Element => {
@@ -54,7 +56,8 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
     return (
       <View style={styles.carousel}>
         <View>
-          <TouchableOpacity onPress={() => console.log('hello')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
             <Image
               style={styles.avatar}
               source={require('../assets/friend1.png')}
