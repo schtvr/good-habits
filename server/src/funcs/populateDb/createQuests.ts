@@ -18,7 +18,7 @@ const createQuests = async () => {
   await Quest.create({
     name: 'Posture check!',
     duration: 14,
-    description: 'Check ya posture, goon',
+    description: 'Keep track of your posture with this helpful quest!',
     category: 'Health',
     completionExp: 500,
     taskCount: 0
@@ -34,7 +34,7 @@ const createQuests = async () => {
   const readingQuest = await Quest.create({
     name: 'Reading training!',
     duration: 60,
-    description: 'read 10 pages a day to gain a reading habit!',
+    description: 'Get into a habit of reading!',
     category: 'Mental',
     completionExp: 550,
     taskCount: 60
@@ -42,7 +42,7 @@ const createQuests = async () => {
   const yogaQuest = await Quest.create({
     name: 'Yoga time!',
     duration: 60,
-    description: 'practice Yoga twice a week for one hour!',
+    description: 'Get an introduction to yoga!',
     category: 'Mental',
     completionExp: 450,
     taskCount: 16
