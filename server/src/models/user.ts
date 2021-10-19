@@ -46,7 +46,7 @@ export interface IUser {
   pfp: string
 }
 
-interface IUserCreationAttributes extends Optional<IUser, 'id' | 'exp' | 'level' | 'pfp'> {}
+interface IUserCreationAttributes extends Optional<IUser, 'id' | 'exp' | 'level' | 'pfp' | 'firstName' | 'lastName'> {}
 
 class User extends Model<IUser, IUserCreationAttributes> implements IUser {
   public id!: number;
@@ -165,7 +165,8 @@ User.init(
     },
     pfp: {
       type: new DataTypes.STRING(255),
-      allowNull: true,
+      allowNull: false,
+      defaultValue: 'https://i.imgur.com/AgDGYNx.png'
     }
   },
   {
