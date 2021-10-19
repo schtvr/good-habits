@@ -24,7 +24,7 @@ interface IQuestCreation {
   category: string
   completionExp: number
   taskCount: number
-  taskArr: ITaskCreation[]
+  tasks: [];
 } 
 
 interface ITaskCreation {
@@ -43,17 +43,21 @@ const CreateAQuestScreen = ({navigation}) => {
     category: '',
     completionExp: 0,
     taskCount: 0,
-    taskArr: [],
   })
 
-  const [Tasks, setTasks] = useState([]);
   const taskTemplate: ITaskCreation = {
     name: '',
     description: '',
     day: 0, 
   }
   
-  const [singleTask, setSingleTask] = useState({...taskTemplate})
+  const [tasks, setTasks] = useState({
+    '99' : {
+      name: 'Please select a day',
+      description: '',
+      day: 99, 
+    }
+  })
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -81,8 +85,12 @@ on crate task button press =>
 */
 
 const addDates = ((duration) => {
-  const dur = parseInt(duration)+1;
-  let str = '2021-09-' + dur.toString()
+  let num = parseInt(duration)+1;
+  let dur = num.toString();
+  if (num < 10) {
+    dur = (`0${num}`)
+  }
+  let str = '2021-09-' + dur
   return str;
 })
 
@@ -94,7 +102,7 @@ const [calendarMarks, setCalendarMarks] = useState({
   prevDate: ''
 }
 )
-
+const [selectedDay, setSelectedDay] = useState('99');
 const handleChange = () => {
   setCalendarMarks({
     ...calendarMarks, 
@@ -106,19 +114,42 @@ const handleChange = () => {
   })
   setQuestCreated(true);
 }
+const submitQuest = () => {
+  delete tasks['99'];
+  const questToCreate = {
+    ...questForm,
+    taskCount: Object.keys(tasks).length,
+    tasks: Object.values(tasks)
+  };
+  console.log(questToCreate);
+}
 
 const selectDay = (date) => {
-  if (calendarMarks.prevDate) delete calendarMarks.markings[calendarMarks.prevDate]; 
+  
+  setSelectedDay(date.day);
   setCalendarMarks({
     ...calendarMarks, 
     markings: {
-      '2021-09-01': {selected: true, selectedColor: '#6071d5'},
-      [addDates(questForm.duration)]: {selected: true, selectedColor: '#6071d5'},
-      [date.dateString]: {selected: true, selectedColor: 'grey'},
+      ...calendarMarks.markings,
+      [calendarMarks.prevDate] : {...calendarMarks.markings[calendarMarks.prevDate], selected: false},
+      '2021-09-01': {...calendarMarks.markings['2021-09-01'], selected: true, selectedColor: '#6071d5'},
+      [addDates(questForm.duration)]: {...calendarMarks.markings[addDates(questForm.duration)], selected: true, selectedColor: '#6071d5'},
+      [date.dateString]: {...calendarMarks.markings[date.dateString], selected: true, selectedColor: 'grey'},
      },
     prevDate: date.dateString,
   })
 }
+
+const addADot = () => {
+  setCalendarMarks({
+  ...calendarMarks, 
+  markings: {
+    ...calendarMarks.markings,
+    [addDates(parseInt(selectedDay)-1)]: {selected:true, marked: true, markedColor: 'red', selectedColor: 'grey'},
+  },
+})
+}
+
 
   
   return (
@@ -130,7 +161,7 @@ const selectDay = (date) => {
         <ThemeProvider theme={elementsTheme}>
           {!questCreated ? (
             <View>
-              <Card containerStyle={{marginTop: 50}}>
+              <Card>
                 <Text h4 h4Style={styles.headerTitle}>
                   Create a new Quest!
                 </Text>
@@ -178,7 +209,7 @@ const selectDay = (date) => {
             </View>
           ):(
             <ScrollView>
-              <Card containerStyle={{marginTop: 50}}>
+              <Card>
                 <Text h4 h4Style={styles.headerTitle}>
                   Add the Tasks to your Quest!
                 </Text>
@@ -187,16 +218,28 @@ const selectDay = (date) => {
                 <Input
                   leftIcon={{type: 'fontisto', name: 'at',color: '#6071d5'}}
                   placeholder="Task name"
-                  value={singleTask.name}
-                  onChangeText={name => setSingleTask({...singleTask, name})}
+                  value={tasks[selectedDay]?.name}
+                  onChangeText={name => {
+                    if (tasks[selectedDay]?.description) addADot()
+                    setTasks({
+                      ...tasks, 
+                      [selectedDay]: {...tasks[selectedDay], name, day: selectedDay}}
+                    )}
+                  }
                   autoCorrect={false}
                   autoCapitalize="none"
                 />
                 <Input
                   leftIcon={{type: 'fontisto', name: 'question',color: '#6071d5'}}
                   placeholder="Description"
-                  value={singleTask.description}
-                  onChangeText={description => setSingleTask({...singleTask, description})}
+                  value={tasks[selectedDay]?.description}
+                  onChangeText={description => {
+                    if (tasks[selectedDay]?.name) addADot()
+                    setTasks({
+                      ...tasks,
+                      [selectedDay]: {...tasks[selectedDay], description, day: selectedDay}}
+                    )}
+                  }
                   autoCorrect={false}
                   autoCapitalize="none"
                 />
@@ -206,7 +249,7 @@ const selectDay = (date) => {
                   // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
                   minDate={'2021-09-01'}
                   // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-                  maxDate={`2021-09-${parseInt(questForm.duration) + 1}`}
+                  maxDate={addDates(questForm.duration)}
                   // Handler which gets executed on day press. Default = undefined
                   onDayPress={(day) => {selectDay(day)}}
                   // Handler which gets executed on day long press. Default = undefined
@@ -230,7 +273,11 @@ const selectDay = (date) => {
                   // Enable the option to swipe between months. Default = false
                   markedDates={calendarMarks.markings}
                 />
-                
+                <Button
+                  title="Create Quest"
+                  onPress={submitQuest}
+                  buttonStyle={styles.btnStyle}
+                />
               </Card>
             </ScrollView>
           )}
@@ -260,6 +307,7 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     width: 150,
+    marginTop: 10,
     alignSelf: 'center',
   },
   test: {
