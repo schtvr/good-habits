@@ -11,12 +11,16 @@ import {
   Pressable,
   Text,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
+import {ThemeProvider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   achievementSelector,
   getAllAchievements,
 } from '../redux/achievementSlice';
+import {elementsTheme} from '../styles/react-native-elements-theme-provider';
+
 import {
   getTemplateAchievements,
   getUserAchievements,
@@ -37,8 +41,9 @@ const AchievementsPage = (): JSX.Element => {
   const dispatch = useDispatch();
   const {achievements, userAchievements} = useSelector(achievementSelector);
   const {loading} = useSelector(stateSelector);
-  console.log('-------------------inside achievements', userAchievements);
-
+  const questImage = '../assets/quests.png';
+  const taskImage = '../assets/task.png';
+  const socialImage = '../assets/social.png';
   useEffect(() => {
     getTemplateAchievements(dispatch);
     getUserAchievements(dispatch);
@@ -58,9 +63,6 @@ const AchievementsPage = (): JSX.Element => {
   const renderItem = ({item, index}) => {
     let obj = {...item};
     checkOwned(obj);
-    const questImage = '../assets/quests.png';
-    const taskImage = '../assets/task.png';
-    const socialImage = '../assets/social.png';
     const selectImage = () => {
       if (obj.category === 'Quests')
         return (
@@ -104,7 +106,12 @@ const AchievementsPage = (): JSX.Element => {
                 }>
                 {obj.name}
               </Text>
-              <Text>{obj.description}</Text>
+              <Text
+                style={
+                  obj.owned ? styles.ownedDescription : styles.description
+                }>
+                {obj.description}
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -115,6 +122,15 @@ const AchievementsPage = (): JSX.Element => {
   const Modals = (): JSX.Element => {
     if (selectedItem !== null) {
       const item = achievements[selectedItem];
+      console.log('ACHIE', achievements);
+      const selectImage = () => {
+        if (item.category === 'Quests')
+          return <Image source={require(questImage)} />;
+        if (item.category === 'Tasks')
+          return <Image source={require(taskImage)} />;
+        if (item.category === 'Social')
+          return <Image source={require(socialImage)} />;
+      };
       return (
         <Modal
           animationType="slide"
@@ -125,9 +141,11 @@ const AchievementsPage = (): JSX.Element => {
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>{item.name}</Text>
-              <Text>{item.description}</Text>
-              <Text>{item.category}</Text>
+              <Text style={styles.modalTitle}>{item.name}</Text>
+              {selectImage()}
+              <Text style={styles.modalTitle}>{item.description}</Text>
+              <Text style={styles.modalTitle}>Category</Text>
+              <Text style={styles.modalText}>{item.category}</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
@@ -145,27 +163,33 @@ const AchievementsPage = (): JSX.Element => {
 
   return (
     <>
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <Text style={styles.loader}>Loading...</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : (
-        <>
-          <View style={styles.header}>
-            <Text style={styles.achievements}>All Achievements!</Text>
-            <Text style={styles.ownedAchievements}>
-              Owned {userAchievements.length}/{achievements.length}
-            </Text>
-          </View>
-          <FlatList
-            data={achievements}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-          />
-        </>
-      )}
-      {modalVisible ? <Modals /> : null}
+      <ImageBackground
+        style={{flex: 1}}
+        source={require('../assets/mauve-stacked-waves-haikei.png')}>
+        <ThemeProvider theme={elementsTheme}>
+          {loading ? (
+            <View style={styles.loaderContainer}>
+              <Text style={styles.loader}>Loading...</Text>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <>
+              <View style={styles.header}>
+                <Text style={styles.achievements}>All Achievements!</Text>
+                <Text style={styles.ownedAchievements}>
+                  Owned {userAchievements.length}/{achievements.length}
+                </Text>
+              </View>
+              <FlatList
+                data={achievements}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+              />
+            </>
+          )}
+          {modalVisible ? <Modals /> : null}
+        </ThemeProvider>
+      </ImageBackground>
     </>
   );
 };
@@ -185,13 +209,14 @@ const styles = StyleSheet.create({
   },
 
   achievements: {
-    fontSize: 20,
+    fontSize: 24,
     paddingRight: 20,
+    fontWeight: 'bold',
   },
   ownedAchievements: {
     alignSelf: 'center',
-    borderColor: 'black',
-    borderWidth: 1,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   achievementTitle: {
     fontSize: 18,
@@ -202,6 +227,15 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: 'black',
   },
+  description: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  ownedDescription: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: 'black',
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -210,9 +244,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#8898f2',
     borderRadius: 20,
-    padding: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -241,11 +276,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+    fontWeight: 'bold',
+    marginHorizontal: 5,
+  },
+  modalTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
   achievementIcon: {
-    tintColor: 'gray',
+    tintColor: '#8e8f94',
   },
   achievementIconOwned: {},
   loaderContainer: {

@@ -162,10 +162,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           source={require('../assets/mauve-stacked-waves-haikei.png')}>
           <ThemeProvider theme={elementsTheme}>
             <ScrollView style={{flex: 1}}>
-              <Button
-                title="Achievements"
-                onPress={() => navigation.navigate('Achievements')}
-              />
+
               <Card>
                 <View style={styles.header}>
                   <Image source={require('../assets/avatar.png')} />
