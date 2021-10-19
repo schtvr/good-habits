@@ -5,11 +5,11 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   SafeAreaView,
   TouchableOpacity,
   ListRenderItem,
 } from 'react-native';
+import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
 interface IQuest {
   id: number;
   duration: number;
@@ -53,14 +53,16 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
   };
 
   const renderItem: ListRenderItem<IFriends> = ({item}) => {
+    const pfp = item.pfp;
     return (
       <View style={styles.carousel}>
         <View>
           <TouchableOpacity
             onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
-            <Image
-              style={styles.avatar}
-              source={require('../assets/friend1.png')}
+            <Avatar
+              size='large'
+              rounded
+              source={{ uri: item.pfp }}
             />
           </TouchableOpacity>
         </View>
@@ -78,11 +80,11 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
         sliderWidth={350}
         itemWidth={300}
         onSnapToItem={(index: number) => setActive(index)}
-      />
-      {data.length ? <View>{pagination()}</View> : null}
+        />
     </SafeAreaView>
   );
 };
+//{data.length ? <View>{pagination()}</View> : null}
 
 const styles = StyleSheet.create({
   carousel: {
@@ -97,7 +99,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
-  avatar: {},
 });
 
 export default CarouselComponent;
