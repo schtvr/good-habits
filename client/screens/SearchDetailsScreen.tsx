@@ -142,7 +142,7 @@ const SearchDetailsScreen = ({navigation}) => {
                           source={require('../assets/heart.png')}
                         />
                       );
-                    if (item.category === 'Spirtual')
+                    if (item.category === 'Spiritual')
                       return (
                         <Avatar
                           size="large"

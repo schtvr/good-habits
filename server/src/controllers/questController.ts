@@ -228,7 +228,7 @@ interface IQuestCreation {
   category: string;
   completionExp: number;
   taskCount: number;
-} 
+}
 
 const createAQuest = async (req: Request, res: Response) => {
   const user = req.user;
@@ -246,9 +246,9 @@ const createAQuest = async (req: Request, res: Response) => {
 interface ITaskCreation {
   name: string;
   description: string;
-  completionExp: number; 
-  index: number; 
-  day: number; 
+  completionExp: number;
+  index: number;
+  day: number;
 }
 
 const addTaskToQuest = async (req: Request, res: Response) => {
@@ -264,7 +264,7 @@ const addTaskToQuest = async (req: Request, res: Response) => {
     return sendRes(res, true, 200, 'Task has been created and added to quest');
   } catch (err) {
     return sendRes(res, false, 500, 'Quest creation has errored', err);
-  } 
+  }
 
 };
 // duration: string
@@ -277,7 +277,7 @@ const addTaskToQuest = async (req: Request, res: Response) => {
 
 const createQuestWithTasks = async (req: Request, res: Response) => {
   const user = req.user;
-  const {duration, name, description, category, completionExp, taskCount, tasks} = req.body;
+  const {duration, name, description, category, completionExp, taskCount, tasks, author} = req.body;
   if (!user) return sendRes(res, false, 401, 'You are unauthorized');
   try {
     const durationParsed = parseInt(duration);
@@ -287,7 +287,8 @@ const createQuestWithTasks = async (req: Request, res: Response) => {
       description,
       category,
       completionExp,
-      taskCount
+      taskCount,
+      author
     });
     for await (let task of tasks) {
       await newQuest.createTask({...task,
