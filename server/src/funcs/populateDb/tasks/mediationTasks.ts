@@ -9,7 +9,7 @@ const tasks = [
     day: 1
   },
   {
-    name: 'Continue your spirtual journey',
+    name: 'Continue your Spiritual journey',
     description: 'Today, try and take 20 minutes of peaceful alone time and quietly contemplate the vast expanse of the universe.',
     completionExp: 20,
     index: 2,

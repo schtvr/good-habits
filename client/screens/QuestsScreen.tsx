@@ -51,7 +51,6 @@ const QuestsScreen = ({navigation}) => {
   const renderQuests = isUser ? userQuests : templateQuests;
 
   const renderItems: ListRenderItem<IQuest> = ({item, index}) => {
-    console.log('ITEM', item);
     return (
       <>
         <TouchableOpacity

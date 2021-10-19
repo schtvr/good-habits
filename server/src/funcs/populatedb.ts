@@ -8,7 +8,7 @@ const populateDb = async () => {
     await createUsers();
     await createQuests();
     await createAchievements();
-    
+
   } catch (err) {
     return;
   }
@@ -21,14 +21,14 @@ const createUsers = async () => {
     firstName: 'timbo',
     lastName: 'slice',
     email: 'bigBoy@gmail.com',
-    password: bcrypt.hashSync('password123', 10) 
+    password: bcrypt.hashSync('password123', 10)
   });
   await User.create({
     userName: 'dummy',
     firstName: 'victor',
     lastName: 'dumdum',
     email: 'dummy@dummy.com',
-    password: bcrypt.hashSync('password123', 10) 
+    password: bcrypt.hashSync('password123', 10)
   });
   await User.create({
     userName: 'dogShit',
@@ -68,11 +68,11 @@ const createQuests = async () => {
     name: 'Mediation crash course',
     duration: 30,
     description: 'Mediate for a whole fkn month straight without stopping',
-    category: 'Spirtual',
+    category: 'Spiritual',
     completionExp: 1,
     taskCount: 5
   });
-  
+
   await createMedidateTasks(meditateQuest);
 };
 
@@ -86,7 +86,7 @@ const createMedidateTasks = async (quest: Quest) => {
       day: 0
     },
     {
-      name: 'Continue your spirtual journey',
+      name: 'Continue your Spiritual journey',
       description: 'Today, try and take 20 minutes of peaceful alone time and quietly contemplate the vast expanse of the universe.',
       completionExp: 20,
       index: 2,
@@ -114,7 +114,7 @@ const createMedidateTasks = async (quest: Quest) => {
       day: 12
     }
   ];
-  
+
   tasks.forEach(async task => {
     await quest.createTask(task);
   });
@@ -136,7 +136,7 @@ const createAchievements = async () => {
     img: '',
     criteria: 5,
     category: 'Quests',
-    completionExp: 500 
+    completionExp: 500
   });
   await AchievementTemplate.create({
     name: 'Huge questicles',
@@ -168,7 +168,7 @@ const createAchievements = async () => {
     img: '',
     criteria: 1,
     category: 'Tasks',
-    completionExp: 100 
+    completionExp: 100
   });
   await AchievementTemplate.create({
     name: 'Grinder',
@@ -184,7 +184,7 @@ const createAchievements = async () => {
     img: '',
     criteria: 25,
     category: 'Tasks',
-    completionExp: 2500 
+    completionExp: 2500
   });
 
 };

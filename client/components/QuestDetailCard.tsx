@@ -44,7 +44,7 @@ const QuestDetailCard = props => {
   const setImage = () => {
     if (category === 'Health')
       return <Image source={require('../assets/heart.png')} />;
-    if (category === 'Spirtual')
+    if (category === 'Spiritual')
       return <Image source={require('../assets/spiritual.png')} />;
     if (category === 'Mental')
       return <Image source={require('../assets/mental.png')} />;
