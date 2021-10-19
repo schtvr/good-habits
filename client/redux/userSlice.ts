@@ -92,6 +92,7 @@ export const userSlice = createSlice({
       state.loading = true;
       state.usersList = body.data.data;
       state.loading = false;
+      console.log('USERS', state.usersList);
     },
     error: (state, body) => {
       console.log('user-error', body.data);

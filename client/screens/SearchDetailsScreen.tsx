@@ -11,12 +11,11 @@ import {
 } from 'react-native';
 import {Avatar, Input, ThemeProvider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import { questSelector} from '../redux/questSlice';
+import {questSelector} from '../redux/questSlice';
 import {stateSelector} from '../redux/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
-import { getAllUsers, getQuests } from '../funcs/dispatch/dispatchFuncs';
-
+import {getAllUsers, getQuests} from '../funcs/dispatch/dispatchFuncs';
 
 const SearchDetailsScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -36,8 +35,8 @@ const SearchDetailsScreen = ({navigation}) => {
       <TouchableOpacity
         onPress={() => navigation.navigate('OtherUser', {id: item.id})}>
         <View style={styles.listItems}>
-          <Avatar size="large" source={require('../assets/avatar.png')} />
-          <Text>{item.userName}</Text>
+          <Avatar size="large" rounded source={{uri: item.pfp}} />
+          <Text style={styles.userName}>{item.userName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -189,6 +188,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    // alignItems: 'center',
   },
   name: {
     width: 110,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 5,
     paddingLeft: 25,
     paddingTop: 20,
-    alignContent: 'center',
+    marginLeft: 23,
   },
   inputStyle: {
     borderColor: 'gray',
@@ -236,7 +236,11 @@ const styles = StyleSheet.create({
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
-
+  userName: {
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    paddingTop: 5,
+  },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',

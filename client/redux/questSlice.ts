@@ -32,7 +32,6 @@ export const questSlice = createSlice({
       };
     },
     getAllQuests: (state, body) => {
-      console.log('howdy there');
       state.quests = body.data.data;
     },
     getAllTasks: (state, body) => {
