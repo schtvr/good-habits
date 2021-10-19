@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   ListRenderItem,
   TouchableOpacity,
@@ -9,10 +9,8 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ImageBackground,
   ActivityIndicator,
-  LogBox,
 } from 'react-native';
 import {Card, ThemeProvider} from 'react-native-elements';
 import {useSelector} from 'react-redux';
@@ -35,9 +33,6 @@ interface IFriends {
 const SocialScreen = ({navigation}) => {
   const {myFriends, allFriends} = useSelector(friendSelector);
   const {loading} = useSelector(stateSelector);
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
 
   const renderItems: ListRenderItem<IFriends> = ({item, index}) => {
     return (
@@ -82,42 +77,41 @@ const SocialScreen = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView style={{flex: 1}}>
-        {loading ? (
-          <View style={styles.loaderContainer}>
-            <Text style={styles.loader}>Loading...</Text>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        ) : (
-          <ImageBackground
-            style={{flex: 1}}
-            source={require('../assets/mauve-stacked-waves-haikei.png')}
-            resizeMode="stretch">
-            <ThemeProvider theme={elementsTheme}>
-              {myFriends.length > 0 ? (
-                <View>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loader}>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <ImageBackground
+          style={{flex: 1}}
+          source={require('../assets/mauve-stacked-waves-haikei.png')}
+          resizeMode="stretch">
+          <ThemeProvider theme={elementsTheme}>
+            {myFriends.length > 0 ? (
+              <View>
+                <ScrollView style={{marginBottom: 20}}>
                   <Text style={styles.title}>All Friends!</Text>
                   <FlatList
                     data={myFriends}
                     keyExtractor={item => item.id.toString()}
                     renderItem={renderItems}
                   />
-                </View>
-              ) : (
-                <>
-                  <Text style={styles.addFriend}>
-                    Try sending a friend request!
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Search')}>
-                    <Text style={styles.link}>Go to friend page!</Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </ThemeProvider>
-          </ImageBackground>
-        )}
-      </ScrollView>
+                </ScrollView>
+              </View>
+            ) : (
+              <>
+                <Text style={styles.addFriend}>
+                  Try sending a friend request!
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+                  <Text style={styles.link}>Go to friend page!</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </ThemeProvider>
+        </ImageBackground>
+      )}
     </View>
   );
 };
