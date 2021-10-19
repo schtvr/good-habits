@@ -9,6 +9,8 @@ import {
   ScrollView,
   ImageBackground,
   ActivityIndicator,
+  Modal,
+  Pressable,
 } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import {LinearProgress, Card, ThemeProvider} from 'react-native-elements';
@@ -47,7 +49,10 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   const {activeQuests, myQuests} = useSelector(questSelector);
   const {newAchievements} = useSelector(achievementSelector);
   const [confetti, setConfetti] = useState(false);
-
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   useEffect(() => {
     const start = async () => {
       await getUserById(dispatch);
@@ -68,17 +73,64 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
   }, [myQuests]);
 
   const renderConfetti = () => {
+    setModalVisible(true);
     setConfetti(true);
     setTimeout(() => {
       setConfetti(false);
     }, 5000);
   };
 
+  const closeModal = () => {
+    setModalVisible(!modalVisible);
+    dispatch(clearNewAchievements());
+  };
+
+  const selecImage = () => {
+    const questImage = '../assets/quests.png';
+    const taskImage = '../assets/task.png';
+    const socialImage = '../assets/social.png';
+    if (newAchievements[0].category === 'Quests')
+      return <Image source={require(questImage)} />;
+    if (newAchievements[0].category === 'Tasks')
+      return <Image source={require(taskImage)} />;
+    if (newAchievements[0].category === 'Social')
+      return <Image source={require(socialImage)} />;
+  };
   useEffect(() => {
     if (newAchievements.length === 0) return;
+    setName(newAchievements[0].name);
+    setCategory(newAchievements[0].category);
+    setDescription(newAchievements[0].description);
     renderConfetti();
-    dispatch(clearNewAchievements());
   }, [newAchievements]);
+
+  const Modals = (): JSX.Element => {
+    if (newAchievements.length === 0) return;
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          closeModal();
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>{name}</Text>
+            {selecImage()}
+            <Text style={styles.modalTitle}>{description}</Text>
+            <Text style={styles.modalTitle}>Category</Text>
+            <Text style={styles.modalText}>{category}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => closeModal()}>
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
 
   const renderAccordians = () => {
     const items = [];
@@ -96,6 +148,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
     }
     return items;
   };
+
   return (
     <View style={styles.body}>
       {loading ? (
@@ -162,6 +215,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
           origin={{x: -10, y: 0}}
         />
       )}
+      {modalVisible ? <Modals /> : null}
     </View>
   );
 };
@@ -232,6 +286,56 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  modalView: {
+    backgroundColor: '#8898f2',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    marginTop: 5,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    fontWeight: 'bold',
+    marginHorizontal: 5,
+  },
+  modalTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  image: {
+    height: 50,
+    width: 50,
   },
 });
 
