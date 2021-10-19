@@ -23,7 +23,6 @@ const LoginScreen = ({navigation}): JSX.Element => {
   const dispatch = useDispatch();
   const signInUser = async () => {
     const userId = await messaging().getToken();
-    console.log('DAGVYDSAGYDSAYA HUYG', userId);
     dispatch(
       signIn({
         api: {

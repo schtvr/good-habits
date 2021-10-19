@@ -20,7 +20,6 @@ const FriendListRow = ({questId}) => {
         }
       });
       const whatever = await res.json();
-      console.log('FRIENDS ON QUEST DATA', whatever);
       setActiveFriendList(whatever.data);
     })();
   }, [isFocused]);
