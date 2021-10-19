@@ -6,6 +6,7 @@ import {
   Switch,
   ImageBackground,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {DataTable, Provider as PaperProvider} from 'react-native-paper';
@@ -79,6 +80,7 @@ const LeaderBoardScreen = () => {
           style={{flex: 1}}
           source={require('../assets/mauve-stacked-waves-haikei.png')}>
           <ThemeProvider theme={elementsTheme}>
+          <ScrollView>
             <Card>
               <View style={styles.titleContainer}>
                 {isGlobal ? (
@@ -119,6 +121,7 @@ const LeaderBoardScreen = () => {
                 </DataTable>
               </Card>
             </View>
+          </ScrollView>
           </ThemeProvider>
         </ImageBackground>
       )}
