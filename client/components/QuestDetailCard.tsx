@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {Card, Button} from 'react-native-elements';
@@ -11,16 +11,17 @@ import {addQuest} from '../redux/questSlice';
 import VotingPanel from './VotingPanel';
 
 const QuestDetailCard = props => {
+  let {quests, activeQuests} = useSelector(questSelector);
   const dispatch = useDispatch();
   const {id} = props;
   const {color} = theme;
-
-  let {quests, activeQuests} = useSelector(questSelector);
+  
+  const [votes, setVotes] = useState(quests.score);
   quests = quests.filter(quest => quest.id === id)[0];
   activeQuests.length > 0
-    ? (activeQuests = activeQuests.filter(quest => quest.id === id))
-    : [];
-
+  ? (activeQuests = activeQuests.filter(quest => quest.id === id))
+  : [];
+  
   const addToMyQuests = async () => {
     dispatch(
       addQuest({
@@ -32,17 +33,16 @@ const QuestDetailCard = props => {
           },
         },
       }),
-    );
-  };
-  useEffect(() => {
-    const getQuestsAndSetIsActive = async () => {
-      await getUsersActiveQuests(dispatch);
+      );
     };
-    getQuestsAndSetIsActive();
-  }, []);
-
+    useEffect(() => {
+      const getQuestsAndSetIsActive = async () => {
+        await getUsersActiveQuests(dispatch);
+      };
+      getQuestsAndSetIsActive();
+    }, []);
+    
   const {duration, name, description, category, completionExp, score} = quests;
-  console.log(score)
   const setImage = () => {
     if (category === 'Health')
       return <Image source={require('../assets/heart.png')} />;
@@ -65,7 +65,7 @@ const QuestDetailCard = props => {
           </Text>
           {quests.author !== 'FATJORTS' && <Text>Created by {quests.author} </Text>}
           <Text>
-            Duration: {duration} days | EXP: { score >= 20 ? 100 : completionExp}
+            Duration: {duration} days | EXP: { votes >= 20 ? 100 : completionExp}
           </Text>
           <Card.Divider />
           <Text style={{marginBottom: 10}}>{description}</Text>
@@ -80,7 +80,7 @@ const QuestDetailCard = props => {
       ) : (
         <Button title="Add to active quests" onPress={addToMyQuests} />
       )}
-      {quests.author !== 'FATJORTS' && <View><Card.Divider /><VotingPanel quest={quests}/></View>}
+      {quests.author !== 'FATJORTS' && <View><Card.Divider /><VotingPanel quest={quests} score={votes} vote={setVotes}/></View>}
     </Card>
   );
 };
