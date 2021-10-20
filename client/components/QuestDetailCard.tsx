@@ -40,7 +40,7 @@ const QuestDetailCard = props => {
     getQuestsAndSetIsActive();
   }, []);
 
-  const {duration, name, description, category, completionExp} = quests;
+  const {duration, name, description, category, completionExp, author} = quests;
   const setImage = () => {
     if (category === 'Health')
       return <Image source={require('../assets/heart.png')} />;
@@ -61,7 +61,11 @@ const QuestDetailCard = props => {
             style={{fontSize: 18, fontWeight: 'bold', color: color[category]}}>
             {name}
           </Text>
-          {quests.author !== 'FATJORTS' && <Text>Created by {quests.author} </Text>}
+          {author === 'FATJORTS' ? (
+            <Text>Official Quest</Text>
+          ) : (
+            <Text>Created By: {author}</Text>
+          )}
           <Text>
             Duration: {duration} days | EXP: {completionExp}
           </Text>

@@ -5,23 +5,33 @@ import {
   View,
   ImageBackground,
   ActivityIndicator,
+  Image,
+  FlatList,
+  TouchableOpacity,
 } from 'react-native';
-import {ThemeProvider} from 'react-native-elements';
+import {ThemeProvider, Card, Button} from 'react-native-elements';
 import QuestDetailCard from '../components/QuestDetailCard';
 import QuestListCard from '../components/QuestListCard';
 import FriendListRow from '../components/FriendListRow';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllTasks, questSelector} from '../redux/questSlice';
+import {getAllTasks, questSelector, addQuest} from '../redux/questSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
 import {stateSelector} from '../redux/userSlice';
+import OtherQuest from '../components/OtherQuest';
 
 const QuestDetailsScreen = ({route, navigation}) => {
   const dispatch = useDispatch();
 
   let {tasks} = useSelector(questSelector);
+  let {quests, activeQuests} = useSelector(questSelector);
+
   const {loading} = useSelector(stateSelector);
+
   const {id, title} = route.params;
+  activeQuests.length > 0
+    ? (activeQuests = activeQuests.filter(quest => quest.id === id))
+    : [];
 
   useEffect(() => {
     const getTasks = async () => {
@@ -47,6 +57,7 @@ const QuestDetailsScreen = ({route, navigation}) => {
       }),
     );
   };
+
   return (
     <View style={{flex: 1}}>
       {loading ? (
@@ -61,6 +72,7 @@ const QuestDetailsScreen = ({route, navigation}) => {
             source={require('../assets/mauve-stacked-waves-haikei.png')}>
             <QuestDetailCard id={id} />
             <FriendListRow questId={id} />
+            <OtherQuest quests={quests} id={id} title={title} />
           </ImageBackground>
         </ThemeProvider>
       )}
@@ -77,6 +89,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  container: {
+    flexDirection: 'row',
+  },
+  image: {
+    width: 60,
+    height: 60,
+    alignSelf: 'center',
+  },
+  textArea: {
+    flexDirection: 'column',
+    paddingLeft: 15,
+    flex: 1,
   },
 });
 
