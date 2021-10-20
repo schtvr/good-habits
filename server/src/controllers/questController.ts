@@ -319,9 +319,10 @@ const voteOnQuest = async (req: Request, res: Response) => {
   if (Math.abs(vote) > 1) return sendRes(res, false, 403, 'Lol you can\'t vote more than 1 at a time');
   try {
     const questToVote = await Quest.findByPk(questId);
+    const voteInt = parseInt(vote);
     if (!questToVote) return sendRes(res, false, 404, 'Could not find quest');
     await questToVote.update({
-      score: questToVote.score += vote
+      score: questToVote.score += voteInt
     });
     return sendRes(res,true, 200, 'Successfully upvoted lol', questToVote);
   } catch (err) {
