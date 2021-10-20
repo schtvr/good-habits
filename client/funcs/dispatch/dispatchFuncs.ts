@@ -10,6 +10,7 @@ import {
   getActiveQuests,
   clearQuests,
   getAllQuests,
+  handleQuestVote,
 } from '../../redux/questSlice';
 import {
   getTaskHistory,
@@ -174,6 +175,21 @@ export const sendNewQuest = async (dispatch: Function, questToCreate) => {
           Authorization: `Bearer ${await getToken()}`,
         },
         body: questToCreate,
+      },
+    }),
+  );
+};
+
+export const sendVote = async (dispatch: Function, vote, questId) => {
+  dispatch(
+    handleQuestVote({
+      api: {
+        method: 'POST',
+        url: `quest/vote/${questId}`,
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+        body: {vote},
       },
     }),
   );

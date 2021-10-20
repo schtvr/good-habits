@@ -55,6 +55,8 @@ export const questSlice = createSlice({
     getOtherUserActiveQuests: (state, body) => {
       state.otherUserQuests.activeQuests = body.data.data;
     },
+    handleQuestVote: (state, body) => {
+    }
   },
 });
 
@@ -68,6 +70,7 @@ export const {
   getActiveTasks,
   getOtherUserActiveQuests,
   getOtherUserCompletedQuests,
+  handleQuestVote,
 } = questSlice.actions;
 export const questSelector = state => state.questInfo;
 
