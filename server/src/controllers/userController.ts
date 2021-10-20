@@ -290,13 +290,6 @@ const acceptFriendRequest = async (req: Request, res: Response) => {
       exp: user.exp += update.gainedExp
     });
 
-    const friendUpdate = await checkAchievements(userToFriend, 'Social', createUpdate());
-    if (friendUpdate) {
-      await userToFriend.update({
-        exp: userToFriend.exp += friendUpdate.gainedExp
-      });
-    }
-
     update.friend.push(userToFriend);
 
     return sendRes(res, true, 200, 'Friend request accepted', update);
