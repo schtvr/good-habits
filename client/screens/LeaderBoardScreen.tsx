@@ -18,8 +18,10 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Card, ThemeProvider} from 'react-native-elements';
 import {elementsTheme} from '../styles/react-native-elements-theme-provider';
+import { useIsFocused } from '@react-navigation/core';
 
 const LeaderBoardScreen = () => {
+  const isFocused = useIsFocused();
   const [isGlobal, setIsGlobal] = useState(true);
   const toggleSwitch = () => setIsGlobal(previousState => !previousState);
   const {globalRankings, friendRankings, loading} = useSelector(stateSelector);
@@ -57,7 +59,7 @@ const LeaderBoardScreen = () => {
   useEffect(() => {
     getGlobalRankings();
     getFriendRankings();
-  }, []);
+  }, [isFocused]);
 
   const makeList = players => {
     if (!isGlobal) players.push(user);

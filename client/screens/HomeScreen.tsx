@@ -21,6 +21,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {stateSelector} from '../redux/userSlice';
 import {questSelector} from '../redux/questSlice';
 import {friendSelector} from '../redux/friendSlice';
+import { useIsFocused } from '@react-navigation/core';
 import {
   getUserById,
   getUsersActiveQuests,
@@ -46,6 +47,7 @@ interface Props {
 
 const HomeScreen = ({navigation}: Props): JSX.Element => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const {user, loading} = useSelector(stateSelector);
   const {myFriends, allFriends} = useSelector(friendSelector);
   const {activeQuests, myQuests} = useSelector(questSelector);
@@ -64,7 +66,7 @@ const HomeScreen = ({navigation}: Props): JSX.Element => {
       await getUserTaskHistory(dispatch);
     };
     start();
-  }, [allFriends]);
+  }, [allFriends, isFocused]);
 
   useEffect(() => {
     const helper = async () => {
