@@ -107,7 +107,6 @@ const headerRight = () => {
       }),
     );
   };
-  console.log('FRIEND REQUESTS 0', friendRequests[0]);
 
   return (
     <View style={styles.header}>
@@ -161,7 +160,7 @@ const headerRight = () => {
               buttonStyle={{
                 width: 100,
                 borderRadius: 10,
-                backgroundColor: '#43aa8b',
+                backgroundColor: '#43aa8b'
               }}
             />
             <Text>{'    '}</Text>
@@ -246,7 +245,7 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {isAuthenticated ? (
+          {!isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
