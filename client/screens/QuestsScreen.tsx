@@ -55,9 +55,12 @@ const QuestsScreen = ({navigation}) => {
       <>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('QuestDetailsScreen', {id: item.id})
+            navigation.navigate('QuestDetailsScreen', {
+              id: item.id,
+              title: item.name,
+            })
           }>
-          <QuestDetailCard id={item.id}/>
+          <QuestDetailCard id={item.id} />
         </TouchableOpacity>
       </>
     );
@@ -142,8 +145,7 @@ const styles = StyleSheet.create({
     height: 20,
     justifyContent: 'center',
     marginTop: 10,
-
-  }
+  },
 });
 
 export default QuestsScreen;
