@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import {getUsersActiveQuests, getToken} from '../funcs/dispatch/dispatchFuncs';
 import {addQuest} from '../redux/questSlice';
+import VotingPanel from './VotingPanel';
 
 const QuestDetailCard = props => {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ const QuestDetailCard = props => {
       ) : (
         <Button title="Add to active quests" onPress={addToMyQuests} />
       )}
+      {quests.author !== 'FATJORTS' && <View><Card.Divider /><VotingPanel quest={quests}/></View>}
     </Card>
   );
 };
