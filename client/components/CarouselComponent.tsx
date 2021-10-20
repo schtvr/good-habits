@@ -53,7 +53,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
   };
 
   const renderItem: ListRenderItem<IFriends> = ({item}) => {
-    const pfp = item.pfp;
+    console.log('OWIEJFOEI', item);
     return (
       <View style={styles.carousel}>
         <View>
@@ -66,7 +66,10 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.activeQuest}>{item.userName}</Text>
+        <Text style={styles.questText}>{`${item.quests 
+          ? 'Current quest: ' + item.quests[0].name 
+          : 'Not on any quests.' }`}
+        </Text>
       </View>
     );
   };
@@ -77,8 +80,12 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
         ref={ref}
         data={data}
         renderItem={renderItem}
-        sliderWidth={350}
+        sliderWidth={300}
         itemWidth={300}
+        enableMomentum={true}
+        enableSnap={true}
+        autoplay={true}
+        autoplayInterval={5000}
         onSnapToItem={(index: number) => setActive(index)}
         />
     </SafeAreaView>
@@ -92,10 +99,17 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     flexDirection: 'row',
   },
+  questText: {
+    fontSize: 16,
+    width: 200,
+    marginLeft: 15,
+    marginTop: 15
+  },
   activeQuest: {
     alignSelf: 'center',
     paddingHorizontal: 20,
     color: '#333333',
+    flexWrap: 'wrap',
     fontWeight: 'bold',
     fontSize: 20,
   },
