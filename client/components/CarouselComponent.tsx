@@ -65,7 +65,7 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.questText}>{`${item.quests 
+        <Text style={styles.questText}>{`${item.quests[0] 
           ? 'Current quest: ' + item.quests[0].name 
           : 'Not on any quests.' }`}
         </Text>
