@@ -53,7 +53,6 @@ const CarouselComponent = ({data}: IProps): JSX.Element => {
   };
 
   const renderItem: ListRenderItem<IFriends> = ({item}) => {
-    console.log('OWIEJFOEI', item);
     return (
       <View style={styles.carousel}>
         <View>

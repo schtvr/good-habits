@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View, Text, TouchableOpacity, Settings} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Badge, Overlay, Button} from 'react-native-elements';
+import {Badge, Overlay, Button, Avatar} from 'react-native-elements';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import QuestsScreen from './screens/QuestsScreen';
@@ -107,6 +107,7 @@ const headerRight = () => {
       }),
     );
   };
+  console.log('FRIEND REQUESTS 0', friendRequests[0]);
 
   return (
     <View style={styles.header}>
@@ -139,16 +140,19 @@ const headerRight = () => {
       <Overlay
         isVisible={visible}
         onBackdropPress={toggleOverlay}
-        overlayStyle={{height: 175, width: 260, backgroundColor: '#8898f2'}}>
+        overlayStyle={{height: 215, borderRadius: 20, width: 260, backgroundColor: '#8898f2'}}>
         <Text style={styles.content}>Friend Request!</Text>
         <View
           style={{
             alignItems: 'center',
-            borderColor: 'black',
-            borderWidth: 1,
             flex: 1,
             justifyContent: 'flex-end',
           }}>
+          {friendRequests[0] && <Avatar
+            size='large'
+            rounded
+            source={{ uri: friendRequests[0].pfp }}
+            />}
           <Text style={styles.userName}>{friendRequests[0]?.userName}</Text>
           <View style={{flexDirection: 'row'}}>
             <Button
@@ -157,7 +161,7 @@ const headerRight = () => {
               buttonStyle={{
                 width: 100,
                 borderRadius: 10,
-                backgroundColor: '#3d4eb3',
+                backgroundColor: '#43aa8b',
               }}
             />
             <Text>{'    '}</Text>
@@ -167,17 +171,10 @@ const headerRight = () => {
               buttonStyle={{
                 width: 100,
                 borderRadius: 10,
-                backgroundColor: '#3d4eb3',
+                backgroundColor: '#f94144',
               }}
             />
           </View>
-          <Button
-            title="cancel"
-            type="clear"
-            buttonStyle={{width: 100, borderRadius: 10}}
-            titleStyle={{color: '#fff'}}
-            onPress={() => setVisible(false)}
-          />
         </View>
       </Overlay>
     </View>
@@ -249,7 +246,7 @@ const App: () => Node = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {!isAuthenticated ? (
+          {isAuthenticated ? (
             <Stack.Screen
               name="Auth"
               component={AuthStack}
@@ -305,10 +302,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   userName: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: 'bold',
-    marginBottom: 20,
     color: 'black',
+    margin: 7 
   },
 });
 
