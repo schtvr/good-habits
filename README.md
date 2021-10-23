@@ -33,7 +33,7 @@ The technologies we used in the development of this project:
 * Others: [JWT](https://jwt.io/), [PeerJS](https://peerjs.com/), [Socket.io](https://socket.io/), [Google Maps API](https://developers.google.com/maps/apis-by-platform), [Stripe](https://stripe.com/docs/api)
 
 # Screenshots
-![Alt text](https://i.imgur.com/DrdqsBS.png | =250x250);
+![Alt text](https://i.imgur.com/DrdqsBS.png);
 ![Alt text](https://i.imgur.com/HVglYHK.png | width=100);
 ![Alt text](https://i.imgur.com/AtKJ6lT.png | width=100);
 ![Alt text](https://i.imgur.com/FaPsOSK.png | width=100);
