@@ -34,13 +34,13 @@ The technologies we used in the development of this project:
 
 # Screenshots
 <div display='flex' flex-direction='column'>
-<img src='https://i.imgur.com/DrdqsBS.png' width='100'>
-<img src='https://i.imgur.com/AtKJ6lT.png' width='100'>
-<img src='https://i.imgur.com/FaPsOSK.png' width='100'>
-<img src='https://i.imgur.com/8At4lw8.png' width='100'>
-<img src='https://i.imgur.com/tLcHnt0.png' width='100'>
-<img src='https://i.imgur.com/PqURaui.png' width='100'>
-<img src='https://i.imgur.com/LgnQ6nn.png' width='100'>
+<img src='https://i.imgur.com/DrdqsBS.png' width='200'>
+<img src='https://i.imgur.com/AtKJ6lT.png' width='200'>
+<img src='https://i.imgur.com/FaPsOSK.png' width='200'>
+<img src='https://i.imgur.com/8At4lw8.png' width='200'>
+<img src='https://i.imgur.com/tLcHnt0.png' width='200'>
+<img src='https://i.imgur.com/PqURaui.png' width='200'>
+<img src='https://i.imgur.com/LgnQ6nn.png' width='200'>
 </div>
 
 # Getting Started
