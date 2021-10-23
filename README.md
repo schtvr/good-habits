@@ -33,6 +33,7 @@ The technologies we used in the development of this project:
 * Others: [JWT](https://jwt.io/), [PeerJS](https://peerjs.com/), [Socket.io](https://socket.io/), [Google Maps API](https://developers.google.com/maps/apis-by-platform), [Stripe](https://stripe.com/docs/api)
 
 # Screenshots
+<div display='flex' flex-direction='column'>
 <img src='https://i.imgur.com/DrdqsBS.png' width='100'>
 <img src='https://i.imgur.com/AtKJ6lT.png' width='100'>
 <img src='https://i.imgur.com/FaPsOSK.png' width='100'>
@@ -40,6 +41,7 @@ The technologies we used in the development of this project:
 <img src='https://i.imgur.com/tLcHnt0.png' width='100'>
 <img src='https://i.imgur.com/PqURaui.png' width='100'>
 <img src='https://i.imgur.com/LgnQ6nn.png' width='100'>
+</div>
 
 # Getting Started
 In the client folder, run ```npm install``` to install dependencies. You will need to create a .env file in the client folder with holds the LOCALURL declaration - e.g.: ```LOCALURL=https://192.168.2.150:3000```. For directions on getting an instance of Android running on your system, check out [Android Studio](https://developer.android.com/studio/).
