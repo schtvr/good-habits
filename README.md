@@ -18,11 +18,11 @@ Questify is a gamified productivity app designed to enable users to develop and 
 
 # Contributors
 
-* Sean Araujo. [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/sean-araujo1993/)]
-* Victor Klawitter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/victor-klawitter/)]
-* Tim Hunter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/timothyh94/)]
-* Juan Palacios [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/juanpalacios92/)]
-* Steve Rigby [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/schtvr/)]
+* Sean Araujo. [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/sean-araujo1993/)
+* Victor Klawitter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/victor-klawitter/)
+* Tim Hunter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/timothyh94/)
+* Juan Palacios [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/juanpalacios92/)
+* Steve Rigby [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/schtvr/)
 
 
 # Built With
@@ -38,3 +38,13 @@ The technologies we used in the development of this project:
 
 # Getting Started
 run npm i on the server and the client root folders and then follow these instuctions to run the app on an android emulator: https://reactnative.dev/docs/running-on-device
+
+In the client folder, run the following command:
+```npm install```
+You will need to create a .env file in the client folder with holds the LOCALURL declaration - e.g.: ```LOCALURL=https://192.168.2.150:3000```
+
+If you plan on hosting a local version, you will need to run the following command from the server folder:
+```npm install```
+
+The server can be initialized by running ```npm start``` from the server directory.
+The client can be initialized by running ```npm run android``` from the client directory. 
