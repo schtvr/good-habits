@@ -1,3 +1,14 @@
+<p align="center">
+<img src="https://media-exp1.licdn.com/dms/image/C4D0BAQFIC6WOWWLvbw/company-logo_200_200/0/1634931014323?e=1643241600&v=beta&t=ApvQZSZ-BdjlQshoRgmOr2Woq1wOK1Gn66Wz_lg5Fec"<br />
+  <h3 align="center">Questify</h3>
+
+  <p align="center">
+    A gamified prodcutivity app designed to enable users to develop and maintain good habits. <br />
+
+    
+  </p>
+</p>
+
 # Questify
 Video presentation - https://www.youtube.com/watch?v=ss0Cza9rGAs
 
