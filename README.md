@@ -18,11 +18,11 @@ Questify is a gamified productivity app designed to enable users to develop and 
 
 # Contributors
 
-* Sean Araujo. [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/sean-araujo1993/)
-* Victor Klawitter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/victor-klawitter/)
-* Tim Hunter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/timothyh94/)
-* Juan Palacios [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/juanpalacios92/)
-* Steve Rigby [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/schtvr/)
+* Sean Araujo. [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/sean-araujo1993/)]
+* Victor Klawitter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/victor-klawitter/)]
+* Tim Hunter [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/timothyh94/)]
+* Juan Palacios [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/juanpalacios92/)]
+* Steve Rigby [![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/schtvr/)]
 
 
 # Built With
