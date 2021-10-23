@@ -33,14 +33,14 @@ The technologies we used in the development of this project:
 * Others: [JWT](https://jwt.io/), [PeerJS](https://peerjs.com/), [Socket.io](https://socket.io/), [Google Maps API](https://developers.google.com/maps/apis-by-platform), [Stripe](https://stripe.com/docs/api)
 
 # Screenshots
-![Alt text](https://i.imgur.com/DrdqsBS.png)
-![Alt text](https://i.imgur.com/HVglYHK.png)
-![Alt text](https://i.imgur.com/AtKJ6lT.png)
-![Alt text](https://i.imgur.com/FaPsOSK.png)
-![Alt text](https://i.imgur.com/8At4lw8.png)
-![Alt text](https://i.imgur.com/tLcHnt0.png)
-![Alt text](https://i.imgur.com/PqURaui.png)
-![Alt text](https://i.imgur.com/LgnQ6nn.png)
+![Alt text](https://i.imgur.com/DrdqsBS.png | width=100)
+![Alt text](https://i.imgur.com/HVglYHK.png | width=100)
+![Alt text](https://i.imgur.com/AtKJ6lT.png | width=100)
+![Alt text](https://i.imgur.com/FaPsOSK.png | width=100)
+![Alt text](https://i.imgur.com/8At4lw8.png | width=100)
+![Alt text](https://i.imgur.com/tLcHnt0.png | width=100)
+![Alt text](https://i.imgur.com/PqURaui.png | width=100)
+![Alt text](https://i.imgur.com/LgnQ6nn.png | width=100)
 
 # Getting Started
 In the client folder, run ```npm install``` to install dependencies. You will need to create a .env file in the client folder with holds the LOCALURL declaration - e.g.: ```LOCALURL=https://192.168.2.150:3000```. For directions on getting an instance of Android running on your system, check out [Android Studio](https://developer.android.com/studio/).
