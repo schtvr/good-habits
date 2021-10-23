@@ -27,8 +27,6 @@ Questify is a gamified productivity app designed to enable users to develop and 
 
 # Built With
 
-React Native, Redux, Express, Node, Jest, Cloudinary, Firebase, PostgreSQL, Sequelize, TypeScript.
-
 The technologies we used in the development of this project:
 * Front End: [React](https://reactnative.dev/), [Redux Toolkit](https://redux-toolkit.js.org/), [TypeScript](https://www.typescriptlang.org/), [Firebase](https://firebase.google.com/), [Cloudinary](https://cloudinary.com/)
 * Back End: [PostgreSQL](https://www.postgresql.org/), [Sequelize](https://sequelize.org/), [NodeJS](https://nodejs.org/en/), [Express](http://expressjs.com/), [AWS RDS](https://aws.amazon.com/rds/)
@@ -37,8 +35,6 @@ The technologies we used in the development of this project:
 # Screenshots
 
 # Getting Started
-run npm i on the server and the client root folders and then follow these instuctions to run the app on an android emulator: https://reactnative.dev/docs/running-on-device
-
 In the client folder, run ```npm install``` to install dependencies. You will need to create a .env file in the client folder with holds the LOCALURL declaration - e.g.: ```LOCALURL=https://192.168.2.150:3000```. For directions on getting an instance of Android running on your system, check out [Android Studio](https://developer.android.com/studio/).
 
 If you plan on hosting a local version, you will need to run the following command from the server folder:
