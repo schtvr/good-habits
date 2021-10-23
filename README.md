@@ -16,4 +16,4 @@ React Native, Redux, Express, Node, Jest, Cloudinary, Firebase, PostgreSQL, Sequ
 # Screenshots
 
 # Getting Started
-# Installation
+run npm i on the server and the client root folders and then follow these instuctions to run the app on an android emulator: https://reactnative.dev/docs/running-on-device
