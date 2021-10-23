@@ -39,9 +39,7 @@ The technologies we used in the development of this project:
 # Getting Started
 run npm i on the server and the client root folders and then follow these instuctions to run the app on an android emulator: https://reactnative.dev/docs/running-on-device
 
-In the client folder, run the following command:
-```npm install```
-You will need to create a .env file in the client folder with holds the LOCALURL declaration - e.g.: ```LOCALURL=https://192.168.2.150:3000```
+In the client folder, run ```npm install``` to install dependencies. You will need to create a .env file in the client folder with holds the LOCALURL declaration - e.g.: ```LOCALURL=https://192.168.2.150:3000```. For directions on getting an instance of Android running on your system, check out [Android Studio](https://developer.android.com/studio/).
 
 If you plan on hosting a local version, you will need to run the following command from the server folder:
 ```npm install```
