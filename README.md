@@ -10,7 +10,6 @@
 </p>
 
 # Questify
-Video presentation - https://www.youtube.com/watch?v=ss0Cza9rGAs
 
 # About The Project
 
